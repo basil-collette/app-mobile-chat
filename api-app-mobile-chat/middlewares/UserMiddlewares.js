@@ -1,5 +1,8 @@
 const UserController = new(require('../controllers/UserController'));
 
+/**
+ * send a jwttoken tu user, using his credentials
+ */
 const login = async (req, res, next) => {
     try {
         const userFields = req.body;
@@ -17,6 +20,10 @@ const login = async (req, res, next) => {
     }
 }
 
+/**
+ * check if user is authentified using jwt token
+ * set the user object returned, in the res.locals
+ */
 const isAuthorized = async (req, res, next) => {
     const authentifiedUser = await UserController.getAuthorizedUser(req);
 
@@ -34,6 +41,9 @@ const isAuthorized = async (req, res, next) => {
     next();
 }
 
+/**
+ * check if all inputs required for login are send in body
+ */
 const loginInputsAreSent = (req, res, next) => {
     const userFields = req.body;
 
@@ -51,9 +61,18 @@ const loginInputsAreSent = (req, res, next) => {
     next();
 }
 
+/**
+ * check if all inputs required for register are send in body
+ */
 const registerInputsAreSent = (req, res, next) => {
     const userFields = req.body;
-    if (userFields.email && userFields.firstName && userFields.lastName) {
+
+    if (userFields.email
+        && userFields.prenom
+        && userFields.nom
+        && userFields.password
+        && userFields.confirmPassword
+    ) {
         
         for (let i in res.locals.inputsNedded) {
             if (!req.body.includes(i)) {
@@ -69,6 +88,9 @@ const registerInputsAreSent = (req, res, next) => {
     }
 }
 
+/**
+ * check if the email send in body is allready used by a user
+ */
 const userDoesntExists = async (req, res, next) => {
     const userFields = req.body;
     if (await UserController.exists(userFields.username)) {
@@ -77,16 +99,22 @@ const userDoesntExists = async (req, res, next) => {
     next();
 }
 
+/**
+ * process before a user persist
+ * valorise the fields 'created_at' and 'roles'
+ */
 const prePersist = (req, res, next) => {
     const date = new Date();
     req.body.createdAt = date;
-    req.body.updatedAt = date;
     if(!req.body.roles) {
         req.body.roles = ["ROLE_USER"];
     }
     next();
 }
 
+/**
+ * process the insert of the user, with fields sent in body req
+ */
 const register = async (req, res, next) => {
     const user = await UserController.register(req.body);
         
@@ -101,6 +129,9 @@ const register = async (req, res, next) => {
     }
 }
 
+/**
+ * send all the users
+ */
 const getAll = async (req, res, next) => {
     try {
         let users = await UserController.getAll();
@@ -113,18 +144,24 @@ const getAll = async (req, res, next) => {
     }
 }
 
-const getAllNested = async (req, res, next) => {
+/**
+ * send informations of a user
+ */
+const getOne = async (req, res, next) => {
     try {
-        let users = await UserController.getAllNested();
+        let user = await UserController.getBydId(res.locals.userId);
 
         res.status(200);
-        res.send(users);
+        res.send(user);
         next();
     } catch (err) {
         next(err);
     }
 }
 
+/**
+ * set the user in process, in the res.locals
+ */
 const setProcessingUser = (req, res, next) => {
     try {
         res.locals.userId = parseInt(req.params.idUser);
@@ -143,6 +180,6 @@ module.exports = {
     isAuthorized,
     login,
     getAll,
-    getAllNested,
+    getOne,
     setProcessingUser
 };

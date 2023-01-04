@@ -98,27 +98,6 @@ module.exports = class UserController {
         });
     }
 
-    async getAllNested() {
-        const groupeModel = require("../models/groupe.model")(this.connexion);
-
-        this.userModel.belongsTo(groupeModel, {
-            foreignKey: {
-                type: Sequelize.DataTypes.UUID,
-                allowNull: true,
-                name: 'groupe_id'
-            },
-            onDelete: 'RESTRICT',
-            onUpdate: 'RESTRICT'
-        });
-
-        const results = await this.userModel.findAll({
-            attributes: ['username'],
-            include: [{ model: groupeModel, attributes: ['name']}]
-        });
-
-        return results;
-    }
-
     async getBydId(idUser) {
         return await this.userModel.findOne({ where: { id: idUser } });
     }
