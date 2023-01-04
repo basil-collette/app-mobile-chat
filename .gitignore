@@ -1,14 +1,17 @@
-node_modules/
-.expo/
-dist/
-npm-debug.*
+client-app-mobile-chat/node_modules/
+client-app-mobile-chat/.expo/
+client-app-mobile-chat/dist/
+client-app-mobile-chat/npm-debug.*
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
 *.orig.*
-web-build/
+client-app-mobile-chat/web-build/
 
 # macOS
-.DS_Store
+client-app-mobile-chat/.DS_Store
+
+
+api-app-mobile-chat/node_modules/
