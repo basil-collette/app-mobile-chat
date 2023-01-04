@@ -13,12 +13,15 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-var port = normalizePort(process.env.PORT || '3000');
+const hostname = '127.0.0.1';
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 const server = http.createServer(app);
 
-server.listen(port);
+server.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/...`);
+});
 server.on('error', onError);
 
 //ROUTES __________________________________________________________________ ROUTES
