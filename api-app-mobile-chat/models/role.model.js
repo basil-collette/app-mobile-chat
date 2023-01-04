@@ -1,14 +1,19 @@
 const Sequelize = require("sequelize");
 
-module.exports = (sequelize, DataTypes) => {
-    return sequelize.define("groupe", {
-        id: {
+module.exports = (sequelize,) => {
+    return sequelize.define("role", {
+        idRole: {
             primaryKey: true,
             autoIncrement: true,
             type: Sequelize.NUMBER,
+            field: 'pk_id_role',
             allowNull: false
         },
-        name: {
+        libelle: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        code: {
             type: Sequelize.STRING,
             allowNull: false
         },
@@ -16,13 +21,8 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.DATE,
             allowNull: false,
             field: 'created_at'
-        },
-        updatedAt: {
-            type: Sequelize.DATE,
-            allowNull: false,
-            field: 'updated_at'
         }
     }, {
-        tableName: 'groupe'
+        tableName: 'role'
     });
 };
