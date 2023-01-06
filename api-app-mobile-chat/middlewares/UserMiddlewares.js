@@ -27,14 +27,12 @@ const login = async (req, res, next) => {
  */
 const isAuthorized = async (req, res, next) => {
     const authentifiedUser = await UserController.getAuthorizedUser(req);
-
-    if (!authentifiedUser) {
-        res.status(400).send("not_authentified");
-        throw new Error();
-    }
     
-    if(authentifiedUser.id != res.locals.userId && !authorizedUser.roles.includes('ROLE_ADMIN')) {
-        res.status(400).send("not_authorized");
+    if (!authentifiedUser
+        || authentifiedUser.id != res.locals.userId
+        && authentifiedUser.roles.find(role => role.code == 'admin') != undefined
+    ) {
+        res.status(400).send("not_authentified");
         throw new Error();
     }
 
@@ -124,26 +122,6 @@ const prePersist = async (req, res, next) => {
 }
 
 /**
- * process before a user update
- * valorise the fields 'password' and 'roles'
- */
-const preUpdate = async (req, res, next) => {
-    try {
-        let registerFields = req.body;
-
-        //hashage du password
-        if (registerFields.password) {
-            registerFields.password = await bcrypt.hash(registerFields.password, 10);
-        }
-
-        next();
-    } catch (err) {
-        console.log(err);
-        next(err);
-    }
-}
-
-/**
  * process the insert of the user, with fields sent in body req
  */
 const register = async (req, res, next) => {
@@ -161,37 +139,6 @@ const register = async (req, res, next) => {
         }
     } catch (err) {
         console.log(err);
-        next(err);
-    }
-}
-
-/**
- * send all the users
- */
-const getAll = async (req, res, next) => {
-    try {
-        let users = await UserController.getAll();
-
-        res.status(200);
-        res.send(users);
-        next();
-    } catch (err) {
-        console.log(err);
-        next(err);
-    }
-}
-
-/**
- * send informations of a user
- */
-const getOne = async (req, res, next) => {
-    try {
-        let user = await UserController.getBydId(res.locals.userId);
-
-        res.status(200);
-        res.send(user);
-        next();
-    } catch (err) {
         next(err);
     }
 }
@@ -216,7 +163,5 @@ module.exports = {
     registerInputsAreSent,
     isAuthorized,
     login,
-    getAll,
-    getOne,
     setProcessingUser
 };

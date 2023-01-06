@@ -9,6 +9,4 @@ router.post("/register", UserMiddlewares.loginInputsAreSent, UserMiddlewares.use
 
 router.post("/login", UserMiddlewares.loginInputsAreSent, UserMiddlewares.login);
 
-router.get('/getAll', UserMiddlewares.getAll);
-
 module.exports = router;
