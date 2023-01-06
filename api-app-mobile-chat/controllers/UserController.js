@@ -104,7 +104,7 @@ module.exports = class UserController {
             if (match) {
                 const expireIn = 24 * 60 * 60; //hour * minutes * seconds
                 const token = jwt.sign({
-                    id: user.idUser,
+                    idUser: user.idUser,
                     roles: user.roles,
                 },
                 process.env.TOKEN_KEY,
@@ -128,12 +128,15 @@ module.exports = class UserController {
             jwt.verify(token, process.env.TOKEN_KEY);
 
             const userCredentials = jwt.decode(token, process.env.TOKEN_KEY);
-
-            //return (({ username, password }) => ({ username, password }))(userCredentials);
-            return await this.getByFilters({ username: userCredentials.username });
+            
+            let user = await this.getById(userCredentials.idUser);
+            user.roles = await user.getRoles();
+            
+            return user;
             
         } catch (err) {
-            return false;
+            console.error(err);
+            throw new Error('error_during_processing_jwttoken');
         }
     }
 
@@ -143,13 +146,13 @@ module.exports = class UserController {
         this.roleModel = require("../models/role.model")(this.connexion);
 
         return await this.userModel.findAll({
-            include: {model: this.roleModel, as: 'roles'},
-            //attributes: ['prenom', 'nom']
+            //include: {model: this.roleModel, as: 'roles'},
+            attributes: ['prenom', 'nom']
         });
     }
 
-    async getBydId(idUser) {
-        return await this.userModel.findOne({ where: { id: idUser } });
+    async getById(idUser) {
+        return await this.userModel.findOne({ where: { pk_id_user: idUser } });
     }
 
     async getByFilters(filters) {
