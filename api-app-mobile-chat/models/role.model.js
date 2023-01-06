@@ -23,6 +23,7 @@ module.exports = (sequelize,) => {
             field: 'created_at'
         }
     }, {
-        tableName: 'role'
+        tableName: 'role',
+        updatedAt: false
     });
 };

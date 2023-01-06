@@ -30,8 +30,6 @@ const indexRouter = require('./routers/index.router');
 app.use('/', indexRouter);
 const userRouter = require('./routers/user.router');
 app.use('/user', userRouter);
-const groupeRouter = require('./routers/groupe.router');
-app.use('/groupe', groupeRouter);
 
 // ERRORS __________________________________________________________________ ERRORS
 
@@ -94,3 +92,10 @@ function onError(error) {
             throw error;
     }
 }
+
+app.use(function(req, res, next) {
+    res.set("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0")
+    res.set("Pragma", "no-cache")
+    res.set("Expires", 0)
+    next()
+})

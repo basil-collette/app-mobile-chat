@@ -1,4 +1,6 @@
 const UserController = new(require('../controllers/UserController'));
+const RoleController = new(require('../controllers/RoleController'));
+const bcrypt = require('bcrypt');
 
 /**
  * send a jwttoken tu user, using his credentials
@@ -6,16 +8,15 @@ const UserController = new(require('../controllers/UserController'));
 const login = async (req, res, next) => {
     try {
         const userFields = req.body;
-        let token = await UserController.login(userFields.username, userFields.password);
+        let token = await UserController.login(userFields.email, userFields.password);
 
-        res.header('Authorization', 'Bearer ' + token);
         res.status(200);
         res.send(token);
         next();
         
     } catch (err) {
         res.status(404);
-        res.end('user_not_authentified');
+        res.end('error_during_authentification');
         //next(err);
     }
 }
@@ -47,7 +48,7 @@ const isAuthorized = async (req, res, next) => {
 const loginInputsAreSent = (req, res, next) => {
     const userFields = req.body;
 
-    if (!userFields.username && !userFields.password) {
+    if (!userFields.email && !userFields.password) {
         res.status(400).send("list of needed inputs is required");
         throw new Error();
     }
@@ -80,6 +81,11 @@ const registerInputsAreSent = (req, res, next) => {
                 throw new Error();
             }
         }
+
+        if (userFields.password != userFields.confirmPassword) {
+            throw new Error('confirmPassword different than password');
+        }
+
         next();
         
     } else {
@@ -92,8 +98,7 @@ const registerInputsAreSent = (req, res, next) => {
  * check if the email send in body is allready used by a user
  */
 const userDoesntExists = async (req, res, next) => {
-    const userFields = req.body;
-    if (await UserController.exists(userFields.username)) {
+    if (await UserController.exists(req.body.email)) {
         return res.status(409).send("Error during registration. Please contact support");
     }
     next();
@@ -103,29 +108,60 @@ const userDoesntExists = async (req, res, next) => {
  * process before a user persist
  * valorise the fields 'created_at' and 'roles'
  */
-const prePersist = (req, res, next) => {
-    const date = new Date();
-    req.body.createdAt = date;
-    if(!req.body.roles) {
-        req.body.roles = ["ROLE_USER"];
+const prePersist = async (req, res, next) => {
+    try {
+        //valorisation de la date de creation
+        req.body.createdAt = new Date();
+
+        //hashage du password
+        registerFields.password = await bcrypt.hash(registerFields.password, 10);
+
+        next();
+    } catch (err) {
+        console.log(err);
+        next(err);
     }
-    next();
+}
+
+/**
+ * process before a user update
+ * valorise the fields 'password' and 'roles'
+ */
+const preUpdate = async (req, res, next) => {
+    try {
+        let registerFields = req.body;
+
+        //hashage du password
+        if (registerFields.password) {
+            registerFields.password = await bcrypt.hash(registerFields.password, 10);
+        }
+
+        next();
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
 }
 
 /**
  * process the insert of the user, with fields sent in body req
  */
 const register = async (req, res, next) => {
-    const user = await UserController.register(req.body);
+    try {
+        const user = await UserController.register(req.body);
         
-    if (user) {
-        console.log("register : OK");
-        res.status(201);
-        res.send(user);
-        next();
-    } else {
-        res.status(404);
-        res.end();
+        if (user) {
+            console.log("register : OK");
+            res.status(201);
+            res.send(user);
+            next();
+        } else {
+            res.status(404);
+            res.end();
+        }
+    } catch (err) {
+        console.log(err);
+        next(err);
     }
 }
 
@@ -140,6 +176,7 @@ const getAll = async (req, res, next) => {
         res.send(users);
         next();
     } catch (err) {
+        console.log(err);
         next(err);
     }
 }
