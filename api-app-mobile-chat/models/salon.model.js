@@ -1,19 +1,16 @@
 const Sequelize = require("sequelize");
 
-module.exports = (sequelize,) => {
-    return sequelize.define("role", {
-        idRole: {
+module.exports = (sequelize) => {
+    
+    var salonModel = sequelize.define("salon", {
+        idSalon: {
             primaryKey: true,
             autoIncrement: true,
             type: Sequelize.NUMBER,
-            field: 'pk_id_role',
+            field: 'pk_id_salon',
             allowNull: false
         },
         libelle: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        code: {
             type: Sequelize.STRING,
             allowNull: false
         },
@@ -21,9 +18,12 @@ module.exports = (sequelize,) => {
             type: Sequelize.DATE,
             allowNull: false,
             field: 'created_at'
-        }
+        },
     }, {
-        tableName: 'role',
-        updatedAt: false
+        tableName: 'salon',
+        updatedAt : false
     });
+
+
+    return salonModel;
 };
