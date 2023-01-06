@@ -1,12 +1,14 @@
-const Sequelize = require("sequelize");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
+const RoleController = require('./RoleController');
 
 module.exports = class UserController {
 
     connexion;
     userModel;
+    roleModel;
+    roleController;
 
     constructor() {
         this.connexion = require('../database/sequelize');
@@ -20,45 +22,90 @@ module.exports = class UserController {
         */
        
         this.userModel = require("../models/user.model")(this.connexion);
+        this.roleModel = require("../models/role.model")(this.connexion);
+
+        this.roleController = new RoleController();
     }
 
     //Account ________________________________________________________________________ Account
 
     async register(userFields) {
-        let hashedPassword = await bcrypt.hash(userFields.password, 10);
+        /*
+        {
+            "email": "basil.collette@outlook.fr",
+            "prenom": "basil",
+            "nom": "collette",
+            "password": "password",
+            "confirmPassword": "password",
+            "roles": [1]
+        }
+        */
 
-        let user = await this.userModel.create({
-            "username": userFields.username,
-            "email": userFields.email,
-            "firstName": userFields.firstName,
-            "lastName": userFields.lastName,
-            "password": hashedPassword,
-            "createdAt": userFields.createdAt,
-            "updatedAt": userFields.updatedAt,
-            "groupeId": userFields.groupeId,
-            "roles": userFields.roles,
-        });
+        let user;
+        try {
+            user = await this.userModel.create({
+                "email": userFields.email,
+                "prenom": userFields.prenom,
+                "nom": userFields.nom,
+                "password": userFields.password,
+                "created_at": userFields.created_at,
+            }, {
+                include: {
+                    model: this.roleModel,
+                    as: "roles"
+                }
+            });
+            
+        } catch (err) {
+            console.error(err);
+            throw new Error('error during inserting user');
+        }
+        
+        try {
+            if (!userFields.roles) {
+                const roleUser = this.roleController.getByFilters({code: 'user'});
+                user.addRole(roleUser);
+            } else {
+                for(const idRole of userFields.roles) {
+                    if (await this.roleController.getById(idRole) != null) {
+                        user.addRole(idRole);
+                    }
+                }
+            }
+        } catch (err) {
+            console.error(err);
+            throw new Error('error during adding role to user');
+        }
 
         return user;
     }
 
-    async login(login, password) {
+    async login(email, password) {
+        /*
+        {
+            "email": "basil.collette@outlook.fr",
+            "password": "password",
+        }
+        */
+
         let user = await this.getByFilters({
-            username: login
+            email: email
+        }, {
+            include: {
+                model: this.roleModel,
+                as: "roles"
+            }
         });
+
+        user.roles = await user.getRoles({attributes: ['idRole', 'code']});
         
         if (user) {
             const match = await bcrypt.compare(password, user.password);
-
             if (match) {
                 const expireIn = 24 * 60 * 60; //hour * minutes * seconds
                 const token = jwt.sign({
-                    username: user.username,
-                    password: user.password,
-                    /*
-                    id: user.id,
+                    id: user.idUser,
                     roles: user.roles,
-                    */
                 },
                 process.env.TOKEN_KEY,
                 {
@@ -93,8 +140,11 @@ module.exports = class UserController {
     //GET ________________________________________________________________________ GET
 
     async getAll() {
+        this.roleModel = require("../models/role.model")(this.connexion);
+
         return await this.userModel.findAll({
-            attributes: ['firstName', 'lastName']
+            include: {model: this.roleModel, as: 'roles'},
+            //attributes: ['prenom', 'nom']
         });
     }
 
@@ -141,8 +191,9 @@ module.exports = class UserController {
 
     //OTHER ___________________________________________________________________ OTHER
 
-    async exists(username) {
-        const user = await this.getByFilters({username: username});
+    async exists(testemail) {
+        const user = await this.getByFilters({email: testemail});
         return user != null;
     }
+
 }

@@ -11,6 +11,4 @@ router.post("/login", UserMiddlewares.loginInputsAreSent, UserMiddlewares.login)
 
 router.get('/getAll', UserMiddlewares.getAll);
 
-router.get('/getAllNested', UserMiddlewares.getAllNested);
-
 module.exports = router;
