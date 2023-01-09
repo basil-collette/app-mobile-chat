@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
             autoIncrement: true,
             type: Sequelize.NUMBER,
             field: 'pk_id_salon',
-            allowNull: false
+            allowNull: false,
         },
         libelle: {
             type: Sequelize.STRING,

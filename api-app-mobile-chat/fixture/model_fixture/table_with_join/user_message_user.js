@@ -20,8 +20,8 @@ const DifferentInt = (number, mbmax) => {
 
 for(i = 0; i < 100; i++){
 
-let user_sender = RandomInt(1,10);
-let user_receiver = DifferentInt(user_sender,10);
+let user_sender = RandomInt(1,12);
+let user_receiver = DifferentInt(user_sender,12);
 
 user_message_user.push({
         model: "user_message_user",
