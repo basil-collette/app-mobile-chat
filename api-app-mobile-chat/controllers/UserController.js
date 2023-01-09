@@ -84,7 +84,7 @@ module.exports = class UserController {
         /*
         {
             "email": "basil.collette@outlook.fr",
-            "password": "password",
+            "password": "password"
         }
         */
 
@@ -152,11 +152,27 @@ module.exports = class UserController {
     }
 
     async getById(idUser) {
-        return await this.userModel.findOne({ where: { pk_id_user: idUser } });
+        return await this.userModel.findOne({
+            where: { pk_id_user: idUser }
+        });
+    }
+
+    async getFilteredById(idUser) {
+        return await this.userModel.findOne({
+            attributes: ['prenom', 'nom', 'email', 'created_at'],
+            where: { pk_id_user: idUser }
+        });
     }
 
     async getByFilters(filters) {
         return await this.userModel.findOne({ where: filters });
+    }
+
+    async getFilteredByFilters(idUser) {
+        return await this.userModel.findOne({
+            attributes: ['prenom', 'nom', 'email', 'created_at'],
+            where: filters
+        });
     }
 
     //UPDATE __________________________________________________________________ UPDATE
