@@ -26,18 +26,28 @@ const login = async (req, res, next) => {
  * set the user object returned, in the res.locals
  */
 const isAuthorized = async (req, res, next) => {
-    const authentifiedUser = await UserController.getAuthorizedUser(req);
+    try {
+        if (!req.params.idUser) {
+            throw new Error('userId GET params is missing');
+        }
+        res.locals.userId = parseInt(req.params.idUser);
     
-    if (!authentifiedUser
-        || authentifiedUser.id != res.locals.userId
-        && authentifiedUser.roles.find(role => role.code == 'admin') != undefined
-    ) {
-        res.status(400).send("not_authentified");
-        throw new Error();
-    }
+        const authentifiedUser = await UserController.getAuthentifiedUser(req);
+        
+        if (!authentifiedUser
+            || authentifiedUser.idUser != res.locals.userId
+            && authentifiedUser.roles.find(role => role.code == 'admin') == undefined
+        ) {
+            res.status(400).send('not_authentified_or_authorized');
+            throw new Error('not_authentified_or_authorized');
+        }
+    
+        res.locals.authentifiedUser = authentifiedUser;
+        next();
 
-    res.locals.authentifiedUser = authentifiedUser;
-    next();
+    } catch(err) {
+        next(err);
+    }
 }
 
 /**

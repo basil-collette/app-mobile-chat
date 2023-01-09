@@ -7,7 +7,7 @@ const RoleController = new(require('../controllers/RoleController'));
 
 /**
  * send all the users firstname and lastname
- * http://127.0.0.1:3000/user/setProcessUser/:idUser/getall
+ * http://127.0.0.1:3000/user/auth/:idUser/getall
  */
 router.get('/getall', async (req, res, next) => {
     try {
@@ -24,32 +24,15 @@ router.get('/getall', async (req, res, next) => {
 
 /**
  * send informations of a user by id
- * http://127.0.0.1:3000/user/setProcessUser/:idUser/getbyid
+ * http://127.0.0.1:3000/user/auth/:idUser/detail
  */
-router.get('/getbyid', async (req, res, next) => {
+router.get('/detail', async (req, res, next) => {
     try {
         let user = await UserController.getFilteredById(res.locals.userId);
 
         res.status(200);
         res.send(JSON.stringify(user));
         next();
-    } catch (err) {
-        next(err);
-    }
-});
-
-/**
- * send informations of a user by email
- * http://127.0.0.1:3000/user/setProcessUser/:idUser/getbyemail/:email
- */
-router.get('/getbyemail/:email', async (req, res, next) => {
-    try {
-        let user = await UserController.getFilteredByFilters({email: req.params.email});
-
-        res.status(200);
-        res.send(JSON.stringify(user));
-        next();
-        
     } catch (err) {
         next(err);
     }
