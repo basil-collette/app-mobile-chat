@@ -22,6 +22,20 @@ const login = async (req, res, next) => {
 }
 
 /**
+ * check if user authentified is admin
+ */
+const isAdmin = async (req, res, next) => {
+    try {
+        if (!UserController.isAdmin(authentifiedUser)) {
+            throw new Error('not_autorized');
+        }
+        next();
+    } catch(err) {
+        next(err);
+    }
+}
+
+/**
  * check if user is authentified using jwt token
  * set the user object returned, in the res.locals
  */
@@ -36,7 +50,7 @@ const isAuthorized = async (req, res, next) => {
         
         if (!authentifiedUser
             || authentifiedUser.idUser != res.locals.userId
-            && authentifiedUser.roles.find(role => role.code == 'admin') == undefined
+            && !UserController.isAdmin(authentifiedUser)
         ) {
             res.status(400).send('not_authentified_or_authorized');
             throw new Error('not_authentified_or_authorized');
@@ -171,6 +185,7 @@ module.exports = {
     prePersist,
     register,
     registerInputsAreSent,
+    isAdmin,
     isAuthorized,
     login,
     setProcessingUser

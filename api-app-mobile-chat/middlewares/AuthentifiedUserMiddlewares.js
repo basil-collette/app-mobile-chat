@@ -90,19 +90,4 @@ router.post('/update', preUpdate, async (req, res, next) => {
     }
 });
 
-//DELETE ______________________________________________________________________________________________________________ DELETE
-
-router.post('/delete', async (req, res, next) => {
-    try {
-        await UserController.delete({ id: parseInt(res.locals.userId) });
-
-        res.status(200);
-        res.send('user_deleted');
-        next();
-
-    } catch(err) {
-        next(err);
-    }
-});
-
 module.exports = router;
