@@ -122,6 +122,18 @@ module.exports = class UserController {
         }
 	}
 
+    async isAdmin(user) {
+        if (!user) {
+            throw new Error('isAdmin : user is undefined');
+        }
+
+        if (!user.roles) {
+            user.roles = await user.getRoles();
+        }
+
+        return user.roles.find(role => role.code == 'admin') != undefined;
+    }
+
     async getAuthentifiedUser(req) {
         try {
             const token = req.headers.authorization.split(' ')[1];
@@ -152,23 +164,18 @@ module.exports = class UserController {
     }
 
     async getById(idUser) {
-        return await this.userModel.findOne({
-            where: { pk_id_user: idUser }
-        });
+        return await this.userModel.findByPk(idUser);
     }
 
     async getFilteredById(idUser) {
-        return await this.userModel.findOne({
-            attributes: ['prenom', 'nom', 'email', 'created_at'],
-            where: { pk_id_user: idUser }
-        });
+        return await this.getFilteredByFilters({pk_id_user: idUser});
     }
 
     async getByFilters(filters) {
         return await this.userModel.findOne({ where: filters });
     }
 
-    async getFilteredByFilters(idUser) {
+    async getFilteredByFilters(filters) {
         return await this.userModel.findOne({
             attributes: ['prenom', 'nom', 'email', 'created_at'],
             where: filters
