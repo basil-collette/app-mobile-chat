@@ -3,11 +3,13 @@ const router = express.Router();
 const UserController = new(require('../controllers/UserController'));
 const RoleController = new(require('../controllers/RoleController'));
 
+// GET ____________________________________________________________________________________________________________________ GET
+
 /**
  * send all the users firstname and lastname
  * http://127.0.0.1:3000/user/setProcessUser/:idUser/getall
  */
-router.post('/getall', async (req, res, next) => {
+router.get('/getall', async (req, res, next) => {
     try {
         let users = await UserController.getAll();
 
@@ -24,9 +26,9 @@ router.post('/getall', async (req, res, next) => {
  * send informations of a user by id
  * http://127.0.0.1:3000/user/setProcessUser/:idUser/getbyid
  */
-router.post('/getbyid', async (req, res, next) => {
+router.get('/getbyid', async (req, res, next) => {
     try {
-        let user = await UserController.getBydId(res.locals.userId);
+        let user = await UserController.getFilteredById(res.locals.userId);
 
         res.status(200);
         res.send(JSON.stringify(user));
@@ -40,9 +42,9 @@ router.post('/getbyid', async (req, res, next) => {
  * send informations of a user by email
  * http://127.0.0.1:3000/user/setProcessUser/:idUser/getbyemail/:email
  */
-router.post('/getbyemail/:email', async (req, res, next) => {
+router.get('/getbyemail/:email', async (req, res, next) => {
     try {
-        let user = await UserController.getByFilters({email: req.params.email});
+        let user = await UserController.getFilteredByFilters({email: req.params.email});
 
         res.status(200);
         res.send(JSON.stringify(user));
@@ -53,38 +55,7 @@ router.post('/getbyemail/:email', async (req, res, next) => {
     }
 });
 
-/**
- * update a user by post attributes
- * http://127.0.0.1:3000/user/setProcessUser/:idUser/update
- */
-router.post('/update', this.preUpdate, async (req, res, next) => {
-    try {
-        let user = await UserController.update(
-            req.body,
-            { id: res.locals.userId }
-        );
-
-        res.status(200);
-        res.send(user);
-        next();
-
-    } catch(err) {
-        next(err);
-    }
-});
-
-router.post('/delete', async (req, res, next) => {
-    try {
-        await UserController.delete({ id: parseInt(res.locals.userId) });
-
-        res.status(200);
-        res.send('user_deleted');
-        next();
-
-    } catch(err) {
-        next(err);
-    }
-});
+// UPDATE ______________________________________________________________________________________________________________ UPDATE
 
 /**
  * process before a user update
@@ -115,5 +86,40 @@ const preUpdate = async (req, res, next) => {
         next(err);
     }
 }
+
+/**
+ * update a user by post attributes
+ * http://127.0.0.1:3000/user/setProcessUser/:idUser/update
+ */
+router.post('/update', preUpdate, async (req, res, next) => {
+    try {
+        let user = await UserController.update(
+            req.body,
+            { id: res.locals.userId }
+        );
+
+        res.status(200);
+        res.send(JSON.stringify(user));
+        next();
+
+    } catch(err) {
+        next(err);
+    }
+});
+
+//DELETE ______________________________________________________________________________________________________________ DELETE
+
+router.post('/delete', async (req, res, next) => {
+    try {
+        await UserController.delete({ id: parseInt(res.locals.userId) });
+
+        res.status(200);
+        res.send('user_deleted');
+        next();
+
+    } catch(err) {
+        next(err);
+    }
+});
 
 module.exports = router;

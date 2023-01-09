@@ -36,7 +36,15 @@ module.exports = (sequelize) => {
         }
     }, {
         tableName: 'user',
-        updatedAt: false
+        updatedAt: false,
+        /*
+        hooks: {
+            beforeFind: function(options) {
+               options.attributes.exclude = ['password'];
+               return options;
+            }
+        }
+        */
     });
 
     userModel.belongsToMany(roleModel, {
@@ -52,20 +60,6 @@ module.exports = (sequelize) => {
         onDelete: 'RESTRICT',
         onUpdate: 'RESTRICT'
     });
-
-    /*
-    userModel.beforeCreate("save", await async function(next) {
-        //const salt = await bcrypt.genSalt();
-        this.password = await bcrypt.hash(this.password, 10);
-        next();
-    });
-
-    userModel.beforeUpdate("save", await async function(next) {
-        //const salt = await bcrypt.genSalt();
-        this.password = await bcrypt.hash(this.password, 10);
-        next();
-    });
-    */
 
     return userModel;
 };
