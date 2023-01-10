@@ -1,5 +1,4 @@
 const UserController = new(require('../controllers/UserController'));
-const RoleController = new(require('../controllers/RoleController'));
 const bcrypt = require('bcrypt');
 
 /**
@@ -15,6 +14,7 @@ const login = async (req, res, next) => {
         next();
         
     } catch (err) {
+        console.log(err);
         res.status(404);
         res.end('error_during_authentification');
         //next(err);
@@ -26,11 +26,17 @@ const login = async (req, res, next) => {
  */
 const isAdmin = async (req, res, next) => {
     try {
+
+        if(!res.locals.authentifiedUser) {
+            res.locals.authentifiedUser = await UserController.getAuthentifiedUser(req);
+        }
+
         if (!UserController.isAdmin(res.locals.authentifiedUser)) {
             throw new Error('not_autorized');
         }
         next();
     } catch(err) {
+        console.log(err);
         next(err);
     }
 }
@@ -184,18 +190,6 @@ const register = async (req, res, next) => {
     }
 }
 
-/**
- * set the user in process, in the res.locals
- */
-const setProcessingUser = (req, res, next) => {
-    try {
-        res.locals.userId = parseInt(req.params.idUser);
-        next();
-    } catch(err) {
-        next(err);
-    }
-}
-
 module.exports = {
     loginInputsAreSent,
     userDoesntExists,
@@ -205,6 +199,5 @@ module.exports = {
     isAdmin,
     isAuthorized,
     IsAuthentified,
-    login,
-    setProcessingUser
+    login
 };

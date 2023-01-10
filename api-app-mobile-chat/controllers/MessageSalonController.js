@@ -74,7 +74,7 @@ module.exports = class MessageSalonController {
     //DELETE __________________________________________________________________ DELETE
 
     async delete(idMessage) {
-        return await this.userModel.destroy(
+        return await this.messageSalonModel.destroy(
             { where: {pk_id_salon_message: idMessage} }
         );
     }
