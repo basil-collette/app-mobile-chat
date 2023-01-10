@@ -28,8 +28,12 @@ server.on('error', onError);
 
 const indexRouter = require('./routers/index.router');
 app.use('/', indexRouter);
+//USER
 const userRouter = require('./routers/user.router');
 app.use('/user', userRouter);
+//MessageSalon
+const messageSalonRouter = require('./routers/messageSalon.router');
+app.use('/messagesalon', messageSalonRouter);
 
 // ERRORS __________________________________________________________________ ERRORS
 
