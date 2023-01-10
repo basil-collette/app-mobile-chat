@@ -123,7 +123,7 @@ module.exports = class UserController {
         if (!user) {
             throw new Error('isAdmin : user is undefined');
         }
-
+        console.log(user);
         if (!user.roles) {
             user.roles = await user.getRoles();
         }
@@ -228,9 +228,9 @@ module.exports = class UserController {
 
     //DELETE __________________________________________________________________ DELETE
 
-    async delete(wheres) {
+    async delete(idUser) {
         return await this.userModel.destroy(
-            { where: wheres }
+            { where: {pk_id_user: idUser }}
         );
     }
 

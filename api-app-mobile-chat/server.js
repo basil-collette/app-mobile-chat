@@ -29,14 +29,14 @@ server.on('error', onError);
 const indexRouter = require('./routers/index.router');
 app.use('/', indexRouter);
 //USER
-const userRouter = require('./routers/user.router');
-app.use('/user', userRouter);
+app.use('/user', require('./routers/user.router'));
 //MessageSalon
-const messageSalonRouter = require('./routers/messageSalon.router');
-app.use('/messagesalon', messageSalonRouter);
+app.use('/messagesalon', require('./routers/messageSalon.router'));
 //MessageUser
-const messageUserRouter = require('./routers/messageUser.router');
-app.use('/messageuser', messageUserRouter);
+app.use('/messageuser', require('./routers/messageUser.router'));
+//AdminRoute
+const UserMiddlewares = require('./middlewares/UserMiddlewares');
+app.use('/admin', UserMiddlewares.isAdmin, require('./routers/admin.router'));
 
 // ERRORS __________________________________________________________________ ERRORS
 
