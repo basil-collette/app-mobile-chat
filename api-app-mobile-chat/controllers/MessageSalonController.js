@@ -24,7 +24,13 @@ module.exports = class MessageSalonController {
     //GET ________________________________________________________________________ GET
 
     async getAll() {
-        return await this.messageSalonModel.findAll();
+        return await this.messageSalonModel.findAll({
+            include: {
+                model: this.userModel,
+                as: "user",
+                attributes: ['prenom', 'nom']
+            }
+        });
     }
 
     async getById(idMessage) {

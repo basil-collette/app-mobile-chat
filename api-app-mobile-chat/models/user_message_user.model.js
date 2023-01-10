@@ -20,7 +20,18 @@ module.exports = (sequelize) => {
             type: Sequelize.DATE,
             allowNull: false,
             field: 'created_at'
+        },
+        idUserSender: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            field: 'fk_id_user_sender'
+        },
+        idUserReceiver: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            field: 'fk_id_user_receiver'
         }
+        
     }, {
         tableName: 'user_message_user',
         updatedAt: false
