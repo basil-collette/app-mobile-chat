@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const RoleController = new(require('./RoleController'));
-const UserPossedeRoleController = new(require('./UserPossedeRoleController'));
 
 module.exports = class UserController {
 

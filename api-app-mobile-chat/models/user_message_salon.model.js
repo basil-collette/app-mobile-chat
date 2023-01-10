@@ -21,13 +21,22 @@ module.exports = (sequelize) => {
             type: Sequelize.DATE,
             allowNull: false,
             field: 'created_at'
+        },
+        idUser: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            field: 'fk_id_user'
+        },
+        idSalon: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            field: 'fk_id_salon'
         }
     }, {
         tableName: 'user_message_salon',
         updatedAt: false
     });
 
-    
     user_message_salonModel.belongsTo(userModel, {
         foreignKey: {
             name : 'idUser',

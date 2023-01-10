@@ -26,7 +26,7 @@ const login = async (req, res, next) => {
  */
 const isAdmin = async (req, res, next) => {
     try {
-        if (!UserController.isAdmin(authentifiedUser)) {
+        if (!UserController.isAdmin(res.locals.authentifiedUser)) {
             throw new Error('not_autorized');
         }
         next();
@@ -45,21 +45,39 @@ const isAuthorized = async (req, res, next) => {
             throw new Error('userId GET params is missing');
         }
         res.locals.userId = parseInt(req.params.idUser);
-    
-        const authentifiedUser = await UserController.getAuthentifiedUser(req);
-        
-        if (!authentifiedUser
-            || authentifiedUser.idUser != res.locals.userId
-            && !UserController.isAdmin(authentifiedUser)
+
+        if (res.locals.authentifiedUser.idUser != res.locals.userId
+            && !UserController.isAdmin(res.locals.authentifiedUser)
         ) {
-            res.status(400).send('not_authentified_or_authorized');
-            throw new Error('not_authentified_or_authorized');
+            res.status(400).send('not_authorized');
+            throw new Error('not_authorized');
+        }
+        next();
+
+    } catch(err) {
+        console.log(err);
+        next(err);
+    }
+}
+
+/**
+ * check if user is authentified using jwt token
+ * set the user object returned, in the res.locals
+ */
+const IsAuthentified = async (req, res, next) => {
+    try {
+        const authentifiedUser = await UserController.getAuthentifiedUser(req);
+
+        if (!authentifiedUser) {
+            res.status(400).send('not_authentified');
+            throw new Error('not_authentified');
         }
     
         res.locals.authentifiedUser = authentifiedUser;
         next();
 
     } catch(err) {
+        console.log(err);
         next(err);
     }
 }
@@ -153,7 +171,6 @@ const register = async (req, res, next) => {
         const user = await UserController.register(req.body);
         
         if (user) {
-            console.log("register : OK");
             res.status(201);
             res.send(user);
             next();
@@ -187,6 +204,7 @@ module.exports = {
     registerInputsAreSent,
     isAdmin,
     isAuthorized,
+    IsAuthentified,
     login,
     setProcessingUser
 };
