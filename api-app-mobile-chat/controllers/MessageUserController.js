@@ -2,6 +2,7 @@ module.exports = class MessageUserController {
 
     connexion;
     messageUserModel;
+    userModel;
 
     constructor() {
         this.connexion = require('../database/sequelize');
@@ -15,48 +16,70 @@ module.exports = class MessageUserController {
         */
        
         this.messageUserModel = require("../models/user_message_user.model")(this.connexion);
+        this.userModel = require("../models/user.model")(this.connexion);
     }
 
     //GET ________________________________________________________________________ GET
 
     async getAll() {
-        return await this.roleModel.findAll({
-            //attributes: ['prenom', 'nom']
-        });
+        return await this.messageUserModel.findAll(
+            /*{
+            include: [{
+                model: this.userModel,
+                as: "userSender",
+                attributes: ['prenom', 'nom']
+            }, {
+                model: this.userModel,
+                as: "userReceiver",
+                attributes: ['prenom', 'nom']
+            }]
+        }*/
+        );
     }
 
-    async getById(idRole) {
-        return await this.roleModel.findByPk(idRole);
+    async getById(idMessage) {
+        return await this.messageUserModel.findByPk(idMessage);
     }
 
-    async getOneByFilters(filters) {
-        return await this.roleModel.findOne({ where: filters });
-    }
-
-    async getAllByFilters(filters) {
-        return await this.roleModel.findAll({ where: filters });
-    }
-
-    //UPDATE __________________________________________________________________ UPDATE
-
-    async update(attributes, wheres) {
-        if (attributes.password) {
-            attributes.password = await bcrypt.hash(attributes.password, 10);
+    //INSERT 
+    async insert(messageUserFields) {
+        /*
+        {
+            "content": "test",
+            "idSalon": 1
+        }
+        */
+        console.log(messageUserFields);
+        let messageUser;
+        try {
+            messageUser = await this.messageUserModel.create({
+                "content": messageUserFields.content,
+                "created_at": messageUserFields.createdAt,
+                "idUserSender": messageUserFields.idUserSender,
+                "idUserReceiver": messageUserFields.idUserReceiver,
+            }, {
+                include: [{
+                    model: this.userModel,
+                    as: "userSender"
+                },{
+                    model: this.userModel,
+                    as: "userReceiver"
+                }]
+            });
+            
+        } catch (err) {
+            console.error(err);
+            throw new Error('error during inserting messageUser');
         }
 
-        return await this.userModel.update(
-            attributes,
-            {
-                where: wheres
-            }
-        );
+        return messageUser;
     }
 
     //DELETE __________________________________________________________________ DELETE
 
-    async delete(wheres) {
-        return await this.userModel.destroy(
-            { where: wheres }
+    async delete(idMessage) {
+        return await this.messageUserModel.destroy(
+            { where: {pk_id_user_message: idMessage} }
         );
     }
 }

@@ -34,6 +34,9 @@ app.use('/user', userRouter);
 //MessageSalon
 const messageSalonRouter = require('./routers/messageSalon.router');
 app.use('/messagesalon', messageSalonRouter);
+//MessageUser
+const messageUserRouter = require('./routers/messageUser.router');
+app.use('/messageuser', messageUserRouter);
 
 // ERRORS __________________________________________________________________ ERRORS
 

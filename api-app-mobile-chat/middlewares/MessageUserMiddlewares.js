@@ -1,12 +1,12 @@
 const UserController = new(require('../controllers/UserController'));
-const MessageSalonController = new(require('../controllers/MessageSalonController'));
+const MessageUserController = new(require('../controllers/MessageUserController'));
 
 /**
  * get all message from salon
  */
 const getAllMessage = async (req, res, next) => {
     try {
-        let messagesSalon = await MessageSalonController.getAll();
+        let messagesSalon = await MessageUserController.getAll();
 
         res.status(200);
         res.send(messagesSalon);
@@ -27,7 +27,7 @@ const prePersist = async (req, res, next) => {
         req.body.createdAt = new Date();
 
         //set idUser of the authentified user
-        req.body.idUser = res.locals.authentifiedUser.idUser;
+        req.body.idUserSender = res.locals.authentifiedUser.idUser;
 
         next();
     } catch (err) {
@@ -43,11 +43,11 @@ const sendMessage = async (req, res, next) => {
     /*
     {
         "content": "test",
-        "idSalon": 1
+        "idUserReceiver": 1
     }
     */
     try {
-        const messageSalon = await MessageSalonController.insert(req.body);
+        const messageSalon = await MessageUserController.insert(req.body);
         
         if (messageSalon) {
             res.status(201);
