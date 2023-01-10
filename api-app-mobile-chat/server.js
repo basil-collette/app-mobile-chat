@@ -3,6 +3,9 @@ const createError = require('http-errors');
 const helmet = require('helmet');
 const express = require('express');
 const http = require('http');
+const socketIO = require("socket.io");
+const cookieParser = require('cookie-parser');
+//const logger = require('morgan');
 require('dotenv').config();
 
 //SETUP ____________________________________________________________________ SETUP
@@ -12,6 +15,8 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+//app.use(logger('dev'));
+//app.use(cookieParser());
 
 const hostname = '127.0.0.1';
 const port = normalizePort(process.env.PORT || '3000');
@@ -38,6 +43,26 @@ app.use('/messageuser', require('./routers/messageUser.router'));
 const UserMiddlewares = require('./middlewares/UserMiddlewares');
 app.use('/admin', UserMiddlewares.isAdmin, require('./routers/admin.router'));
 
+//SOCKET __________________________________________________________________ SOCKET
+
+const io = socketIO(server, {
+    cors: {
+        origin: "*",
+        methods: ["POST", "GET"]
+    }
+});
+//const io = require('socket.io')();
+require('./socket')(io);
+
+io.attach(server);
+
+//VIEWS ____________________________________________________________________ VIEWS
+/*
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
+
+app.use(express.static(path.join(__dirname, 'public')));
+*/
 // ERRORS __________________________________________________________________ ERRORS
 
 // catch 404 and forward to error handler
