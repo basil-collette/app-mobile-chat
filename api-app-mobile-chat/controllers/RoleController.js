@@ -26,11 +26,15 @@ module.exports = class RoleController {
     }
 
     async getById(idRole) {
-        return await this.roleModel.findOne({ where: { pk_id_role: idRole } });
+        return await this.roleModel.findByPk(idRole);
     }
 
-    async getByFilters(filters) {
+    async getOneByFilters(filters) {
         return await this.roleModel.findOne({ where: filters });
+    }
+
+    async getAllByFilters(filters) {
+        return await this.roleModel.findAll({ where: filters });
     }
 
     //UPDATE __________________________________________________________________ UPDATE
@@ -46,16 +50,6 @@ module.exports = class RoleController {
                 where: wheres
             }
         );
-    }
-
-    async updateGroupUsers(groupId, userList) {
-        let query =
-            `UPDATE user SET 
-                groupe_id = case 
-                When groupe_id = ${ groupId } AND id NOT IN (${ userList }) then null
-                else 1
-            end`;
-        return await this.groupeModel.query(query, { type: QueryTypes.UPDATE });
     }
 
     //DELETE __________________________________________________________________ DELETE
