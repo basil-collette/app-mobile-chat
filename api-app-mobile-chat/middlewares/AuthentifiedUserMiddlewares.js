@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserController = new(require('../controllers/UserController'));
 const RoleController = new(require('../controllers/RoleController'));
+const Op = require("sequelize").Op;
 
 // GET ____________________________________________________________________________________________________________________ GET
 
@@ -46,22 +47,17 @@ router.get('/detail', async (req, res, next) => {
  */
 const preUpdate = async (req, res, next) => {
     try {
-        let registerFields = req.body;
-
         //hashage du password
-        if (registerFields.password) {
-            registerFields.password = await bcrypt.hash(registerFields.password, 10);
+        if (req.body.password) {
+            req.body.password = await bcrypt.hash(req.body.password, 10);
         }
 
         //recupere les roles par leur id
-        if (registerFields.roles) {
-            const roleController = new RoleController();
-            let rolesList = [];
-            for(const roleId of registerFields.roles) {
-                rolesList.push(await roleController.getById(roleId));
-            }
-            registerFields.roles = rolesList;
+        /*
+        if (req.body.roles) {
+            req.body.roles = await RoleController.getAllByFilters({idRole: {[Op.in]: req.body.roles}});
         }
+        */
 
         next();
     } catch (err) {
@@ -72,16 +68,16 @@ const preUpdate = async (req, res, next) => {
 
 /**
  * update a user by post attributes
- * http://127.0.0.1:3000/user/setProcessUser/:idUser/update
+ * http://127.0.0.1:3000/user/auth/:idUser/update
  */
 router.post('/update', preUpdate, async (req, res, next) => {
     try {
-        let user = await UserController.update(
+        const user = await UserController.update(
             req.body,
-            { id: res.locals.userId }
+            { pk_id_user: res.locals.userId }
         );
 
-        res.status(200);
+        res.status(201);
         res.send(JSON.stringify(user));
         next();
 

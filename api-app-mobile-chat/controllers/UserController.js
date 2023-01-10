@@ -1,14 +1,14 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
-const RoleController = require('./RoleController');
+const RoleController = new(require('./RoleController'));
+const UserPossedeRoleController = new(require('./UserPossedeRoleController'));
 
 module.exports = class UserController {
 
     connexion;
     userModel;
     roleModel;
-    roleController;
 
     constructor() {
         this.connexion = require('../database/sequelize');
@@ -23,8 +23,6 @@ module.exports = class UserController {
        
         this.userModel = require("../models/user.model")(this.connexion);
         this.roleModel = require("../models/role.model")(this.connexion);
-
-        this.roleController = new RoleController();
     }
 
     //Account ________________________________________________________________________ Account
@@ -63,11 +61,11 @@ module.exports = class UserController {
         
         try {
             if (!userFields.roles) {
-                const roleUser = this.roleController.getByFilters({code: 'user'});
+                const roleUser = RoleController.getOneByFilters({code: 'user'});
                 user.addRole(roleUser);
             } else {
                 for(const idRole of userFields.roles) {
-                    if (await this.roleController.getById(idRole) != null) {
+                    if (await RoleController.getById(idRole) != null) {
                         user.addRole(idRole);
                     }
                 }
@@ -158,7 +156,7 @@ module.exports = class UserController {
         this.roleModel = require("../models/role.model")(this.connexion);
 
         return await this.userModel.findAll({
-            //include: {model: this.roleModel, as: 'roles'},
+            //include: {model: this.roleModel, as: 'roles', attributes: ['libelle']},
             attributes: ['prenom', 'nom']
         });
     }
@@ -182,29 +180,51 @@ module.exports = class UserController {
         });
     }
 
+    async getNestedFilteredByFilters(filters) {
+        return await this.userModel.findOne({
+            attributes: ['prenom', 'nom', 'email', 'created_at'],
+            where: filters,
+            include: {
+                attributes: ['code'],
+                model: this.roleModel,
+                as: "roles",
+                through: {attributes: []}
+            }
+        });
+    }
+
     //UPDATE __________________________________________________________________ UPDATE
 
     async update(attributes, wheres) {
-        if (attributes.password) {
-            attributes.password = await bcrypt.hash(attributes.password, 10);
-        }
-
-        return await this.userModel.update(
+        //set attributes
+        await this.userModel.update(
             attributes,
             {
                 where: wheres
             }
         );
-    }
 
-    async updateGroupUsers(groupId, userList) {
-        let query =
-            `UPDATE user SET 
-                groupe_id = case 
-                When groupe_id = ${ groupId } AND id NOT IN (${ userList }) then null
-                else 1
-            end`;
-        return await this.groupeModel.query(query, { type: QueryTypes.UPDATE });
+        let user = await this.getByFilters(
+            wheres,
+            {
+                include: {
+                    model: this.roleModel,
+                    as: "roles"
+            }
+        });
+        
+        if (attributes.roles) {
+            try {
+                await user.setRoles(attributes.roles);
+                user.roles = user.getRoles();
+
+            } catch(err) {
+                console.log(err);
+                throw new Error('error during updating user roles');
+            }
+        }
+
+        return await this.getNestedFilteredByFilters(wheres);
     }
 
     //DELETE __________________________________________________________________ DELETE
