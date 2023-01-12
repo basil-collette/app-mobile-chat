@@ -141,7 +141,7 @@ const registerInputsAreSent = (req, res, next) => {
 }
 
 /**
- * check if the email send in body is allready used by a user
+ * check if the email send in body is already used by a user
  */
 const userDoesntExists = async (req, res, next) => {
     if (await UserController.exists(req.body.email)) {
