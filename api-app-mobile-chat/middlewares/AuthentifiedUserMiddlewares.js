@@ -8,7 +8,7 @@ const Op = require("sequelize").Op;
 
 /**
  * send all the users firstname and lastname
- * http://127.0.0.1:3000/user/auth/:idUser/getall
+ * GET http://127.0.0.1:3000/user/auth/:idUser/getall
  */
 router.get('/getall', async (req, res, next) => {
     try {
@@ -25,7 +25,7 @@ router.get('/getall', async (req, res, next) => {
 
 /**
  * send informations of a user by id
- * http://127.0.0.1:3000/user/auth/:idUser/detail
+ * GET http://127.0.0.1:3000/user/auth/:idUser/detail
  */
 router.get('/detail', async (req, res, next) => {
     try {
@@ -68,7 +68,7 @@ const preUpdate = async (req, res, next) => {
 
 /**
  * update a user by post attributes
- * http://127.0.0.1:3000/user/auth/:idUser/update
+ * POST http://127.0.0.1:3000/user/auth/:idUser/update
  */
 router.post('/update', preUpdate, async (req, res, next) => {
     try {

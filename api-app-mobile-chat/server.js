@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const express = require('express');
 const http = require('http');
 const socketIO = require("socket.io");
-const cookieParser = require('cookie-parser');
+//const cookieParser = require('cookie-parser');
 //const logger = require('morgan');
 require('dotenv').config();
 
@@ -18,14 +18,15 @@ app.use(express.urlencoded({ extended: false }));
 //app.use(logger('dev'));
 //app.use(cookieParser());
 
-const hostname = '127.0.0.1';
+//const hostname = '127.0.0.1';
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 const server = http.createServer(app);
 
-server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/...`);
+server.listen(port, /*hostname,*/ () => {
+    //console.log(`Server running at http://${hostname}:${port}/...`);
+    console.log(`Server running on port :${port}...`);
 });
 server.on('error', onError);
 
@@ -51,8 +52,19 @@ const io = socketIO(server, {
         methods: ["POST", "GET"]
     }
 });
-//const io = require('socket.io')();
-require('./socket')(io);
+
+io.on('connection', (socket) => {
+    let id = socket.id;
+
+    console.log(`New connection : ${id}`);
+
+    socket.on('disconnect', () => console.log(`${id} disconnected`));
+
+    socket.on('chat', (message) => {
+        console.log(`${id} : ${message}`);
+        io.emit('chat', `${id} : ${message}`);
+    });
+})
 
 io.attach(server);
 

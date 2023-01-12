@@ -4,7 +4,7 @@ const MessageUserController = new(require('../controllers/MessageUserController'
 
 /**
  * delete a user by getparams id
- * http://127.0.0.1:3000/admin/delete/user/:idUser
+ * GET http://127.0.0.1:3000/admin/delete/user/:idUser
  */
 const deleteUser = async (req, res, next) => {
     try {
@@ -21,7 +21,7 @@ const deleteUser = async (req, res, next) => {
 
 /**
  * delete a user by getparams id
- * http://127.0.0.1:3000/admin/delete/salonmessage/:idMessage
+ * GET http://127.0.0.1:3000/admin/delete/salonmessage/:idMessage
  */
 const deleteSalonMessage = async (req, res, next) => {
     try {
@@ -38,7 +38,7 @@ const deleteSalonMessage = async (req, res, next) => {
 
 /**
  * delete a user by getparams id
- * http://127.0.0.1:3000/admin/delete/usermessage/:idMessage
+ * GET http://127.0.0.1:3000/admin/delete/usermessage/:idMessage
  */
 const deleteUserMessage = async (req, res, next) => {
     try {

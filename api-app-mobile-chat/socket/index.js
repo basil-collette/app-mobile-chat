@@ -1,5 +1,3 @@
-//const { fetchMovies } = require('../controllers/movie.controller');
-
 module.exports = (io) => {
 
     io.on('connection', (socket) => {
@@ -9,12 +7,9 @@ module.exports = (io) => {
 
         socket.on('disconnect', () => console.log(`${id} disconnected`));
 
-        socket.on('message', (message) => {
-            //console.log(`${id} : ${message}`);
-            io.emit('message', `${id} : ${message}`);
+        socket.on('chat', (message) => {
+            console.log(`${id} : ${message}`);
+            io.emit('chat', `${id} : ${message}`);
         });
-
-        //socket.on('fetchMovies', () => fetchMovies(socket));
-
     })
 }

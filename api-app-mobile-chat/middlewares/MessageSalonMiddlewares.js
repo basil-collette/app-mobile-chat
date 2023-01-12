@@ -3,6 +3,7 @@ const MessageSalonController = new(require('../controllers/MessageSalonControlle
 
 /**
  * get all message from salon
+ * GET http://127.0.0.1:3000/messagesalon/getall/:idSalon
  */
 const getAllMessage = async (req, res, next) => {
     try {
@@ -19,7 +20,7 @@ const getAllMessage = async (req, res, next) => {
 
 /**
  * process before a messageSalon insert
- * valorise the fields 'createdAt'
+ * valorise the fields 'createdAt'& idUser
  */
 const prePersist = async (req, res, next) => {
     try {
@@ -38,6 +39,7 @@ const prePersist = async (req, res, next) => {
 
 /**
  * send a a message to salon
+ * POST http://127.0.0.1:3000/messagesalon/send/
  */
 const sendMessage = async (req, res, next) => {
     /*
@@ -67,6 +69,7 @@ const sendMessage = async (req, res, next) => {
 
 /**
  * send a a message to salon
+ * GET http://127.0.0.1:3000/messagesalon/delete/:idSalon/:idMessage
  */
 const deleteMessage = async (req, res, next) => {
     try {
