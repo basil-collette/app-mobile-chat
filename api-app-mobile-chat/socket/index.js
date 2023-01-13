@@ -19,6 +19,13 @@ module.exports = (io) => {
          */
         socket.on('disconnect', () => {
             console.log(`${socketId} disconnected`);
+
+            global.sockets.map((socketItem, index) => {
+                if (socketItem.socketId == socketId) {
+                    delete global.sockets[index];
+                    return;
+                }
+            });
         });
     
         /**
