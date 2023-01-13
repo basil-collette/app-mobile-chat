@@ -7,10 +7,11 @@ const bcrypt = require('bcrypt');
 const login = async (req, res, next) => {
     try {
         const userFields = req.body;
-        let token = await UserController.login(userFields.email, userFields.password);
+        
+        let result = await UserController.login(userFields.email, userFields.password);
 
         res.status(200);
-        res.send(token);
+        res.send(result);
         next();
         
     } catch (err) {

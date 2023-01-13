@@ -1,4 +1,6 @@
-const request = async (endpoint, post, endProcess, headers, body) => {
+import { ENDPOINT_API } from '@env'
+
+const request = async (endpoint, post, headers, body) => {
 
     let requestOptions = {
         method: (post == true) ? 'POST' : 'GET',
@@ -7,17 +9,14 @@ const request = async (endpoint, post, endProcess, headers, body) => {
 
     if(headers) {
         Object.assign(requestOptions.headers, headers);
-        console.log(requestOptions.headers);
     }
 
     if(body) {
-        requestOptions.body = JSON.stringify(body)
+        requestOptions.body = JSON.stringify(body);
     }
 
-    const response = await fetch(endpoint, requestOptions);
-    const data = await response.json();
-
-    if (endProcess) endProcess(data);
+    const response = await fetch(ENDPOINT_API + endpoint, requestOptions);
+    return await response.json();
 }
 
 module.exports = {
