@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import HomeTemplate from "./home.template.jsx";
+import HomeTemplate from "./chat.template.jsx";
 import { request } from '../../services/RequestService';
 import { SocketContext } from '../../context/socket.context';
 import * as StoreService from '../../services/StoreService';
 import { ENDPOINT_API } from '@env'
 
-export default function HomeComponent(props) {
+export default function ChatComponent(props) {
 
   const socket = useContext(SocketContext);
 
@@ -16,7 +16,6 @@ export default function HomeComponent(props) {
 
   useEffect(() => {
     setUser();
-    
   }, []);
 
   //FUNCTIONS ______________________________________________________________________ FUNCTIONS

@@ -79,7 +79,7 @@ export default StyleSheet.create({
         color : '#AAAABC',
         textAlign : 'center',
         fontSize : 23,
-        marginBottom: 25
+        marginBottom: 45,
       },
       inputEmail: {
         height: 46,
