@@ -64,7 +64,7 @@ export default function RegisterComponent(props) {
     }
   }
 
-  const changeBackButtonState = () => {
+  const toggleBackButtonState = () => {
     setState({
       ...state,
       textBackButton: !state.textBackButton
@@ -90,10 +90,9 @@ export default function RegisterComponent(props) {
     <RegisterTemplate 
       BackButtonState={state.textBackButton}
       goBack={goBack}
-      changeBackButtonState={changeBackButtonState}
+      toggleBackButtonState={toggleBackButtonState}
       registerRequest={registerRequest}
       updateInput={updateInput}
       /> 
   );
-
 }

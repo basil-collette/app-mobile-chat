@@ -15,7 +15,7 @@ export default function RegisterTemplate(props) {
             <View style={styles.containerForm}>
                 <Image
                     style={styles.logo}
-                    source={require('../../assets/img/logo.png')}
+                    source={require('@ssets/img/logo.png')}
                 />
 
                 <Text style={styles.title}>Sign in</Text>
@@ -72,8 +72,8 @@ export default function RegisterTemplate(props) {
                     <TouchableHighlight
                         style={styles.buttonBack}
                         underlayColor='#8093FF'
-                        onPressIn = {() => props.changeBackButtonState()}
-                        onPressOut = {() => props.changeBackButtonState()}
+                        onPressIn = {() => props.toggleBackButtonState()}
+                        onPressOut = {() => props.toggleBackButtonState()}
                         >
                         <Text style={[styles.textButtonBack, {color : props.BackButtonState === true ? "white" : "#8093FF"}]}>Back</Text>
                     </TouchableHighlight>
