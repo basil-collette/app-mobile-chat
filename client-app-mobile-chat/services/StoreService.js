@@ -13,11 +13,7 @@ const storeData = async (key, value) => {
 
 const retrieveData = async (key) => {
     try {
-        const result = await SecureStore.getItemAsync(key);
-        if(!result) {
-          throw new Error('item not stored');
-        }
-        return result;
+        return await SecureStore.getItemAsync(key);
     } catch(err) {
         console.error(err);
     }
