@@ -25,14 +25,14 @@ export default function AuthTemplate(props) {
 
                 <TextInput
                     style={styles.inputEmail}
-                    onChangeText={(e) => {props.inputEmailEvent(e)}}
+                    onChangeText={(e) => {props.updateInput('email', e)}}
                     title="Email"
                     placeholder="Email" 
                     placeholderTextColor="white"
                 />
                 <TextInput
                     style={styles.inputPassword}
-                    onChangeText={(e) => {props.inputPasswordEvent(e)}}
+                    onChangeText={(e) => {props.updateInput('password', e)}}
                     title="Password"
                     placeholder="Register"
                     placeholderTextColor="white"

@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthTemplate from './auth.template.jsx';
 import { SocketContext } from '../../context/socket.context';
-import { request } from '../../services/RequestService';
-import * as StoreService from '../../services/StoreService';
+import { httpRequest } from '../../services/RequestService';
+import StoreService from '../../services/StoreService';
+import InputService from '../../services/InputService';
+import RegexService from '../../services/RegexService';
 
 export default function AuthComponent(props) {
 
@@ -23,20 +25,34 @@ export default function AuthComponent(props) {
     };
   }, []);
 
-  //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
+  //FUNCTIONS ________________________________________________________________________________________ FUNCTIONS
 
-  const updateInputEmail = (inputEmailValue) => {
-    setState({
-      ...state,
-      connexionInputs: {...state.connexionInputs, email: inputEmailValue}
-    });
+  const verifyLoginInputs = () => {
+    return (
+      RegexService.testNameRegex(state.connexionInputs.email)
+      && RegexService.testNameRegex(state.connexionInputs.password)
+    );
+  }
+  
+  const finalizeLogin = () => {
+    //check if remember login credentials
+
+    props.navigation.navigate('Home');
   }
 
-  const updateInputPassword = (inputPasswordValue) => {
-    setState({
-      ...state,
-      connexionInputs: {...state.connexionInputs, password: inputPasswordValue}
-    });
+  //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
+
+  const updateInput = (inputName, value) => {
+    try {
+      const newConnexionInputs = InputService.setInputStates(state.connexionInputs, inputName, value);
+
+      setState({
+        ...state,
+        connexionInputs: newConnexionInputs
+      });
+    } catch(err) {
+      //
+    }
   }
 
   const loginRequest = async () => {
@@ -46,7 +62,7 @@ export default function AuthComponent(props) {
         return;
       }
 
-      let resultToken = await request('user/login/', true, null, state.connexionInputs);
+      let resultToken = await httpRequest('user/login/', true, null, state.connexionInputs);
 
       if (resultToken) {
         await StoreService.storeData('user', resultToken.user);
@@ -69,39 +85,15 @@ export default function AuthComponent(props) {
     props.navigation.navigate('Signin');
   }
 
-  //FUNCTIONS ________________________________________________________________________________________ FUNCTIONS
-
-  const verifyLoginInputs = () => {
-    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(state.connexionInputs.email)) {
-      return false;
-    }
-
-    /*
-    if (/.{6,}/g.test(state.connexionInputs.password)) {
-      return false;
-    }
-    */
-
-    return true;
-  }
-  
-  const finalizeLogin = () => {
-
-    //check if remember login credentials
-
-    props.navigation.navigate('Home');
-  }
-
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
 
   return (
     <AuthTemplate
       rememberStatus={state.rememberStatusCheck}
       setRememberStatusCheck={() => {setState({...state, rememberStatusCheck: !state.rememberStatusCheck})}}
-      inputEmailEvent={updateInputEmail}
-      inputPasswordEvent={updateInputPassword}
       registerBtnClick={goToRegister}
       loginBtnClick={loginRequest}
+      updateInput={updateInput}
     /> 
   );
 
