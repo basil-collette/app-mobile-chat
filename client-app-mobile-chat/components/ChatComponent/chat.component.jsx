@@ -1,24 +1,36 @@
-import React, { useState, useEffect, useContext } from 'react';
-import HomeTemplate from "./chat.template.jsx";
-import { request } from '../../services/RequestService';
-import { SocketContext } from '../../context/socket.context';
-import * as StoreService from '../../services/StoreService';
-import { ENDPOINT_API } from '@env'
+import React, { useState, useEffect } from 'react';
+import ChatTemplate from './chat.template.jsx';
+import { httpRequest } from '@services/RequestService';
+import * as StoreService from '@services/StoreService';
+import { SocketContext } from '@context/socket.context';
 
-export default function ChatComponent(props) {
-
+export default function RegisterComponent(props) {
+  
   const socket = useContext(SocketContext);
 
   const [state, setState] = useState({
+    user: {prenom: '', nom: ''},
+    msgInput: '',
     messages: [],
-    user: {prenom: '', nom: ''}
+    typeChat: props.typeChat,
+    idDestination: props.idDestination
   });
 
   useEffect(() => {
     setUser();
+
+    socket.on('client-chat', (chatMsg) => {
+      addMsg(chatMsg);
+    });
+
+    console.log("ChatComponent loaded");
+
+    return () => {
+      console.log('ChatComponent Destruct');
+    };
   }, []);
 
-  //FUNCTIONS ______________________________________________________________________ FUNCTIONS
+  //FUNCTIONS ________________________________________________________________________________________ FUNCTIONS
 
   const setUser = async () => {
     setState({
@@ -27,33 +39,63 @@ export default function ChatComponent(props) {
     });
   }
 
-  const writeMsg = async (message) => {
-    /*
-    socket.on('chat', (chatMsg) => {
-      addMsg(chatMsg);
+  const addMsg = (msg) => {
+    setState({
+      ...state,
+      message: [...state.message, msg]
     });
-    */
+  }
+  
+  //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
 
-    const finalEndPoint = ENDPOINT_API + 'messagesalon/send/';
-    const headers = { 'Authorization': 'Bearer ' + await StoreService.retrieveData('jwttoken') };
+  const goBack = () => {
+    props.navigation.goBack();
+  }
+
+  const sendMessage = async () => {
     const body = {
-      "content": "testfromreact",
-      "idSalon": 1
+      "content": state.msgInput
     };
 
+    let endPoint;
+
+    if (typeChat == 'salon') {
+
+      endPoint = 'messagesalon';
+      body['idSalon'] = state.idDestination;
+
+    } else if (typeChat == 'user') {
+
+      endPoint = 'messageuser';
+      body['idUserReceiver'] = state.idDestination;
+
+    } else {
+      // error, say that typechat isnt correct
+      return;
+    }
+
     try {
-      request(finalEndPoint, true, null, headers, body);
+      await httpRequest(endPoint, true, headers, body);
     } catch(err) {
       console.error(err);
     }
   }
 
-  const addMsg = (chatMsg) => {
+  const updateMsgInput = (value) => {
     setState({
       ...state,
-      messages: [...state.messages, chatMsg]
+      msgInput: value
     });
   }
-    
-  return (<HomeTemplate writeMsg={writeMsg} messages={state.messages} userName={state.user.prenom + '' + state.user.nom} />);
-};
+
+  //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
+
+  return (
+    <ChatTemplate
+      messages={state.messages}
+      goBack={goBack}
+      sendMessage={sendMessage}
+      updateMsgInput={updateMsgInput}
+      /> 
+  );
+}

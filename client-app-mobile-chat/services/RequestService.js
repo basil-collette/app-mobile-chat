@@ -8,13 +8,16 @@ const httpRequest = async (endpoint, post, headers, body) => {
         headers: { 'Content-Type': 'application/json' }
     };
 
-    const bearerToken = await StoreService.retrieveData('jwttoken');
-    if(bearerToken) {
-        Object.assign(requestOptions.headers, { 'Authorization': 'Bearer ' + bearerToken });
-    }
-
     if(headers) {
         Object.assign(requestOptions.headers, headers);
+    }
+
+    if (!requestOptions.headers['Authorization']) {
+        const bearerToken = await StoreService.retrieveData('jwttoken');
+        
+        if(bearerToken) {
+            Object.assign(requestOptions.headers, { 'Authorization': 'Bearer ' + bearerToken });
+        }
     }
 
     if(body) {
