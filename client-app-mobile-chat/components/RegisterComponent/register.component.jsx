@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import RegisterTemplate from './register.template.jsx';
-import { httpRequest } from '../../services/RequestService';
-import RegexService from '../../services/RegexService';
-import InputService from '../../services/InputService';
+import { httpRequest } from '@services/RequestService';
+import RegexService from '@services/RegexService';
+import InputService from '@services/InputService';
 
 export default function RegisterComponent(props) {
   
@@ -23,12 +23,12 @@ export default function RegisterComponent(props) {
 
   const verifyRegisterInputs = () => {
     return (
-      RegexService.testNameRegex(state.connexionInputs.prenom) //prenom
-      && RegexService.testNameRegex(state.connexionInputs.nom) //nom
-      && RegexService.testEmailRegex(state.connexionInputs.email) //email
-      && RegexService.testPasswordRegex(state.connexionInputs.password) //password
-      && RegexService.testPasswordRegex(state.connexionInputs.confirmPassword) //confirmPassword
-      && state.connexionInputs.confirmPassword == state.connexionInputs.password //password == confirmPassword
+      RegexService.testNameRegex(state. registerInputs.prenom) //prenom
+      && RegexService.testNameRegex(state. registerInputs.nom) //nom
+      && RegexService.testEmailRegex(state. registerInputs.email) //email
+      && RegexService.testPasswordRegex(state. registerInputs.password) //password
+      && RegexService.testPasswordRegex(state. registerInputs.confirmPassword) //confirmPassword
+      && state. registerInputs.confirmPassword == state. registerInputs.password //password == confirmPassword
     );
   }
   

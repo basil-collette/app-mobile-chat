@@ -10,6 +10,17 @@ module.exports = function(api) {
         "safe": false,
         "allowUndefined": true,
         "verbose": false
+      }],
+      ["module-resolver", {
+        "root": ["./"],
+        "alias": {
+          "underscore": "lodash",
+          "@comp": "./components",
+          "@services": "./services",
+          "@assets": "./assets",
+          "@context": "./context",
+          "@socket": "./socket",
+        }
       }]
     ]
   };
