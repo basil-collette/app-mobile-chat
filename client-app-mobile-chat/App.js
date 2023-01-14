@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
-import AuthComponent from './components/AuthComponent/auth.component.jsx'
-import HomeComponent from './components/HomeComponent/home.component.jsx'
-import { SocketContext, socket } from './context/socket.context';
+import AuthComponent from '@comp/AuthComponent/auth.component.jsx'
+import HomeComponent from '@comp/HomeComponent/home.component.jsx'
+import { SocketContext, socket } from '@context/socket.context';
 
 export default function App() {
 

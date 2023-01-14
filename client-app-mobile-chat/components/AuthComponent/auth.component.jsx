@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthTemplate from './auth.template.jsx';
-import { SocketContext } from '../../context/socket.context';
-import { httpRequest } from '../../services/RequestService';
-import StoreService from '../../services/StoreService';
-import InputService from '../../services/InputService';
-import RegexService from '../../services/RegexService';
+import { SocketContext } from '@context/socket.context';
+import { httpRequest } from '@services/RequestService';
+import StoreService from '@services/StoreService';
+import InputService from '@services/InputService';
+import RegexService from '@services/RegexService';
 
 export default function AuthComponent(props) {
 

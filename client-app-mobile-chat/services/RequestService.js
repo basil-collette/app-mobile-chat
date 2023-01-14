@@ -1,4 +1,4 @@
-import * as StoreService from './StoreService';
+import * as StoreService from '@services/StoreService';
 import { ENDPOINT_API } from '@env'
 
 const httpRequest = async (endpoint, post, headers, body) => {
