@@ -1,11 +1,17 @@
+import * as StoreService from './StoreService';
 import { ENDPOINT_API } from '@env'
 
-const request = async (endpoint, post, headers, body) => {
+const httpRequest = async (endpoint, post, headers, body) => {
 
     let requestOptions = {
         method: (post == true) ? 'POST' : 'GET',
         headers: { 'Content-Type': 'application/json' }
     };
+
+    const bearerToken = await StoreService.retrieveData('jwttoken');
+    if(bearerToken) {
+        Object.assign(requestOptions.headers, { 'Authorization': 'Bearer ' + bearerToken });
+    }
 
     if(headers) {
         Object.assign(requestOptions.headers, headers);
@@ -20,5 +26,5 @@ const request = async (endpoint, post, headers, body) => {
 }
 
 module.exports = {
-    request
+    httpRequest
 };
