@@ -30,10 +30,30 @@ server.listen(port, /*hostname,*/ () => {
 });
 server.on('error', onError);
 
+//SOCKET __________________________________________________________________ SOCKET
+
+global.sockets = [];
+const io = socketIO(server, {
+    cors: {
+        origin: "*",
+        methods: ["POST", "GET"]
+    }
+});
+require('./socket')(io);
+
 //ROUTES __________________________________________________________________ ROUTES
 
-const indexRouter = require('./routers/index.router');
-app.use('/', indexRouter);
+/*
+app.use((req, res, next) => {
+    const sessionID = req.headers['x-session-id'];
+    req.socket = io.sockets.sockets[sessionID];
+    console.log(req.socket);
+    next();
+});
+*/
+
+//INDEX
+app.use('/', require('./routers/index.router'));
 //USER
 app.use('/user', require('./routers/user.router'));
 //MessageSalon
@@ -41,32 +61,7 @@ app.use('/messagesalon', require('./routers/messageSalon.router'));
 //MessageUser
 app.use('/messageuser', require('./routers/messageUser.router'));
 //AdminRoute
-const UserMiddlewares = require('./middlewares/UserMiddlewares');
-app.use('/admin', UserMiddlewares.isAdmin, require('./routers/admin.router'));
-
-//SOCKET __________________________________________________________________ SOCKET
-
-const io = socketIO(server, {
-    cors: {
-        origin: "*",
-        methods: ["POST", "GET"]
-    }
-});
-
-io.on('connection', (socket) => {
-    let id = socket.id;
-
-    console.log(`New connection : ${id}`);
-
-    socket.on('disconnect', () => console.log(`${id} disconnected`));
-
-    socket.on('chat', (message) => {
-        console.log(`${id} : ${message}`);
-        io.emit('chat', `${id} : ${message}`);
-    });
-})
-
-io.attach(server);
+app.use('/admin', require('./middlewares/UserMiddlewares').isAdmin, require('./routers/admin.router'));
 
 //VIEWS ____________________________________________________________________ VIEWS
 /*
@@ -137,9 +132,11 @@ function onError(error) {
     }
 }
 
+/*
 app.use(function(req, res, next) {
     res.set("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0")
     res.set("Pragma", "no-cache")
     res.set("Expires", 0)
     next()
 })
+*/

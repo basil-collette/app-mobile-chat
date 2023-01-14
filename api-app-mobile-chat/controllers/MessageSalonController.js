@@ -45,7 +45,6 @@ module.exports = class MessageSalonController {
             "idSalon": 1
         }
         */
-        console.log(messageSalonFields);
         let messageSalon;
         try {
             messageSalon = await this.messageSalonModel.create({

@@ -100,16 +100,21 @@ module.exports = class UserController {
             const match = await bcrypt.compare(password, user.password);
             if (match) {
                 const expireIn = 24 * 60 * 60; //hour * minutes * seconds
-                const token = jwt.sign({
-                    idUser: user.idUser,
-                    roles: user.roles,
-                },
-                process.env.TOKEN_KEY,
-                {
-                    expiresIn: expireIn
-                });
+                const token = jwt.sign(
+                    {
+                        idUser: user.idUser,
+                        roles: user.roles,
+                    },
+                    process.env.TOKEN_KEY,
+                    {
+                        expiresIn: expireIn
+                    }
+                );
 
-                return token;
+                user = JSON.parse(JSON.stringify(user));
+                delete user.password;
+                
+                return {user: user, token: token};
             } else {
                 throw new Error('user_not_found');
             }
