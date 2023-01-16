@@ -21,20 +21,19 @@ module.exports = class MessageUserController {
 
     //GET ________________________________________________________________________ GET
 
-    async getAll() {
-        return await this.messageUserModel.findAll(
-            /*{
+    async getDiscussion(wheres) {
+        return await this.messageUserModel.findAll({
+            where: wheres,
             include: [{
                 model: this.userModel,
                 as: "userSender",
                 attributes: ['prenom', 'nom']
-            }, {
+            },{
                 model: this.userModel,
                 as: "userReceiver",
                 attributes: ['prenom', 'nom']
             }]
-        }*/
-        );
+        });
     }
 
     async getById(idMessage) {
@@ -43,13 +42,6 @@ module.exports = class MessageUserController {
 
     //INSERT 
     async insert(messageUserFields) {
-        /*
-        {
-            "content": "test",
-            "idSalon": 1
-        }
-        */
-        console.log(messageUserFields);
         let messageUser;
         try {
             messageUser = await this.messageUserModel.create({
