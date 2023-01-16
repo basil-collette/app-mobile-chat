@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { Component } from 'react';
 import HomeTemplate from "./home.template.jsx";
 import { SocketContext } from '@context/socket.context';
 import * as StoreService from '@services/StoreService';
