@@ -1,5 +1,43 @@
 import * as React from "react"
-import Svg, { Path, G} from "react-native-svg"
+import Svg, { G, Mask, Path, Defs, ClipPath, Rect } from "react-native-svg"
+
+const SvgArrow = (props) => {
+  return (
+    <Svg
+      viewBox="0 0 25 25"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <G clipPath="url(#clip0_5_167)">
+        <Mask
+          id="a"
+          style={{
+            maskType: "luminance"
+          }}
+          maskUnits="userSpaceOnUse"
+          x={0}
+          y={0}
+          width={25}
+          height={25}
+        >
+          <Path d="M25 0H0v25h25V0z" fill="#fff" />
+        </Mask>
+        <G mask="url(#a)">
+          <Path
+            d="M3.21 14.194l7.292-1.458c.651-.13.651-.342 0-.472l-7.293-1.458c-.434-.087-.857-.51-.944-.945L.807 2.57c-.13-.652.253-.955.857-.676l22.253 10.27c.402.186.402.488 0 .673L1.664 23.107c-.604.279-.988-.024-.857-.676l1.458-7.292c.087-.434.51-.858.944-.944z"
+          />
+        </G>
+      </G>
+      <Defs>
+        <ClipPath id="clip0_5_167">
+          <Path fill="#fff" d="M0 0H25V25H0z" />
+        </ClipPath>
+      </Defs>
+    </Svg>
+  )
+}
+
+
 
 const SvgProfil = (props) => {
     return (
@@ -38,7 +76,8 @@ const SvgUser = (props) => {
   </Svg>);
 }
 
+
   
 
-module.exports = {SvgProfil, SvgHome, SvgChat,SvgUser}
+module.exports = {SvgProfil, SvgHome, SvgChat,SvgUser,SvgArrow}
 

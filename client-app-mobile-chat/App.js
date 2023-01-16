@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import AuthComponent from './components/AuthComponent/auth.component.jsx'
 import HomeComponent from './components/HomeComponent/home.component.jsx'
+import UsersComponent from './components/UsersComponent/users.component.jsx'
 import { SocketContext, socket } from './context/socket.context';
 
 export default function App() {
@@ -19,6 +20,11 @@ export default function App() {
   }, []);
 
   const AppStackNavigator = createStackNavigator({
+    Users : {
+      screen: UsersComponent,
+      navigationOptions: {
+        headerShown: false
+      },
     Login: {
       screen: AuthComponent,
       navigationOptions: {
@@ -36,7 +42,9 @@ export default function App() {
       screen: HomeComponent,
       navigationOptions: {
         headerShown: false
-      }
+      },
+    
+    }
     }
   });
 
