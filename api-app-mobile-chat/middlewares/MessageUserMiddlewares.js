@@ -1,16 +1,28 @@
 const UserController = new(require('../controllers/UserController'));
 const MessageUserController = new(require('../controllers/MessageUserController'));
+const Op = require("sequelize").Op;
 
 /**
  * get all message from salon
- * GET http://127.0.0.1:3000/messageuser/getall/:idUser
+ * GET http://127.0.0.1:3000/messageuser/getdiscussion/:idUserReceiver/
  */
-const getAllMessage = async (req, res, next) => {
+const getDiscussion = async (req, res, next) => {
     try {
-        let messagesSalon = await MessageUserController.getAll();
+        const idUserSender = res.locals.authentifiedUser.idUser;
+        const idUserReceiver = req.params.idUserReceiver;
+
+        const wheres = {
+            [Op.and]: [
+                {idUserSender: {[Op.in]: [idUserReceiver, idUserSender]}},
+                {idUserReceiver: {[Op.in]: [idUserReceiver, idUserSender]}},
+                {idUserSender: {[Op.not]: idUserReceiver}}
+            ]
+        };
+
+        let messagesUser = await MessageUserController.getDiscussion(wheres);
 
         res.status(200);
-        res.send(messagesSalon);
+        res.send(messagesUser);
         next();
     } catch (err) {
         console.log(err);
@@ -39,7 +51,7 @@ const prePersist = async (req, res, next) => {
 
 /**
  * send a a message to salon
- * POST http://127.0.0.1:3000/messageuser/send
+ * POST http://127.0.0.1:3000/messageuser/send/
  */
 const sendMessage = async (req, res, next) => {
     /*
@@ -88,7 +100,7 @@ const deleteMessage = async (req, res, next) => {
 }
 
 module.exports = {
-    getAllMessage,
+    getDiscussion,
     prePersist,
     sendMessage,
     deleteMessage
