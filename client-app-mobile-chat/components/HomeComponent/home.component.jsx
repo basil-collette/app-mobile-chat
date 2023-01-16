@@ -32,9 +32,30 @@ export default function HomeComponent(props) {
 
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
 
+  const goProfile = () => {
+    props.navigation.navigate('Option', {});
+  }
+
+  const goRoom = (idRoom) => {
+    const goRoomParams = {
+      typeChat: 'salon',
+      idDestination: idRoom,
+      chatLibelle: 'Chat Général'
+    };
+    
+    props.navigation.navigate('Chat', goRoomParams);
+  }
+
+  const goUserList = () => {
+    props.navigation.navigate('UserList', {});
+  }
+
   return (
     <HomeTemplate
-      userName={state.user.prenom + '' + state.user.nom}
+      userName={state.user.prenom + ' ' + state.user.nom}
+      goProfile={goProfile}
+      goRoom={goRoom}
+      goUserList={goUserList}
     />
     );
 };

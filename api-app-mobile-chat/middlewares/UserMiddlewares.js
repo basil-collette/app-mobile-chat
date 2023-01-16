@@ -1,5 +1,6 @@
 const UserController = new(require('../controllers/UserController'));
 const bcrypt = require('bcrypt');
+const { Z_BUF_ERROR } = require('zlib');
 
 /**
  * send a jwttoken tu user, using his credentials
@@ -146,14 +147,15 @@ const registerInputsAreSent = (req, res, next) => {
  */
 const userDoesntExists = async (req, res, next) => {
     if (await UserController.exists(req.body.email)) {
-        return res.status(409).send("Error during registration. Please contact support");
+        throw new Error("Error during registration. Please contact support");
+        //return res.status(409).send("Error during registration. Please contact support");
     }
     next();
 }
 
 /**
  * process before a user persist
- * valorise the fields 'created_at' and 'roles'
+ * valorise the fields 'created_at' and 'roles', hash password
  */
 const prePersist = async (req, res, next) => {
     try {
@@ -161,7 +163,12 @@ const prePersist = async (req, res, next) => {
         req.body.createdAt = new Date();
 
         //hashage du password
-        registerFields.password = await bcrypt.hash(registerFields.password, 10);
+        req.body.password = await bcrypt.hash(req.body.password, 10);
+
+        //valorisation du roles si aucun n'est spécifié
+        if (!req.body.roles) {
+            req.body.roles = [1];
+        }
 
         next();
     } catch (err) {

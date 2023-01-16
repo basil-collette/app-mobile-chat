@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ChatTemplate from './chat.template.jsx';
 import { httpRequest } from '@services/RequestService';
 import * as StoreService from '@services/StoreService';
@@ -9,6 +9,7 @@ export default function RegisterComponent(props) {
   const socket = useContext(SocketContext);
 
   const [state, setState] = useState({
+    chatLibelle: props.chatLibelle,
     user: {prenom: '', nom: ''},
     msgInput: '',
     messages: [],

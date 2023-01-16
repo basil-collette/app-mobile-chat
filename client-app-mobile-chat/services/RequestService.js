@@ -24,8 +24,14 @@ const httpRequest = async (endpoint, post, headers, body) => {
         requestOptions.body = JSON.stringify(body);
     }
 
-    const response = await fetch(ENDPOINT_API + endpoint, requestOptions);
-    return await response.json();
+    try {
+        const response = await fetch(ENDPOINT_API + endpoint, requestOptions);
+        return await response.json();
+    } catch(err) {
+        console.error(err);
+        throw new Error(err);
+    }
+    
 }
 
 module.exports = {

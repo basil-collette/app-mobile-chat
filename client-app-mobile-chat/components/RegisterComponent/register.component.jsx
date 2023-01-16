@@ -56,10 +56,11 @@ export default function RegisterComponent(props) {
         finalizeRegister();
 
       } else {
-        //say that error occured during connexion
+        //say that error occured during connexion, toaster
       }
 
     } catch(err) {
+      //say that error occured during connexion, toaster
       console.error(err);
     }
   }
