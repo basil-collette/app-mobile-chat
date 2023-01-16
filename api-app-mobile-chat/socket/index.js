@@ -1,6 +1,5 @@
 /**
- * Socket Events of the API
- * @param {*} io socket declared in server.js
+ * Socket Events of the API, declared in server.js
  */
 module.exports = (io) => {
 

@@ -1,27 +1,27 @@
 import { TextInput, View, Image, TouchableHighlight, Text } from "react-native";
-import styles from './register.style.jsx';
+import RegisterStyle from './register.style.jsx';
 
 export default function RegisterTemplate(props) {
 
     return (
-        <View style={styles.container}>
-            <View style = {styles.containerHeader}>
-                    <View style={styles.triangleRight}></View>
-                    <View style={styles.triangleLeft}></View>
-                    <View style={styles.circleLeft}></View>
-                    <View style={styles.circleRight}></View>
+        <View style={RegisterStyle.container}>
+            <View style = {RegisterStyle.containerHeader}>
+                    <View style={RegisterStyle.triangleRight}></View>
+                    <View style={RegisterStyle.triangleLeft}></View>
+                    <View style={RegisterStyle.circleLeft}></View>
+                    <View style={RegisterStyle.circleRight}></View>
             </View>
 
-            <View style={styles.containerForm}>
+            <View style={RegisterStyle.containerForm}>
                 <Image
-                    style={styles.logo}
-                    source={require('../../assets/img/logo.png')}
+                    style={RegisterStyle.logo}
+                    source={require('@assets/img/logo.png')}
                 />
 
-                <Text style={styles.title}>Sign in</Text>
+                <Text style={RegisterStyle.title}>Sign in</Text>
 
                 <TextInput
-                    style={styles.input}
+                    style={RegisterStyle.input}
                     title="Email"
                     placeholder="Email" 
                     placeholderTextColor="white"
@@ -31,7 +31,7 @@ export default function RegisterTemplate(props) {
                     onChangeText={(e) => {props.updateInput('email', e)}}
                 />
                 <TextInput
-                    style={styles.input}
+                    style={RegisterStyle.input}
                     title="Lastname"
                     placeholder="Lastname"
                     placeholderTextColor="white"
@@ -39,7 +39,7 @@ export default function RegisterTemplate(props) {
                     onChangeText={(e) => {props.updateInput('nom', e)}}
                 />
                 <TextInput
-                    style={styles.input}
+                    style={RegisterStyle.input}
                     title="Firstname"
                     placeholder="Firstname" 
                     placeholderTextColor="white"
@@ -47,7 +47,7 @@ export default function RegisterTemplate(props) {
                     onChangeText={(e) => {props.updateInput('prenom', e)}}
                 />
                 <TextInput
-                    style={styles.input}
+                    style={RegisterStyle.input}
                     title="Password"
                     placeholder="Password"
                     placeholderTextColor="white"
@@ -58,7 +58,7 @@ export default function RegisterTemplate(props) {
 
                 <View style = {{marginBottom : 45, height : 46}}>
                     <TextInput
-                        style={styles.input}
+                        style={RegisterStyle.input}
                         title="ConfPassword"
                         placeholder="Confirm password"
                         placeholderTextColor="white"
@@ -68,22 +68,23 @@ export default function RegisterTemplate(props) {
                     />
                 </View>
 
-                <View style={styles.containerButton}>
+                <View style={RegisterStyle.containerButton}>
                     <TouchableHighlight
-                        style={styles.buttonBack}
+                        style={RegisterStyle.buttonBack}
                         underlayColor='#8093FF'
-                        onPressIn = {() => props.changeBackButtonState()}
-                        onPressOut = {() => props.changeBackButtonState()}
+                        onPressIn={() => props.toggleBackButtonState()}
+                        onPressOut={() => props.toggleBackButtonState()}
+                        onPress={() => {props.goBack()}}
                         >
-                        <Text style={[styles.textButtonBack, {color : props.BackButtonState === true ? "white" : "#8093FF"}]}>Back</Text>
+                        <Text style={[RegisterStyle.textButtonBack, {color : props.BackButtonState === true ? "white" : "#8093FF"}]}>Back</Text>
                     </TouchableHighlight>
                     
                     <TouchableHighlight
-                        style={styles.buttonSignIn}
+                        style={RegisterStyle.buttonSignIn}
                         underlayColor='#8093FF'
-                        onPress={() => console.log("LETS GO!")}
+                        onPress={() => props.registerRequest()}
                         >
-                        <Text style={[styles.textButtonSignIn]}>Sign in</Text>
+                        <Text style={[RegisterStyle.textButtonSignIn]}>Sign in</Text>
                     </TouchableHighlight>
                 </View>
 

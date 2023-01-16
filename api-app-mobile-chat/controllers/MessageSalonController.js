@@ -23,8 +23,9 @@ module.exports = class MessageSalonController {
 
     //GET ________________________________________________________________________ GET
 
-    async getAll() {
+    async getDiscussion(wheres) {
         return await this.messageSalonModel.findAll({
+            wher: wheres,
             include: {
                 model: this.userModel,
                 as: "user",

@@ -5,9 +5,9 @@ const MessageSalonController = new(require('../controllers/MessageSalonControlle
  * get all message from salon
  * GET http://127.0.0.1:3000/messagesalon/getall/:idSalon
  */
-const getAllMessage = async (req, res, next) => {
+const getDiscussion = async (req, res, next) => {
     try {
-        let messagesSalon = await MessageSalonController.getAll();
+        let messagesSalon = await MessageSalonController.getDiscussion({idSalon: req.params.idSalon});
 
         res.status(200);
         res.send(messagesSalon);
@@ -88,7 +88,7 @@ const deleteMessage = async (req, res, next) => {
 }
 
 module.exports = {
-    getAllMessage,
+    getDiscussion,
     prePersist,
     sendMessage,
     deleteMessage

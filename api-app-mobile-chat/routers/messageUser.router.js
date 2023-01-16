@@ -3,7 +3,7 @@ const router = express.Router();
 const UserMiddlewares = require('../middlewares/UserMiddlewares');
 const MessageUserMiddleWares = require('../middlewares/MessageUserMiddleWares');
 
-router.get('/getall/:idUser', UserMiddlewares.IsAuthentified, MessageUserMiddleWares.getAllMessage);
+router.get('/getdiscussion/:idUserReceiver', UserMiddlewares.IsAuthentified, MessageUserMiddleWares.getDiscussion);
 
 router.post('/send', UserMiddlewares.IsAuthentified, MessageUserMiddleWares.prePersist, MessageUserMiddleWares.sendMessage);
 
