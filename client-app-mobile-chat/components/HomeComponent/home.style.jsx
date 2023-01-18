@@ -67,5 +67,6 @@ export default StyleSheet.create({
         borderRightColor: "#3B55EB",
         borderBottomColor: "transparent",
         borderTopColor: "transparent",
-      }
+      },
+      
 });

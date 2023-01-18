@@ -6,7 +6,7 @@ import { SocketContext, socket } from './context/socket.context';
 import AuthComponent from './components/AuthComponent/auth.component.jsx'
 import HomeComponent from './components/HomeComponent/home.component.jsx'
 import UsersComponent from './components/UsersComponent/users.component.jsx'
-import ChatComponent from '@comp/ChatComponent/chat.component.jsx;
+import ChatComponent from '@comp/ChatComponent/chat.component.jsx';
 import RegisterComponent from '@comp/RegisterComponent/register.component.jsx';
 
 export default function App() {
@@ -31,6 +31,11 @@ export default function App() {
   }, [socket]);
 
   const AppStackNavigator = createStackNavigator({
+    Chat: {
+      screen: ChatComponent,
+      navigationOptions: {
+        headerShown: false
+      },
     Users : {
       screen: UsersComponent,
       navigationOptions: {
@@ -55,12 +60,8 @@ export default function App() {
         headerShown: false
       }
     },
-    Chat: {
-      screen: ChatComponent,
-      navigationOptions: {
-        headerShown: false
-      }
-    }/*,
+    
+    },/*,
     UserList: {
       screen: UserListComponent,
       navigationOptions: {
@@ -82,6 +83,7 @@ export default function App() {
       }
     }
     */
+  }
   });
 
   const AppContainer = createAppContainer(AppStackNavigator);

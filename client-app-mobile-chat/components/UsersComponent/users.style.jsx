@@ -33,7 +33,6 @@ export default StyleSheet.create({
     width: "100%",
     backgroundColor: "#3B55EB",
     borderRadius: 10,
-
   },
   userContainer: {
     flexDirection: "row",
