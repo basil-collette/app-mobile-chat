@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef} from 'react';
 import ChatTemplate from './chat.template.jsx';
 import { httpRequest } from '@services/RequestService';
 import * as StoreService from '@services/StoreService';
 import { SocketContext } from '@context/socket.context';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 export default function RegisterComponent(props) {
   
@@ -14,12 +15,17 @@ export default function RegisterComponent(props) {
     msgInput: '',
     messages: [],
     typeChat: props.typeChat,
-    idDestination: props.idDestination
+    idDestination: props.idDestination,
+    currentOrientation: ScreenOrientation.Orientation.UNKNOWN
   });
 
+
+  const scrollView = useRef();
+  let orientationChangeListener;
   useEffect(() => {
     setUser();
-
+  
+    
     socket.on('client-chat', (chatMsg) => {
       addMsg(chatMsg);
     });
@@ -27,6 +33,7 @@ export default function RegisterComponent(props) {
     console.log("ChatComponent loaded");
 
     return () => {
+      orientationChangeListener.remove();
       console.log('ChatComponent Destruct');
     };
   }, []);
@@ -89,6 +96,8 @@ export default function RegisterComponent(props) {
     });
   }
 
+
+
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
 
   return (
@@ -97,6 +106,7 @@ export default function RegisterComponent(props) {
       goBack={goBack}
       sendMessage={sendMessage}
       updateMsgInput={updateMsgInput}
+      scrollView= {scrollView}
       /> 
   );
 }
