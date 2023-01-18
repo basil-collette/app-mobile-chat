@@ -8,87 +8,32 @@ export default function ChatTemplate(props) {
 
   return (
     <View style={ChatStyle.container}>
-      {/* <Text style={ChatStyle.title}>{props.userName}</Text>
 
-        <Button title="Write"
-                onPress={() => {
-                    props.writeMsg("test");
-                }}>
-        </Button>
+      <ScrollView
+        contentContainerStyle={ChatStyle.scrollViewStyle}
+        ref={props.scrollView}
+        onContentSizeChange={() => {
+          props.scrollView.current.scrollToEnd({ animated: true, index: -1 }, 200);
+        }}
+        >
 
-        <View style={ChatStyle.containerForm}>
-          {props.messages.map((msg) => {
-              return (
-                <Text key={msg} style={ChatStyle.title}>{msg}</Text>
-              );
-          })}
-        </View> */}
-        
-        <ScrollView contentContainerStyle={ChatStyle.scrollViewStyle} ref={props.scrollView} onContentSizeChange={(event) => {props.scrollView.current.scrollToEnd({ animated: true, index: -1 }, 200);
-  }}>
-        <View style={ChatStyle.msgContainer}>
-          <Text style={ChatStyle.msgContentContainer}>user - 10:11</Text>
-            <View style={ChatStyle.msgContentContainerInterlocutor}>
-              <Text style={ChatStyle.msgContent}>Chat Chat Chat Chat ChatChat ChatChatChatChatChat Chat Chat </Text>
+        {props.messages.map((msg, index) => {
+          let identityStyle = (props.user.idUser == msg.idUser) ? ChatStyle.msgContentContainerConnectedUser : ChatStyle.msgContentContainerInterlocutor;
+          let finalStyle = (index + 1 != props.messages.length) ? [identityStyle, {marginBottom: 5}] : identityStyle;
+          
+          return (
+            <View key={msg.id} style={ChatStyle.msgContainer}>
+              <Text style={ChatStyle.msgContentContainer}>{msg.createdAt}</Text>
+
+              <View style={finalStyle}>
+                <Text style={ChatStyle.msgContent}>{msg.content}</Text>
+              </View>
             </View>
-            <View style={ChatStyle.msgContentContainerInterlocutor}>
-              <Text style={ChatStyle.msgContent}>Lets go ! </Text>
-            </View>
-        </View>
-        <View style = {ChatStyle.msgContainer}>
-         <Text style={ChatStyle.msgContentContainer}>user - 10:11</Text>
-          <View style={ChatStyle.msgContentContainerConnectedUser}>
-            <Text style={ChatStyle.msgContent}>Je sais pas pourquoi mdr bref ooooh</Text>
-          </View>
-          <View style={ChatStyle.msgContentContainerConnectedUser}>
-            <Text style={ChatStyle.msgContent}>sinon ça va toi ? </Text>
-          </View>
-          </View>
-        <View style={ChatStyle.msgContainer}>
-          <Text style={ChatStyle.msgContentContainer}>user - 10:11</Text>
-            <View style={ChatStyle.msgContentContainerInterlocutor}>
-              <Text style={ChatStyle.msgContent}>en vrai balek </Text>
-            </View>
-        </View>
-        <View style = {ChatStyle.msgContainer}>
-         <Text style={ChatStyle.msgContentContainer}>user - 10:11</Text>
-          <View style={ChatStyle.msgContentContainerConnectedUser}>
-            <Text style={ChatStyle.msgContent}>Chat</Text>
-          </View>
-          </View>
+          );
+        })}
 
-        <View style={ChatStyle.msgContainer}>
-          <Text style={ChatStyle.msgContentContainer}>user - 10:11</Text>
-            <View style={ChatStyle.msgContentContainerInterlocutor}>
-              <Text style={ChatStyle.msgContent}>Wesh trkl ?  </Text>
-            </View>
-        </View>
+      </ScrollView>
 
-        <View style = {ChatStyle.msgContainer}>
-         <Text style={ChatStyle.msgContentContainer}>user - 10:11</Text>
-          <View style={ChatStyle.msgContentContainerConnectedUser}>
-            <Text style={ChatStyle.msgContent}>Oue et toi ? </Text>
-          </View>
-          </View>
-        <View style={ChatStyle.msgContainer}>
-          <Text style={ChatStyle.msgContentContainer}>user - 10:11</Text>
-            <View style={ChatStyle.msgContentContainerInterlocutor}>
-              <Text style={ChatStyle.msgContent}>Je te deteste putain pourquoi t'as fait ça devant ma daronne frr </Text>
-            </View>
-            <View style={ChatStyle.msgContentContainerInterlocutor}>
-              <Text style={ChatStyle.msgContent}>Elle est choqué vrm </Text>
-            </View>
-        </View>
-
-         <View style = {ChatStyle.msgContainer}>
-         <Text style={ChatStyle.msgContentContainer}>user - 10:11</Text>
-          <View style={ChatStyle.msgContentContainerConnectedUser}>
-            <Text style={ChatStyle.msgContent}>cv c rien mon sang t bizarre</Text>
-          </View>
-
-          </View>
-
-        </ScrollView>
       <View style={ChatStyle.messageBarContainer}>
         <TextInput
           style={ChatStyle.InputMessage}
@@ -98,10 +43,16 @@ export default function ChatTemplate(props) {
           placeholderTextColor="white"
           secureTextEntry={true}
         />
-        <TouchableHighlight style={chatStyle.sendButtonContainer}>
+        <TouchableHighlight
+          style={chatStyle.sendButtonContainer}
+          onPress={() => {
+            props.sendMessage();
+          }}
+          >
           <SvgArrow width={25} height={25} fill="#3B55EB"></SvgArrow>
         </TouchableHighlight>
       </View>
+
     </View>
   );
 

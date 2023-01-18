@@ -1,30 +1,27 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  container: {
+  componentBody: {
+    width: '100%',
+    height: '100%',
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
-    backgroundColor: "#3C3C49"
+    paddingTop: 20,
+    paddingBottom: 41,
+    paddingHorizontal: 20,
+    overflow: 'hidden',
   },
-  containerHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    backgroundColor: "#3B55EB",
-    width: "100%",
-    padding: 10,
-    marginBottom: 25
-  },
-  bulleContainer: {
-    flex: 0.95,
-    width: "90%",
+  userListContainer: {
+    width: '100%',
+    maxHeight: '100%',
+    flexDirection: "column",
     backgroundColor: "#3B55EB",
     borderRadius: 10,
     paddingBottom: 20,
     paddingRight: 20,
-    paddingLeft: 20
+    paddingLeft: 20,
   },
   scrollViewContainer: {
     flexDirection: "column",
@@ -38,13 +35,14 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
+    width: "100%",
     height: 50,
     backgroundColor: "#AAAABC",
     borderRadius: 7,
-    marginBottom: 10,
-    width: "100%",
   },
-
+  userContainerGap: {
+    marginBottom: 5
+  },
   profilButton: {
     height: "100%",
     borderRightWidth: 3,
@@ -67,19 +65,15 @@ export default StyleSheet.create({
     borderRadius: 10
   },
   triangle: {
-    position: "absolute",
     width: 0,
-    top: "102%",
-    right: "50%",
     height: 0,
-    backgroundColor: "transparent",
     borderStyle: "solid",
-    borderRightWidth: 20,
-    borderLeftWidth: 20,
-    borderTopWidth: 25,
+    borderRightWidth: 18,
+    borderLeftWidth: 18,
+    borderTopWidth: 21,
     borderRightColor: "transparent",
     borderLeftColor: "transparent",
-    borderTopColor: "#3B55EB",
+    borderTopColor: "#3B55EB"
   },
   titleAlign: {
     color: "white",

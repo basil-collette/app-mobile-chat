@@ -1,10 +1,9 @@
 import * as StoreService from '@services/StoreService';
 import { ENDPOINT_API } from '@env'
 
-const httpRequest = async (endpoint, post, headers, body) => {
-
+const httpRequest = async (endpoint, headers, body) => {
     let requestOptions = {
-        method: (post == true) ? 'POST' : 'GET',
+        method: (body) ? 'POST' : 'GET',
         headers: { 'Content-Type': 'application/json' }
     };
 
@@ -12,28 +11,36 @@ const httpRequest = async (endpoint, post, headers, body) => {
         Object.assign(requestOptions.headers, headers);
     }
 
-    if (!requestOptions.headers['Authorization']) {
-        const bearerToken = await StoreService.retrieveData('jwttoken');
-        
-        if(bearerToken) {
-            Object.assign(requestOptions.headers, { 'Authorization': 'Bearer ' + bearerToken });
-        }
-    }
-
     if(body) {
         requestOptions.body = JSON.stringify(body);
     }
 
     try {
-        const response = await fetch(ENDPOINT_API + endpoint, requestOptions);
+        const response = await fetch(endpoint, requestOptions);
         return await response.json();
     } catch(err) {
         console.error(err);
         throw new Error(err);
     }
-    
+}
+
+const apiHttpRequest = async (endpoint, headers, body) => {
+    if (!headers) {
+        headers = {};
+    }
+
+    if(!headers['Authorization']) {
+        const bearerToken = await StoreService.retrieveData('jwttoken');
+        
+        if(bearerToken) {
+            Object.assign(headers, { 'Authorization': 'Bearer ' + bearerToken });
+        }
+    }
+
+    return await httpRequest(ENDPOINT_API + endpoint, headers, body);
 }
 
 module.exports = {
-    httpRequest
+    httpRequest,
+    apiHttpRequest
 };

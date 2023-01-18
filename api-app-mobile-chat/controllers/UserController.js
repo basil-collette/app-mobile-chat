@@ -161,7 +161,7 @@ module.exports = class UserController {
 
         return await this.userModel.findAll({
             //include: {model: this.roleModel, as: 'roles', attributes: ['libelle']},
-            attributes: ['prenom', 'nom']
+            attributes: ['idUser', 'prenom', 'nom']
         });
     }
 

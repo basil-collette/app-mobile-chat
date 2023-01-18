@@ -1,10 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const UserController = new(require('../controllers/UserController'));
-const RoleController = new(require('../controllers/RoleController'));
-const Op = require("sequelize").Op;
 
 // GET ____________________________________________________________________________________________________________________ GET
+
+const getUsersState = (users) => {
+    return users.map((user) => {
+        let newUser = {...user.dataValues}
+
+        if (global.clientSockets.find((socket) => socket.idUser && socket.idUser == user.dataValues.idUser)) {
+            newUser.isConnected = true;
+        } else {
+            newUser.isConnected = false;
+        }
+        
+        delete newUser.idUser;
+        return newUser;
+    });
+}
 
 /**
  * send all the users firstname and lastname
@@ -12,8 +25,8 @@ const Op = require("sequelize").Op;
  */
 router.get('/getall', async (req, res, next) => {
     try {
-        let users = await UserController.getAll();
-
+        let users = getUsersState(await UserController.getAll());
+        
         res.status(200);
         res.send(users);
         next();
@@ -51,13 +64,6 @@ const preUpdate = async (req, res, next) => {
         if (req.body.password) {
             req.body.password = await bcrypt.hash(req.body.password, 10);
         }
-
-        //recupere les roles par leur id
-        /*
-        if (req.body.roles) {
-            req.body.roles = await RoleController.getAllByFilters({idRole: {[Op.in]: req.body.roles}});
-        }
-        */
 
         next();
     } catch (err) {

@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import HomeTemplate from "./home.template.jsx";
+import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import { SocketContext } from '@context/socket.context';
 import * as StoreService from '@services/StoreService';
 
@@ -26,7 +27,7 @@ export default function HomeComponent(props) {
   const setUser = async () => {
     setState({
       ...state,
-      user: JSON.parse(await StoreService.retrieveData('user'))
+      user: await StoreService.retrieveData('user')
     });
   }
 
@@ -43,7 +44,7 @@ export default function HomeComponent(props) {
       chatLibelle: 'Chat Général'
     };
     
-    props.navigation.navigate('Chat', goRoomParams);
+    props.navigation.navigate('Chat', {...goRoomParams});
   }
 
   const goUserList = () => {
@@ -51,11 +52,16 @@ export default function HomeComponent(props) {
   }
 
   return (
-    <HomeTemplate
+    <GlobalTemplate
       userName={state.user.prenom + ' ' + state.user.nom}
-      goProfile={goProfile}
-      goRoom={goRoom}
-      goUserList={goUserList}
-    />
+      >
+
+      <HomeTemplate
+        goProfile={goProfile}
+        goRoom={goRoom}
+        goUserList={goUserList}
+      />
+
+    </GlobalTemplate>
     );
 };

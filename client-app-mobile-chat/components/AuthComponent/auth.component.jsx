@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthTemplate from './auth.template.jsx';
 import { SocketContext } from '@context/socket.context';
-import { httpRequest } from '@services/RequestService';
+import { apiHttpRequest } from '@services/RequestService';
 import StoreService from '@services/StoreService';
 import InputService from '@services/InputService';
 import RegexService from '@services/RegexService';
 
 export default function AuthComponent(props) {
-
-  const socket = useContext(SocketContext);
   
+  const currentSocket = useContext(SocketContext);
+
   const [state, setState] = useState({
     rememberStatusCheck: false,
-    connexionInputs: {email: '', password: ''}
+    connexionInputs: {email: 'user@gmail.com', password: 'password'}
   });
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function AuthComponent(props) {
   
   const finalizeLogin = () => {
     //check if remember login credentials
-
+    
     props.navigation.navigate('Home');
   }
 
@@ -62,14 +62,14 @@ export default function AuthComponent(props) {
         return;
       }
 
-      let resultToken = await httpRequest('user/login/', true, null, state.connexionInputs);
-
+      let resultToken = await apiHttpRequest('user/login/', null, state.connexionInputs);
+      
       if (resultToken) {
         await StoreService.storeData('user', resultToken.user);
         await StoreService.storeData('jwttoken', resultToken.token);
         
-        socket.emit('associate_userid_to_socket', resultToken.user.idUser);
-
+        currentSocket.emit('associate_userid_to_socket', resultToken.user.idUser);
+        
         finalizeLogin();
 
       } else {

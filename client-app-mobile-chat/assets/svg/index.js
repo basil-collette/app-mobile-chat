@@ -3,24 +3,16 @@ import Svg, { G, Mask, Path, Defs, ClipPath, Rect } from "react-native-svg"
 
 const SvgArrow = (props) => {
   return (
-    <Svg
-      viewBox="0 0 25 25"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+    <Svg viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg" {...props} >
       <G clipPath="url(#clip0_5_167)">
         <Mask
-          id="a"
-          style={{
-            maskType: "luminance"
-          }}
           maskUnits="userSpaceOnUse"
           x={0}
           y={0}
           width={25}
           height={25}
         >
-          <Path d="M25 0H0v25h25V0z" fill="#fff" />
+          <Path d="M25 0H0v25h25V0z" />
         </Mask>
         <G mask="url(#a)">
           <Path
@@ -28,16 +20,9 @@ const SvgArrow = (props) => {
           />
         </G>
       </G>
-      <Defs>
-        <ClipPath id="clip0_5_167">
-          <Path fill="#fff" d="M0 0H25V25H0z" />
-        </ClipPath>
-      </Defs>
     </Svg>
   )
 }
-
-
 
 const SvgProfil = (props) => {
     return (
@@ -61,7 +46,6 @@ const SvgChat = (props) => {
     </Svg>)
 }
 
-
 const SvgUser = (props) => {
    return( <Svg
     xmlns="http://www.w3.org/2000/svg"
@@ -75,9 +59,6 @@ const SvgUser = (props) => {
     <Path d="M11.469 31.103C11.009 31.037 10.52 31 10 31c-3.83 0-5.969 2.021-6.789 3.028a.99.99 0 0 0-.204.604l-.001.017C3 35.019 3 35.509 3 36a1 1 0 0 0 1 1h7.172A2.986 2.986 0 0 1 11 36c0-1.138 0-2.494.004-3.295 0-.57.163-1.125.465-1.602ZM34 37H14a.997.997 0 0 1-1-1c0-1.135 0-2.485.004-3.289v-.006c0-.23.08-.452.225-.63C14.47 30.658 18.22 27 24 27c6.542 0 9.827 3.651 10.832 5.028.111.169.168.36.168.555V36a.997.997 0 0 1-1 1Zm2.828 0H44a1 1 0 0 0 1-1v-1.369c0-.221-.073-.435-.207-.61C43.969 33.021 41.829 31 38 31c-.493 0-.958.033-1.396.093.259.453.396.967.396 1.492V36c0 .344-.059.682-.172 1ZM10 19c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5Zm28 0c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5Zm-14-8c-3.863 0-7 3.137-7 7s3.137 7 7 7 7-3.137 7-7-3.137-7-7-7Z" />
   </Svg>);
 }
-
-
-  
 
 module.exports = {SvgProfil, SvgHome, SvgChat,SvgUser,SvgArrow}
 

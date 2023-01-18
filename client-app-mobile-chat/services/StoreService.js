@@ -13,7 +13,8 @@ const storeData = async (key, value) => {
 
 const retrieveData = async (key) => {
     try {
-        return await SecureStore.getItemAsync(key);
+        const result = await SecureStore.getItemAsync(key);
+        return await JSON.parse(result);
     } catch(err) {
         console.error(err);
     }
