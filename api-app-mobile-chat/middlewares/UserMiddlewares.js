@@ -1,6 +1,5 @@
 const UserController = new(require('../controllers/UserController'));
 const bcrypt = require('bcrypt');
-const { Z_BUF_ERROR } = require('zlib');
 
 /**
  * send a jwttoken tu user, using his credentials
@@ -14,7 +13,6 @@ const login = async (req, res, next) => {
         res.status(200);
         res.send(result);
         next();
-        
     } catch (err) {
         console.log(err);
         res.status(404);
@@ -28,7 +26,6 @@ const login = async (req, res, next) => {
  */
 const isAdmin = async (req, res, next) => {
     try {
-
         if(!res.locals.authentifiedUser) {
             res.locals.authentifiedUser = await UserController.getAuthentifiedUser(req);
         }

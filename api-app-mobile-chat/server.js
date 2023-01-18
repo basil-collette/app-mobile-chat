@@ -32,7 +32,7 @@ server.on('error', onError);
 
 //SOCKET __________________________________________________________________ SOCKET
 
-global.sockets = [];
+global.clientSockets = [];
 const io = socketIO(server, {
     cors: {
         origin: "*",
@@ -41,13 +41,20 @@ const io = socketIO(server, {
 });
 require('./socket')(io);
 
+setInterval(() => {
+    global.clientSockets.map((socketItem, index) => {
+        if (!socketItem.socket.connected) {
+            delete global.clientSockets[index];
+            return null;
+        }
+    });
+}, 1000);
+
 //ROUTES __________________________________________________________________ ROUTES
 
 /*
 app.use((req, res, next) => {
-    const sessionID = req.headers['x-session-id'];
-    req.socket = io.sockets.sockets[sessionID];
-    console.log(req.socket);
+    console.log(req);
     next();
 });
 */
@@ -109,6 +116,7 @@ function normalizePort(val) {
 
 // Event listener for HTTP server "error" event.
 function onError(error) {
+    console.error(err);
     if (error.syscall !== 'listen') {
         throw error;
     }
@@ -131,12 +139,3 @@ function onError(error) {
             throw error;
     }
 }
-
-/*
-app.use(function(req, res, next) {
-    res.set("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0")
-    res.set("Pragma", "no-cache")
-    res.set("Expires", 0)
-    next()
-})
-*/

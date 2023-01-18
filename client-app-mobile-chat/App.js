@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
-
-import { SocketContext, socket } from './context/socket.context';
-import AuthComponent from './components/AuthComponent/auth.component.jsx'
-import HomeComponent from './components/HomeComponent/home.component.jsx'
-import UsersComponent from './components/UsersComponent/users.component.jsx'
-import ChatComponent from '@comp/ChatComponent/chat.component.jsx;
+import { SocketContext, socket } from '@context/socket.context';
+import AuthComponent from '@comp/AuthComponent/auth.component.jsx';
+import HomeComponent from '@comp/HomeComponent/home.component.jsx';
+import UserListComponent from '@comp/UserListComponent/users.component.jsx';
+import ChatComponent from '@comp/ChatComponent/chat.component.jsx';
 import RegisterComponent from '@comp/RegisterComponent/register.component.jsx';
 
 export default function App() {
@@ -22,20 +21,7 @@ export default function App() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!socket['connected']) {
-      console.log('not connected');
-    } else {
-      console.log('connected');
-    }
-  }, [socket]);
-
   const AppStackNavigator = createStackNavigator({
-    Users : {
-      screen: UsersComponent,
-      navigationOptions: {
-        headerShown: false
-      },
     Login: {
       screen: AuthComponent,
       //unmountOnBlur: true,
@@ -60,13 +46,13 @@ export default function App() {
       navigationOptions: {
         headerShown: false
       }
-    }/*,
-    UserList: {
+    },
+    UserList : {
       screen: UserListComponent,
       navigationOptions: {
         headerShown: false
       }
-    },
+    }/*
     UserDetail: {
       screen: UserDetailComponent,
       unmountOnBlur: true,

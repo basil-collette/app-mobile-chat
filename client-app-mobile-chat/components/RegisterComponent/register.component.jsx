@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import RegisterTemplate from './register.template.jsx';
-import { httpRequest } from '@services/RequestService';
+import { apiHttpRequest } from '@services/RequestService';
 import RegexService from '@services/RegexService';
 import InputService from '@services/InputService';
 
@@ -50,7 +50,7 @@ export default function RegisterComponent(props) {
         return;
       }
 
-      let result = await httpRequest('user/register/', true, null, state.registerInputs);
+      let result = await apiHttpRequest('user/register/', null, state.registerInputs);
 
       if (result) {
         finalizeRegister();

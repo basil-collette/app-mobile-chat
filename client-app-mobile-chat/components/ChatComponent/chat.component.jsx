@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ChatTemplate from './chat.template.jsx';
-import { httpRequest } from '@services/RequestService';
+import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
+import { apiHttpRequest } from '@services/RequestService';
 import * as StoreService from '@services/StoreService';
 import { SocketContext } from '@context/socket.context';
 
@@ -9,12 +10,12 @@ export default function RegisterComponent(props) {
   const socket = useContext(SocketContext);
 
   const [state, setState] = useState({
-    chatLibelle: props.chatLibelle,
+    chatLibelle: props.navigation.state.params.chatLibelle,
     user: {prenom: '', nom: ''},
     msgInput: '',
     messages: [],
-    typeChat: props.typeChat,
-    idDestination: props.idDestination
+    typeChat: props.navigation.state.params.typeChat,
+    idDestination: props.navigation.state.params.idDestination
   });
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function RegisterComponent(props) {
   const setUser = async () => {
     setState({
       ...state,
-      user: JSON.parse(await StoreService.retrieveData('user'))
+      user: await StoreService.retrieveData('user')
     });
   }
 
@@ -45,6 +46,10 @@ export default function RegisterComponent(props) {
       ...state,
       message: [...state.message, msg]
     });
+  }
+
+  const goProfile = () => {
+    props.navigation.navigate('Option', {});
   }
   
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
@@ -76,7 +81,7 @@ export default function RegisterComponent(props) {
     }
 
     try {
-      await httpRequest(endPoint, true, headers, body);
+      const response = await apiHttpRequest(endPoint, headers, body);
     } catch(err) {
       console.error(err);
     }
@@ -92,11 +97,19 @@ export default function RegisterComponent(props) {
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
 
   return (
-    <ChatTemplate
-      messages={state.messages}
-      goBack={goBack}
-      sendMessage={sendMessage}
-      updateMsgInput={updateMsgInput}
-      /> 
+    <GlobalTemplate
+      userName={state.user.prenom + ' ' + state.user.nom}
+      goProfile={goProfile}
+      title={state.chatLibelle}
+      >
+
+      <ChatTemplate
+        messages={state.messages}
+        goBack={goBack}
+        sendMessage={sendMessage}
+        updateMsgInput={updateMsgInput}
+        /> 
+      
+    </GlobalTemplate>
   );
 }

@@ -10,8 +10,9 @@ module.exports = (io) => {
     io.on('connection', (socket) => {
     
         const socketId = socket.id;
-        global.sockets.push({socketId: socketId});
+        global.clientSockets.push({socket: socket});
         console.log(`New connection : ${socketId}`);
+        //socket.client.conn.remoteAdress
     
         /**
          * triggered when client stop connexion
@@ -19,10 +20,10 @@ module.exports = (io) => {
         socket.on('disconnect', () => {
             console.log(`${socketId} disconnected`);
 
-            global.sockets.map((socketItem, index) => {
+            global.clientSockets.map((socketItem, index) => {
                 if (socketItem.socketId == socketId) {
-                    delete global.sockets[index];
-                    return;
+                    delete global.clientSockets[index];
+                    return null;
                 }
             });
         });
@@ -33,9 +34,9 @@ module.exports = (io) => {
         socket.on('associate_userid_to_socket', (idUser) => {
             socket.data.idUser = idUser;
 
-            global.sockets.map(socketItem => {
-                if (socketItem.socketId == socketId) {
-                    socketItem.idUser = idUser;
+            global.clientSockets.map((socketItem, index) => {
+                if (socketItem.socket.id == socketId) {
+                    global.clientSockets[index].idUser = idUser;
                     return;
                 }
             });
@@ -52,7 +53,7 @@ module.exports = (io) => {
         });
 
         socket.on('test', (test) => {
-            console.log(global.sockets);
+            console.log(global.clientSockets);
         });
     
     })
