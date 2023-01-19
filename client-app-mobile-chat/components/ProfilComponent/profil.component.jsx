@@ -4,7 +4,7 @@ import { request } from '../../services/RequestService';
 import { SocketContext } from '../../context/socket.context';
 import StoreService from '@services/StoreService';
 import { ENDPOINT_API } from '@env';
-import { httpRequest } from '@services/RequestService';
+import { apiHttpRequest } from '@services/RequestService';
 import InputService from '@services/InputService';
 import RegexService from '@services/RegexService';
 
@@ -62,7 +62,7 @@ export default function ProfilComponent(props) {
         delete userDetails['password']
       }
       console.log(userDetails);
-      let request = await httpRequest(`user/auth/${userDetails.idUser}/update/`, 'POST', null, userDetails);
+      let request = await apiHttpRequest(`user/auth/${userDetails.idUser}/update/`, 'POST', null, userDetails);
       await StoreService.storeData('user', request)
     } catch (err) {
       console.error(err);

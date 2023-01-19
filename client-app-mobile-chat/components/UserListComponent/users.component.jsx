@@ -32,7 +32,7 @@ export default function HomeComponent(props) {
     
     const endpoint = 'user/auth/' + user.idUser + '/getall';
     
-    const allUsers = await apiHttpRequest(endpoint, null, null);
+    const allUsers = await apiHttpRequest(endpoint, 'GET', null, null);
     
     setState({
       ...state,

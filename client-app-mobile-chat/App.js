@@ -48,30 +48,24 @@ export default function App() {
         headerShown: false
       }
     },
-    UserList : {
+    UserList: {
       screen: UserListComponent,
       navigationOptions: {
         headerShown: false
       }
-    }/*
-    UserDetail: {
-      screen: UserDetailComponent,
-      unmountOnBlur: true,
-    Users : {
-      screen: UsersComponent,
+    },
+    UserDetail : {
+      screen: ProfilComponent,
       navigationOptions: {
         headerShown: false
       }
-    },
-      Profil : {
-        screen: ProfilComponent,
-        navigationOptions: {
-          headerShown: false
-        },
-      }
+    }
+    /*
+    Option: {
+      screen: OptionComponent,
+      unmountOnBlur: true,
     }
     */
-
   });
 
   const AppContainer = createAppContainer(AppStackNavigator);

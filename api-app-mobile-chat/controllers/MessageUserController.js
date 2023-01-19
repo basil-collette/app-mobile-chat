@@ -24,6 +24,7 @@ module.exports = class MessageUserController {
     async getDiscussion(wheres) {
         return await this.messageUserModel.findAll({
             where: wheres,
+            order: [['pk_id_user_message', 'ASC']],
             include: [{
                 model: this.userModel,
                 as: "userSender",

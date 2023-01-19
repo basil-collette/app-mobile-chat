@@ -40,7 +40,7 @@ export default function ChatComponent(props) {
   const init = async () => {
     const userResult = await StoreService.retrieveData('user');
 
-    const messagesResult = await apiHttpRequest('messageuser/getdiscussion/' + state.idDestination, null, null);
+    const messagesResult = await apiHttpRequest('messageuser/getdiscussion/' + state.idDestination, 'GET', null, null);
     
     setMessages(messages => messagesResult);
     setState({
@@ -86,9 +86,9 @@ export default function ChatComponent(props) {
     }
 
     try {
-      const response = await apiHttpRequest(endPoint, null, body);
+      const response = await apiHttpRequest(endPoint, 'POST', null, body);
 
-      msgInput.clear();
+      msgInput.current.clear();
       setState({
         ...state,
         msgInput: ''

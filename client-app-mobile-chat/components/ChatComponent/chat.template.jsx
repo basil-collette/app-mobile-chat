@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ScrollView,TouchableHighlight } from 'react-native';
+import { View, Text, TextInput, ScrollView, TouchableHighlight } from 'react-native';
 import ChatStyle from "./chat.style.jsx";
 import { SvgArrow } from '@assets/svg'
 
@@ -63,5 +63,4 @@ export default function ChatTemplate(props) {
 
     </View>
   );
-
 };

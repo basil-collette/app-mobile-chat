@@ -1,7 +1,6 @@
 import * as StoreService from '@services/StoreService';
 import { ENDPOINT_API } from '@env'
 
-
 const httpRequest = async (endpoint, method, headers, body) => {
 
     let requestOptions = {
@@ -26,7 +25,7 @@ const httpRequest = async (endpoint, method, headers, body) => {
     }
 }
 
-const apiHttpRequest = async (endpoint, headers, body) => {
+const apiHttpRequest = async (endpoint, method, headers, body) => {
     if (!headers) {
         headers = {};
     }
@@ -39,7 +38,7 @@ const apiHttpRequest = async (endpoint, headers, body) => {
         }
     }
 
-    return await httpRequest(ENDPOINT_API + endpoint, headers, body);
+    return await httpRequest(ENDPOINT_API + endpoint, method, headers, body);
 }
 
 module.exports = {

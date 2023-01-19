@@ -33,7 +33,6 @@ export default function RegisterComponent(props) {
   }
   
   const finalizeRegister = () => {
-
     props.navigation.navigate('Login');
   }
 
@@ -50,9 +49,7 @@ export default function RegisterComponent(props) {
         return;
       }
 
-
-      let result = await httpRequest('user/register/', 'POST', null, state.registerInputs);
-
+      let result = await apiHttpRequest('user/register/', 'POST', null, state.registerInputs);
 
       if (result) {
         finalizeRegister();
