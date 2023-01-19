@@ -1,16 +1,14 @@
-import React from 'react';
-import ChatStyle from "./chat.style.jsx";
 import { View, Text, TextInput, ScrollView,TouchableHighlight } from 'react-native';
-import { SvgArrow } from '../../assets/svg'
-import chatStyle from './chat.style.jsx';
+import ChatStyle from "./chat.style.jsx";
+import { SvgArrow } from '@assets/svg'
 
 export default function ChatTemplate(props) {
 
   return (
-    <View style={ChatStyle.container}>
+    <View style={ChatStyle.body}>
 
       <ScrollView
-        contentContainerStyle={ChatStyle.scrollViewStyle}
+        contentContainerStyle={ChatStyle.messageList}
         ref={props.scrollView}
         onContentSizeChange={() => {
           props.scrollView.current.scrollToEnd({ animated: true, index: -1 }, 200);
@@ -18,15 +16,28 @@ export default function ChatTemplate(props) {
         >
 
         {props.messages.map((msg, index) => {
-          let identityStyle = (props.user.idUser == msg.idUser) ? ChatStyle.msgContentContainerConnectedUser : ChatStyle.msgContentContainerInterlocutor;
-          let finalStyle = (index + 1 != props.messages.length) ? [identityStyle, {marginBottom: 5}] : identityStyle;
-          
-          return (
-            <View key={msg.id} style={ChatStyle.msgContainer}>
-              <Text style={ChatStyle.msgContentContainer}>{msg.createdAt}</Text>
+          const isConnectedUser = props.connectedUser.idUser == msg.userSender.idUser;
+          const baseMsgContainer = (isConnectedUser) ? ChatStyle.msgContainerConnectedUser : ChatStyle.msgContainerInterlocutor;
+          const finalMsgContainer = (index + 1 != props.messages.length) ? [baseMsgContainer, {marginBottom: 5}] : baseMsgContainer;
+          const content = (isConnectedUser) ? ChatStyle.msgContentConnectedUser : ChatStyle.msgContentInterlocutor;
+          const triangle = (isConnectedUser) ? ChatStyle.triangleRight : ChatStyle.triangleLeft;
 
-              <View style={finalStyle}>
-                <Text style={ChatStyle.msgContent}>{msg.content}</Text>
+          return (
+            <View key={index} style={ChatStyle.msgContainer}>
+              <Text style={ChatStyle.msgInfo}>{msg.userSender.prenom + ' - ' + msg.createdAt}</Text>
+
+              <View style={finalMsgContainer}>
+                {isConnectedUser ?
+                  <>
+                    <Text style={content}>{msg.content}</Text>
+                    <View style={[ChatStyle.triangle, triangle]}></View>
+                  </>
+                  :
+                  <>
+                    <View style={[ChatStyle.triangle, triangle]}></View>
+                    <Text style={content}>{msg.content}</Text>
+                  </>
+                }
               </View>
             </View>
           );
@@ -36,15 +47,12 @@ export default function ChatTemplate(props) {
 
       <View style={ChatStyle.messageBarContainer}>
         <TextInput
+          ref={props.msgInput}
           style={ChatStyle.InputMessage}
-          onChangeText={(e) => { props.updateInput('password', e) }}
-          title="Password"
-          placeholder="Register"
-          placeholderTextColor="white"
-          secureTextEntry={true}
+          onChangeText={(e) => { props.updateMsgInput(e) }}
         />
         <TouchableHighlight
-          style={chatStyle.sendButtonContainer}
+          style={ChatStyle.sendButtonContainer}
           onPress={() => {
             props.sendMessage();
           }}

@@ -6,10 +6,10 @@ export default function RegisterTemplate(props) {
     return (
         <View style={RegisterStyle.container}>
             <View style = {RegisterStyle.containerHeader}>
-                    <View style={RegisterStyle.triangleRight}></View>
-                    <View style={RegisterStyle.triangleLeft}></View>
-                    <View style={RegisterStyle.circleLeft}></View>
-                    <View style={RegisterStyle.circleRight}></View>
+                <View style={RegisterStyle.triangleRight}></View>
+                <View style={RegisterStyle.triangleLeft}></View>
+                <View style={RegisterStyle.circleLeft}></View>
+                <View style={RegisterStyle.circleRight}></View>
             </View>
 
             <View style={RegisterStyle.containerForm}>

@@ -7,7 +7,7 @@ for (i = 0; i < 100; i++) {
     user_message_salon.push({
         model: "user_message_salon",
         data: {
-            content: faker.faker.lorem.words(NumberHelper.randomInt(1, 20)),
+            content: faker.faker.lorem.words(NumberHelper.randomInt(3, 20)),
             createdAt: faker.faker.date.past(),
             idUser: NumberHelper.randomInt(1, 10),
             idSalon: 1

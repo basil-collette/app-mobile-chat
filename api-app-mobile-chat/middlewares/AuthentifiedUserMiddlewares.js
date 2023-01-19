@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const UserMiddlewares = require('./UserMiddlewares');
 const UserController = new(require('../controllers/UserController'));
 
 // GET ____________________________________________________________________________________________________________________ GET
@@ -8,13 +9,12 @@ const getUsersState = (users) => {
     return users.map((user) => {
         let newUser = {...user.dataValues}
 
-        if (global.clientSockets.find((socket) => socket.idUser && socket.idUser == user.dataValues.idUser)) {
+        if (global.clientSockets.find((socket) => socket.idUser == user.dataValues.idUser)) {
             newUser.isConnected = true;
         } else {
             newUser.isConnected = false;
         }
         
-        delete newUser.idUser;
         return newUser;
     });
 }
@@ -76,7 +76,7 @@ const preUpdate = async (req, res, next) => {
  * update a user by post attributes
  * POST http://127.0.0.1:3000/user/auth/:idUser/update
  */
-router.post('/update', preUpdate, async (req, res, next) => {
+router.post('/update', UserMiddlewares.userDoesntExists, preUpdate, async (req, res, next) => {
     try {
         const user = await UserController.update(
             req.body,

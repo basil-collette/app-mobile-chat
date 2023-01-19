@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const express = require('express');
 const http = require('http');
 const socketIO = require("socket.io");
+const SocketHelper = require('./helpers/SocketHelper');
 //const cookieParser = require('cookie-parser');
 //const logger = require('morgan');
 require('dotenv').config();
@@ -32,32 +33,21 @@ server.on('error', onError);
 
 //SOCKET __________________________________________________________________ SOCKET
 
-global.clientSockets = [];
 const io = socketIO(server, {
     cors: {
         origin: "*",
         methods: ["POST", "GET"]
     }
 });
-require('./socket')(io);
+global.io = io;
+global.clientSockets = [];
+require('./socket')();
 
 setInterval(() => {
-    global.clientSockets.map((socketItem, index) => {
-        if (!socketItem.socket.connected) {
-            delete global.clientSockets[index];
-            return null;
-        }
-    });
+    SocketHelper.removeDisconnectedSocket();
 }, 1000);
 
 //ROUTES __________________________________________________________________ ROUTES
-
-/*
-app.use((req, res, next) => {
-    console.log(req);
-    next();
-});
-*/
 
 //INDEX
 app.use('/', require('./routers/index.router'));
@@ -116,7 +106,9 @@ function normalizePort(val) {
 
 // Event listener for HTTP server "error" event.
 function onError(error) {
+    throw new Error('test error');
     console.error(err);
+
     if (error.syscall !== 'listen') {
         throw error;
     }

@@ -1,5 +1,5 @@
-import { View, Text, StatusBar, TouchableWithoutFeedback  } from "react-native";
-import { SvgProfil, SvgHome, SvgChat, SvgUser } from '@assets/svg/';
+import { View, Text, TouchableWithoutFeedback } from "react-native";
+import { SvgHome, SvgChat, SvgUser } from '@assets/svg/';
 import HomeStyle from "./home.style.jsx";
 
 export default function HomeTemplate(props) {
@@ -14,13 +14,12 @@ export default function HomeTemplate(props) {
           onPress={() => {props.goRoom(1)}}
           underlayColor='#8093FF'
           >
-            <View style={HomeStyle.bulle}>
-              <SvgChat width={30} height={30} fill="white" />
-              <Text style={{ color: "white", fontSize: 18, marginLeft: 12 }}>Chat</Text>
-              <View style={HomeStyle.triangleBulleGauche}></View>
-            </View>
-          
-        </TouchableWithoutFeedback >
+          <View style={HomeStyle.bulle}>
+            <SvgChat width={30} height={30} fill="white" />
+            <Text style={{ color: "white", fontSize: 18, marginLeft: 12 }}>Chat</Text>
+            <View style={HomeStyle.triangleBulleGauche}></View>
+          </View>
+        </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback
           onPress={() => props.goUserList()}
@@ -31,10 +30,7 @@ export default function HomeTemplate(props) {
               <Text style={{ color: "white", fontSize: 18, marginLeft: 12 }}>Users</Text>
               <View style={HomeStyle.triangleBulleDroite}></View>
             </View>
-          
-        </TouchableWithoutFeedback >
-
-        
+        </TouchableWithoutFeedback>
       </View>
     </>
   );

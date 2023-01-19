@@ -27,17 +27,28 @@ module.exports = class MessageUserController {
             include: [{
                 model: this.userModel,
                 as: "userSender",
-                attributes: ['prenom', 'nom']
+                attributes: ['idUser', 'prenom', 'nom']
             },{
                 model: this.userModel,
                 as: "userReceiver",
-                attributes: ['prenom', 'nom']
+                attributes: ['idUser', 'prenom', 'nom']
             }]
         });
     }
 
     async getById(idMessage) {
-        return await this.messageUserModel.findByPk(idMessage);
+        return await this.messageUserModel.findOne({
+            where: { pk_id_user_message: idMessage },
+            raw: true,
+            nest: true,
+            include: [{
+                model: this.userModel,
+                as: "userSender"
+            },{
+                model: this.userModel,
+                as: "userReceiver"
+            }]
+        });
     }
 
     //INSERT 
@@ -58,13 +69,13 @@ module.exports = class MessageUserController {
                     as: "userReceiver"
                 }]
             });
+
+            return await this.getById(messageUser.dataValues.idUserMessageUser);
             
         } catch (err) {
             console.error(err);
             throw new Error('error during inserting messageUser');
         }
-
-        return messageUser;
     }
 
     //DELETE __________________________________________________________________ DELETE
