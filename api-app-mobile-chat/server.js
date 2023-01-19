@@ -43,8 +43,8 @@ global.io = io;
 global.clientSockets = [];
 require('./socket')();
 
-setInterval(() => {
-    SocketHelper.removeDisconnectedSocket();
+let disconnectedSocketRemoverInterval = setInterval(() => {
+    SocketHelper.removeDisconnectedSockets();
 }, 1000);
 
 //ROUTES __________________________________________________________________ ROUTES

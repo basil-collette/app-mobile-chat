@@ -1,5 +1,5 @@
 /**
- * 
+ * Module manipulate sockets
  */
 
 //SETUP _________________________________________________________________________________________ SETUP
@@ -14,10 +14,11 @@ const associateUserToSocket = (socketId, idUser) => {
 }
 
 const getSocketByIdUser = (idUser) => {
-    return global.clientSockets.find((socketItem) => socketItem.idUser == idUser);
+    const socketItem = global.clientSockets.find((socketItem) => socketItem.idUser == idUser);
+    return socketItem.socket;
 }
 
-const removeDisconnectedSocket = () => {
+const removeDisconnectedSockets = () => {
     global.clientSockets.map((socketItem, index) => {
         if (!socketItem.socket.connected) {
             global.clientSockets = global.clientSockets.splice(index, 1);
@@ -40,5 +41,5 @@ module.exports = {
     associateUserToSocket,
     getSocketByIdUser,
     emitUserMsg,
-    removeDisconnectedSocket
+    removeDisconnectedSockets
 };
