@@ -9,45 +9,48 @@ export default function ChatComponent(props) {
   
   const socket = useContext(SocketContext);
   const scrollView = useRef();
+  const msgInput = useRef();
 
+  const [messages, setMessages] = useState([]);
   const [state, setState] = useState({
     chatLibelle: props.navigation.state.params.chatLibelle,
-    user: {prenom: '', nom: ''},
+    connectedUser: {idUser: '', prenom: '', nom: ''},
     msgInput: '',
-    messages: [],
     typeChat: props.navigation.state.params.typeChat,
     idDestination: props.navigation.state.params.idDestination
   });
 
-  let orientationChangeListener;
   useEffect(() => {
-    setUser();
+    init();
     
-    socket.on('client-chat', (chatMsg) => {
-      addMsg(chatMsg);
+    socket.on('client_chat', (msg)=> {
+      addMsg(msg);
     });
 
     console.log("ChatComponent loaded");
 
     return () => {
+      socket.removeListener('client_chat');
       console.log('ChatComponent Destruct');
     };
   }, []);
 
   //FUNCTIONS ________________________________________________________________________________________ FUNCTIONS
 
-  const setUser = async () => {
+  const init = async () => {
+    const userResult = await StoreService.retrieveData('user');
+
+    const messagesResult = await apiHttpRequest('messageuser/getdiscussion/' + state.idDestination, null, null);
+    
+    setMessages(messages => messagesResult);
     setState({
       ...state,
-      user: await StoreService.retrieveData('user')
+      connectedUser: userResult
     });
   }
 
   const addMsg = (msg) => {
-    setState({
-      ...state,
-      message: [...state.message, msg]
-    });
+    setMessages(messages => [...messages, msg]);
   }
 
   const goProfile = () => {
@@ -62,20 +65,20 @@ export default function ChatComponent(props) {
 
   const sendMessage = async () => {
     const body = {
-      "content": state.msgInput
+      content: state.msgInput
     };
 
     let endPoint;
 
-    if (typeChat == 'salon') {
+    if (state.typeChat == 'salon') {
 
-      endPoint = 'messagesalon';
-      body['idSalon'] = state.idDestination;
+      endPoint = 'messagesalon/send/';
+      body.idSalon = state.idDestination;
 
-    } else if (typeChat == 'user') {
+    } else if (state.typeChat == 'user') {
 
-      endPoint = 'messageuser';
-      body['idUserReceiver'] = state.idDestination;
+      endPoint = 'messageuser/send/';
+      body.idUserReceiver = state.idDestination;
 
     } else {
       // error, say that typechat isnt correct
@@ -83,8 +86,13 @@ export default function ChatComponent(props) {
     }
 
     try {
-      const response = await apiHttpRequest(endPoint,'POST',headers, body);
+      const response = await apiHttpRequest(endPoint, null, body);
 
+      msgInput.clear();
+      setState({
+        ...state,
+        msgInput: ''
+      });
     } catch(err) {
       console.error(err);
     }
@@ -101,17 +109,19 @@ export default function ChatComponent(props) {
 
   return (
     <GlobalTemplate
-      userName={state.user.prenom + ' ' + state.user.nom}
+      userName={state.connectedUser.prenom + ' ' + state.connectedUser.nom}
       goProfile={goProfile}
       title={state.chatLibelle}
       >
 
       <ChatTemplate
-        messages={state.messages}
+        connectedUser={state.connectedUser}
+        messages={messages}
         goBack={goBack}
         sendMessage={sendMessage}
         updateMsgInput={updateMsgInput}
         scrollView={scrollView}
+        msgInput={msgInput}
         /> 
       
     </GlobalTemplate>

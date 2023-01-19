@@ -93,16 +93,9 @@ const IsAuthentified = async (req, res, next) => {
 const loginInputsAreSent = (req, res, next) => {
     const userFields = req.body;
 
-    if (!userFields.email && !userFields.password) {
+    if (!userFields.email || !userFields.password) {
         res.status(400).send("list of needed inputs is required");
         throw new Error();
-    }
-        
-    for (let i in res.locals.inputsNedded) {
-        if (!req.body.includes(i)) {
-            res.status(400).send("All inputs are required");
-            throw new Error();
-        }
     }
     next();
 }
@@ -113,30 +106,22 @@ const loginInputsAreSent = (req, res, next) => {
 const registerInputsAreSent = (req, res, next) => {
     const userFields = req.body;
 
-    if (userFields.email
-        && userFields.prenom
-        && userFields.nom
-        && userFields.password
-        && userFields.confirmPassword
+    if (
+        !userFields.email
+        || !userFields.prenom
+        || !userFields.nom
+        || !userFields.password
+        || !userFields.confirmPassword
     ) {
-        
-        for (let i in res.locals.inputsNedded) {
-            if (!req.body.includes(i)) {
-                res.status(400).send("All inputs are required");
-                throw new Error();
-            }
-        }
-
-        if (userFields.password != userFields.confirmPassword) {
-            throw new Error('confirmPassword different than password');
-        }
-
-        next();
-        
-    } else {
         res.status(400).send("list of needed inputs is required");
         throw new Error();
     }
+
+    if (userFields.password != userFields.confirmPassword) {
+        throw new Error('confirmPassword different than password');
+    }
+
+    next();
 }
 
 /**

@@ -1,5 +1,6 @@
-import { View, Text, StatusBar, TouchableWithoutFeedback, Animated } from "react-native";
-import { SvgProfil, SvgHome, SvgChat, SvgUser } from '@assets/svg/';
+
+import { View, Text, TouchableWithoutFeedback } from "react-native";
+import { SvgHome, SvgChat, SvgUser } from '@assets/svg/';
 import HomeStyle from "./home.style.jsx";
 
 export default function HomeTemplate(props) {
@@ -13,7 +14,7 @@ export default function HomeTemplate(props) {
         <TouchableWithoutFeedback
           onPress={() => { props.goProfile() }}
           underlayColor='#8093FF'
-        >
+          >
           <Animated.View style={[HomeStyle.bulle,props.animationChatBtn]}>
             <SvgChat width={30} height={30} fill="white" />
             <Text style={{ color: "white", fontSize: 18, marginLeft: 12 }}>Chat</Text>
@@ -29,10 +30,6 @@ export default function HomeTemplate(props) {
           <View style={HomeStyle.triangleBulleDroite}></View>
         </Animated.View>
       </View>
-
-
-        
-  
     </>
   );
 };

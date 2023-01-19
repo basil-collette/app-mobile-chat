@@ -1,52 +1,83 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  container: {
+  body: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-end",
     backgroundColor: "#3C3C49"
   },
-  scrollViewStyle: {
+  messageList: {
     flexDirection: "column",
     justifyContent: "flex-end",
     paddingHorizontal: 30,
-    width : "100%",
-    alignItems:"center",
-    flexGrow:1,
+    width: "100%",
+    flexGrow: 1,
     paddingVertical: 10
-
   },
 
-  triangleBulleGauche : {
-    position : "absolute",
-    width: 0,
-    height: 0,
-    right: "100%",
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderRightWidth: 15,
-    borderBottomWidth: 10,
-    borderTopWidth: 10,
-    borderRightColor: "blue",
-    borderBottomColor: "transparent",
-    borderTopColor: "transparent"
+  msgContainer: {
+    flexDirection: "column",
+    width: "100%",
   },
-  triangleBulleDroite : {
-    position :"absolute",
-    left : "100%",
+  msgInfo: {
+    fontSize: 12,
+    color: "gray",
+    textAlign: "center",
+    marginBottom: 7
+  },
+  msgContainerInterlocutor: {
+    width: "100%",
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginBottom: 7
+  },
+  msgContainerConnectedUser: {
+    width:"100%",
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginBottom: 7
+  },
+  msgContentInterlocutor: {
+    backgroundColor: "#3B55EB",
+    borderRadius: 10,
+    padding: 12,
+    marginRight: 15,
+    color: "white",
+    fontSize: 18,
+  },
+  msgContentConnectedUser: {
+    backgroundColor : "#AAAABC",
+    borderRadius : 10,
+    padding : 12,
+    marginLeft: 15,
+    color: "white",
+    fontSize: 18,
+  },
+
+  triangle: {
     width: 0,
     height: 0,
     backgroundColor: "transparent",
     borderStyle: "solid",
-    borderLeftWidth: 15,
     borderBottomWidth: 10,
     borderTopWidth: 10,
-    borderLeftColor: "blue",
     borderBottomColor: "transparent",
     borderTopColor: "transparent",
-    zIndex: 100
-},
+  },
+  triangleLeft: {
+    borderRightWidth: 15,
+    borderLeftWidth: 0,
+    borderRightColor: "#3B55EB",
+  },
+  triangleRight: {
+    borderLeftWidth: 15,
+    borderRightWidth: 0,
+    borderLeftColor: "#AAAABC",
+  },
+
   messageBarContainer: {
     flexDirection: "row",
     backgroundColor : "#AAAABC",
@@ -54,53 +85,17 @@ export default StyleSheet.create({
     justifyContent:"center",
     padding : 10,
   },
-  msgContent : {
-    color: "white", 
-    fontSize: 18,
-  },
-  msgContainerContent: {
-    color : "#AAAABC",
-    fontSize:18,
-    width : "100%",
-  },
    InputMessage: {
-    flex : 1,
-    color: 'white',
+    flex: 1,
+    color: 'black',
     borderRadius: 5,
     backgroundColor: 'white',
-    marginRight : 10,
-    padding : 5
+    marginRight: 10,
+    padding: 5
   },
-  sendButtonContainer : {
-    paddingVertical : 10,
-    alignContent :"center"
-
-  },
-
-  msgContentContainerInterlocutor : {
-    backgroundColor : "#3B55EB",
-    borderRadius : 10,
-    padding : 12,
-    alignSelf:"flex-start",
-    marginBottom:7
+  sendButtonContainer: {
+    paddingVertical: 10,
+    alignContent: "center"
   },
 
-  msgContentContainerConnectedUser : {
-    backgroundColor : "#AAAABC",
-    borderRadius : 10,
-    padding : 12,
-    alignSelf:"flex-end",
-    marginBottom:7
-  },
-  msgContainer:{
-  flexDirection:"column",
-  width:"100%",
-  },
-  msgContentContainer:{
-    fontSize:16,
-    color : "gray",
-    textAlign:"center",
-    marginBottom:7
-    
-    }
 });
