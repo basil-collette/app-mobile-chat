@@ -7,6 +7,7 @@ import HomeComponent from '@comp/HomeComponent/home.component.jsx';
 import UserListComponent from '@comp/UserListComponent/users.component.jsx';
 import ChatComponent from '@comp/ChatComponent/chat.component.jsx';
 import RegisterComponent from '@comp/RegisterComponent/register.component.jsx';
+import ProfilComponent from '@comp/ProfilComponent/profil.component.jsx';
 
 export default function App() {
 
@@ -56,18 +57,21 @@ export default function App() {
     UserDetail: {
       screen: UserDetailComponent,
       unmountOnBlur: true,
+    Users : {
+      screen: UsersComponent,
       navigationOptions: {
         headerShown: false
       }
     },
-    Option: {
-      screen: OptionComponent,
-      unmountOnBlur: true,
-      navigationOptions: {
-        headerShown: false
+      Profil : {
+        screen: ProfilComponent,
+        navigationOptions: {
+          headerShown: false
+        },
       }
     }
     */
+
   });
 
   const AppContainer = createAppContainer(AppStackNavigator);

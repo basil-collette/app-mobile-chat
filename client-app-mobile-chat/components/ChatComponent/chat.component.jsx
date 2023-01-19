@@ -5,7 +5,7 @@ import { apiHttpRequest } from '@services/RequestService';
 import * as StoreService from '@services/StoreService';
 import { SocketContext } from '@context/socket.context';
 
-export default function RegisterComponent(props) {
+export default function ChatComponent(props) {
   
   const socket = useContext(SocketContext);
   const scrollView = useRef();
@@ -30,7 +30,6 @@ export default function RegisterComponent(props) {
     console.log("ChatComponent loaded");
 
     return () => {
-      orientationChangeListener.remove();
       console.log('ChatComponent Destruct');
     };
   }, []);
@@ -84,7 +83,8 @@ export default function RegisterComponent(props) {
     }
 
     try {
-      const response = await apiHttpRequest(endPoint, headers, body);
+      const response = await apiHttpRequest(endPoint,'POST',headers, body);
+
     } catch(err) {
       console.error(err);
     }

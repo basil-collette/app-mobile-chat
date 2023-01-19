@@ -1,9 +1,11 @@
 import * as StoreService from '@services/StoreService';
 import { ENDPOINT_API } from '@env'
 
-const httpRequest = async (endpoint, headers, body) => {
+
+const httpRequest = async (endpoint, method, headers, body) => {
+
     let requestOptions = {
-        method: (body) ? 'POST' : 'GET',
+        method: method,
         headers: { 'Content-Type': 'application/json' }
     };
 
