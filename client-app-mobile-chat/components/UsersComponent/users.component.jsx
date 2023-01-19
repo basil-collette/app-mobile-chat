@@ -5,9 +5,7 @@ import { SocketContext } from '../../context/socket.context';
 import * as StoreService from '../../services/StoreService';
 import { ENDPOINT_API } from '@env'
 
-export default function HomeComponent(props) {
-
- 
+export default function UsersComponent(props) {
     
   return (<UsersTemplate/>);
 };

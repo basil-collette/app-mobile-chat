@@ -50,7 +50,7 @@ export default function RegisterComponent(props) {
         return;
       }
 
-      let result = await httpRequest('user/register/', true, null, state.registerInputs);
+      let result = await httpRequest('user/register/', 'POST', null, state.registerInputs);
 
       if (result) {
         finalizeRegister();

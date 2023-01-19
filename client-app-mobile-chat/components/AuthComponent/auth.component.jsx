@@ -61,8 +61,7 @@ export default function AuthComponent(props) {
         //say that inputs are invalids
         return;
       }
-
-      let resultToken = await httpRequest('user/login/', true, null, state.connexionInputs);
+      let resultToken = await httpRequest('user/login/', 'POST', null, state.connexionInputs);
 
       if (resultToken) {
         await StoreService.storeData('user', resultToken.user);

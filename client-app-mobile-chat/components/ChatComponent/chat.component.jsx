@@ -5,7 +5,7 @@ import * as StoreService from '@services/StoreService';
 import { SocketContext } from '@context/socket.context';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
-export default function RegisterComponent(props) {
+export default function ChatComponent(props) {
   
   const socket = useContext(SocketContext);
 
@@ -33,7 +33,6 @@ export default function RegisterComponent(props) {
     console.log("ChatComponent loaded");
 
     return () => {
-      orientationChangeListener.remove();
       console.log('ChatComponent Destruct');
     };
   }, []);
@@ -83,7 +82,7 @@ export default function RegisterComponent(props) {
     }
 
     try {
-      await httpRequest(endPoint, true, headers, body);
+      await httpRequest(endPoint, 'POST', headers, body);
     } catch(err) {
       console.error(err);
     }

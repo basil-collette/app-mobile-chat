@@ -1,21 +1,28 @@
-import React, { Component } from 'react';
+import React, { Component, useContext, useState, useEffect } from 'react';
 import HomeTemplate from "./home.template.jsx";
 import { SocketContext } from '@context/socket.context';
 import * as StoreService from '@services/StoreService';
+import { Animated, Easing } from 'react-native';
+import { easeOutBackAnimation } from '@assets/animation'
 
 export default function HomeComponent(props) {
 
   const socket = useContext(SocketContext);
 
   const [state, setState] = useState({
-    user: {prenom: '', nom: ''}
+    user: { prenom: '', nom: '' },
+    animation: {
+      ChatBtn: new Animated.ValueXY({ x: -400, y: 0 }),
+      UserListBtn: new Animated.ValueXY({ x: 400, y: 0 })
+    }
+
   });
 
   useEffect(() => {
     setUser();
-
+    easeOutBackAnimation(state.animation.ChatBtn, 500, 50, { x: 0, y: 0 })
+    easeOutBackAnimation(state.animation.UserListBtn, 500, 200, { x: 0, y: 0 })
     console.log("HomeComponent loaded");
-
     return () => {
       console.log('HomeComponent Destruct');
     };
@@ -26,14 +33,14 @@ export default function HomeComponent(props) {
   const setUser = async () => {
     setState({
       ...state,
-      user: JSON.parse(await StoreService.retrieveData('user'))
+      user: await StoreService.retrieveData('user')
     });
   }
 
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
 
   const goProfile = () => {
-    props.navigation.navigate('Option', {});
+    props.navigation.navigate('Profil',{});
   }
 
   const goRoom = (idRoom) => {
@@ -42,7 +49,7 @@ export default function HomeComponent(props) {
       idDestination: idRoom,
       chatLibelle: 'Chat Général'
     };
-    
+
     props.navigation.navigate('Chat', goRoomParams);
   }
 
@@ -56,6 +63,9 @@ export default function HomeComponent(props) {
       goProfile={goProfile}
       goRoom={goRoom}
       goUserList={goUserList}
+      animationChatBtn={{ transform: state.animation.ChatBtn.getTranslateTransform() }}
+      animationUserListBtn={{ transform: state.animation.UserListBtn.getTranslateTransform() }}
+
     />
-    );
+  );
 };

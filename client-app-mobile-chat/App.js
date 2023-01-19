@@ -8,6 +8,7 @@ import HomeComponent from './components/HomeComponent/home.component.jsx'
 import UsersComponent from './components/UsersComponent/users.component.jsx'
 import ChatComponent from '@comp/ChatComponent/chat.component.jsx';
 import RegisterComponent from '@comp/RegisterComponent/register.component.jsx';
+import ProfilComponent from '@comp/ProfilComponent/profil.component.jsx';
 
 export default function App() {
 
@@ -31,16 +32,7 @@ export default function App() {
   }, [socket]);
 
   const AppStackNavigator = createStackNavigator({
-    Chat: {
-      screen: ChatComponent,
-      navigationOptions: {
-        headerShown: false
-      },
-    Users : {
-      screen: UsersComponent,
-      navigationOptions: {
-        headerShown: false
-      },
+    
     Login: {
       screen: AuthComponent,
       //unmountOnBlur: true,
@@ -60,30 +52,24 @@ export default function App() {
         headerShown: false
       }
     },
-    
-    },/*,
-    UserList: {
-      screen: UserListComponent,
+    Chat: {
+      screen: ChatComponent,
       navigationOptions: {
         headerShown: false
       }
     },
-    UserDetail: {
-      screen: UserDetailComponent,
-      unmountOnBlur: true,
+    Users : {
+      screen: UsersComponent,
       navigationOptions: {
         headerShown: false
       }
     },
-    Option: {
-      screen: OptionComponent,
-      unmountOnBlur: true,
-      navigationOptions: {
-        headerShown: false
+      Profil : {
+        screen: ProfilComponent,
+        navigationOptions: {
+          headerShown: false
+        },
       }
-    }
-    */
-  }
   });
 
   const AppContainer = createAppContainer(AppStackNavigator);
