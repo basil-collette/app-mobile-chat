@@ -42,7 +42,7 @@ export default StyleSheet.create({
   },
   profilButton: {
     height: "100%",
-    borderRightWidth: 3,
+    borderRightWidth: 2,
     borderRightColor: "#3B55EB",
     justifyContent: "center",
     borderLeftRadius: 10,

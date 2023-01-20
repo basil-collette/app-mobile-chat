@@ -31,10 +31,10 @@ const removeDisconnectedSockets = () => {
 
 const emitUserMsg = (idUserSender, idUserReceiver, msg) => {
     const userSenderSocket = getSocketByIdUser(idUserSender);
-    if (userSenderSocket) global.io.to(userSenderSocket.socket.id).emit('client_chat', msg);
+    if (userSenderSocket) global.io.to(userSenderSocket.socket.id).emit('new_chatmsg_to_client', msg);
 
     const userReceiverSocket = getSocketByIdUser(idUserReceiver);
-    if (userReceiverSocket) global.io.to(userReceiverSocket.socket.id).emit('client_chat', msg);
+    if (userReceiverSocket) global.io.to(userReceiverSocket.socket.id).emit('new_chatmsg_to_client', msg);
 }
 
 module.exports = {

@@ -16,13 +16,14 @@ const httpRequest = async (endpoint, method, headers, body) => {
         requestOptions.body = JSON.stringify(body);
     }
 
-    try {
-        const response = await fetch(endpoint, requestOptions);
-        return await response.json();
-    } catch(err) {
-        console.error(err);
-        throw new Error(err);
+    const response = await fetch(endpoint, requestOptions);
+
+    if (!response.ok) {
+        const textError = await JSON.parse(await response.text());
+        throw new Error(textError.message);
     }
+
+    return await response.json();
 }
 
 const apiHttpRequest = async (endpoint, method, headers, body) => {
@@ -37,7 +38,7 @@ const apiHttpRequest = async (endpoint, method, headers, body) => {
             Object.assign(headers, { 'Authorization': 'Bearer ' + bearerToken });
         }
     }
-
+    
     return await httpRequest(ENDPOINT_API + endpoint, method, headers, body);
 }
 
