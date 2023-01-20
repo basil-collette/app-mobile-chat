@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef} from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import ChatTemplate from './chat.template.jsx';
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import { apiHttpRequest } from '@services/RequestService';
@@ -11,10 +11,10 @@ export default function ChatComponent(props) {
   const scrollView = useRef();
   const msgInput = useRef();
 
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([]); //messages in a separate state to avoid async crossing setStates errors
   const [state, setState] = useState({
     chatLibelle: props.navigation.state.params.chatLibelle,
-    connectedUser: {idUser: '', prenom: '', nom: ''},
+    connectedUser: { idUser: '', prenom: '', nom: '' },
     msgInput: '',
     typeChat: props.navigation.state.params.typeChat,
     idDestination: props.navigation.state.params.idDestination
@@ -22,15 +22,11 @@ export default function ChatComponent(props) {
 
   useEffect(() => {
     init();
-    
-    socket.on('client_chat', (msg)=> {
-      addMsg(msg);
-    });
 
     console.log("ChatComponent loaded");
 
     return () => {
-      socket.removeListener('client_chat');
+      socket.off('new_chatmsg_to_client');
       console.log('ChatComponent Destruct');
     };
   }, []);
@@ -38,6 +34,8 @@ export default function ChatComponent(props) {
   //FUNCTIONS ________________________________________________________________________________________ FUNCTIONS
 
   const init = async () => {
+    socket.on('new_chatmsg_to_client', addMsg);
+    
     const userResult = await StoreService.retrieveData('user');
 
     const messagesResult = await apiHttpRequest('messageuser/getdiscussion/' + state.idDestination, 'GET', null, null);

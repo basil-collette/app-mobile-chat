@@ -1,7 +1,6 @@
-import * as React from "react"
 import {Animated,Easing} from "react-native"
 
-const easeOutBackAnimation = (properties,duration,delay,toValue) =>{
+const easeOutBackAnimation = (properties, duration, delay, toValue) => {
   Animated.timing(properties, {
     toValue: toValue,
     duration: duration,
@@ -11,8 +10,7 @@ const easeOutBackAnimation = (properties,duration,delay,toValue) =>{
   }).start();
 }
 
-
-  
-
-module.exports = {easeOutBackAnimation}
+module.exports = {
+  easeOutBackAnimation
+}
 

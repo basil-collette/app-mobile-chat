@@ -19,11 +19,9 @@ module.exports = () => {
         /**
          * triggered when client stop connexion
          */
-        /*
         socket.on('disconnect', () => {
             console.log(`${socketId} disconnected`);
         });
-        */
     
         /**
          * Setup the user id associated to the socket connexion
@@ -43,12 +41,7 @@ module.exports = () => {
         socket.on('leave_salon', (idSalon) => {
             //socket.leave(idSalon);
         });
-    
-        /*
-        socket.on('api_chat', (message) => {
-            io.emit('client_chat', `${socketId} : ${message}`);
-        });
-        */
+
         socket.on('test', (test) => {
             console.log(global.clientSockets);
         });

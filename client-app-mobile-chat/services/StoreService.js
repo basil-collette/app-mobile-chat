@@ -2,7 +2,7 @@ import * as SecureStore from 'expo-secure-store';
 
 const storeData = async (key, value) => {
     try {
-        if (typeof str !== 'string') {
+        if (typeof value !== 'string') {
             value = JSON.stringify(value);
         }
         return await SecureStore.setItemAsync(key, value);
@@ -13,8 +13,7 @@ const storeData = async (key, value) => {
 
 const retrieveData = async (key) => {
     try {
-        const result = await SecureStore.getItemAsync(key);
-        return await JSON.parse(result);
+        return await SecureStore.getItemAsync(key);
     } catch(err) {
         console.error(err);
     }

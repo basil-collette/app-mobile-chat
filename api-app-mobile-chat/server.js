@@ -1,5 +1,4 @@
 'use strict';
-const createError = require('http-errors');
 const helmet = require('helmet');
 const express = require('express');
 const http = require('http');
@@ -29,7 +28,6 @@ server.listen(port, /*hostname,*/ () => {
     //console.log(`Server running at http://${hostname}:${port}/...`);
     console.log(`Server running on port :${port}...`);
 });
-server.on('error', onError);
 
 //SOCKET __________________________________________________________________ SOCKET
 
@@ -43,14 +41,12 @@ global.io = io;
 global.clientSockets = [];
 require('./socket')();
 
-setInterval(() => {
-    SocketHelper.removeDisconnectedSocket();
+let disconnectedSocketRemoverInterval = setInterval(() => {
+    SocketHelper.removeDisconnectedSockets();
 }, 1000);
 
 //ROUTES __________________________________________________________________ ROUTES
 
-//INDEX
-app.use('/', require('./routers/index.router'));
 //USER
 app.use('/user', require('./routers/user.router'));
 //MessageSalon
@@ -60,31 +56,19 @@ app.use('/messageuser', require('./routers/messageUser.router'));
 //AdminRoute
 app.use('/admin', require('./middlewares/UserMiddlewares').isAdmin, require('./routers/admin.router'));
 
-//VIEWS ____________________________________________________________________ VIEWS
-/*
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
-
-app.use(express.static(path.join(__dirname, 'public')));
-*/
 // ERRORS __________________________________________________________________ ERRORS
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    next(createError(404));
-});
-
 // error handler
-app.use(function (err, req, res, next) {
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use((err, req, res, next) => {
+    if (res.headersSent) {
+        return next(err);
+    }
 
-    var error = {
+    let error = {
         status: err.status,
         message: err.message
     }
-    res.status(err.status || 500);
-    res.send(error);
+    res.status(err.status || 500).send(error);
 });
 
 //FUNCTIONS _______________________________________________________________ FUNCTIONS
@@ -102,32 +86,4 @@ function normalizePort(val) {
     }
 
     return false;
-}
-
-// Event listener for HTTP server "error" event.
-function onError(error) {
-    throw new Error('test error');
-    console.error(err);
-
-    if (error.syscall !== 'listen') {
-        throw error;
-    }
-
-    var bind = typeof port === 'string'
-        ? 'Pipe ' + port
-        : 'Port ' + port;
-
-    // handle specific listen errors with friendly messages
-    switch (error.code) {
-        case 'EACCES':
-            console.error(bind + ' requires elevated privileges');
-            process.exit(1);
-            break;
-        case 'EADDRINUSE':
-            console.error(bind + ' is already in use');
-            process.exit(1);
-            break;
-        default:
-            throw error;
-    }
 }

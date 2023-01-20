@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  container: {
+  body: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
@@ -9,14 +9,7 @@ export default StyleSheet.create({
     backgroundColor: "#3C3C49",
     paddingHorizontal: 20
   },
-  profilNameContainer : {
-    position:"absolute",
-    bottom : "100%",
-  },
-  inputContainer : {
-  marginVertical:5
-  },
-  bulleContainer: {
+  container: {
     width: "100%",
     backgroundColor: "#3B55EB",
     borderRadius: 10,
@@ -28,19 +21,13 @@ export default StyleSheet.create({
     paddingTop:60,
   },
 
-  triangle: {
-    position: "absolute",
-    width: 0,
-    top: "112%",
-    height: 0,
-    borderStyle: "solid",
-    borderRightWidth: 20,
-    borderLeftWidth: 20,
-    borderTopWidth: 25,
-    borderRightColor: "transparent",
-    borderLeftColor: "transparent",
-    borderTopColor: "#3B55EB",
-    zIndex: 1000
+  profilInfoContainer : {
+    position:"absolute",
+    bottom : "100%",
+  },
+
+  inputContainer : {
+    marginVertical:5
   },
   input: {
     height: 46,
@@ -52,12 +39,13 @@ export default StyleSheet.create({
     borderColor: 'white',
     backgroundColor: '#AAAABC',
   },
+
   buttonSave: {
+    width: 115,
+    height: 41,
     color: 'white',
     fontSize: 17,
     backgroundColor: "#8093FF",
-    height: 41,
-    width: 115,
     borderRadius: 14,
     padding : 10,
     marginTop:30,
@@ -66,5 +54,21 @@ export default StyleSheet.create({
   buttonSaveText : {
     color: '#fff',
     textAlign: 'center',
-  }
+  },
+
+  triangle: {
+    position: "absolute",
+    top: "112%",
+    width: 0,
+    height: 0,
+    borderStyle: "solid",
+    borderRightWidth: 20,
+    borderLeftWidth: 20,
+    borderTopWidth: 25,
+    borderRightColor: "transparent",
+    borderLeftColor: "transparent",
+    borderTopColor: "#3B55EB",
+    zIndex: 1000
+  }  
+  
 });
