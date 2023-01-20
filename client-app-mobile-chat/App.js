@@ -48,7 +48,7 @@ export default function App() {
         headerShown: false
       }
     },
-    UserList : {
+    UserList: {
       screen: UserListComponent,
       navigationOptions: {
         headerShown: false
@@ -78,7 +78,8 @@ export default function App() {
 
   return (
     <SocketContext.Provider value={socket}>
-      <AppContainer />
+      <AppContainer>
+      </AppContainer>
     </SocketContext.Provider>
   );
 }

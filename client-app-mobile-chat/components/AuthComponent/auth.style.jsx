@@ -130,7 +130,7 @@ export default StyleSheet.create({
         borderColor:'#8093FF',
         height: 41,
         width: 115,
-        borderRadius: 10,
+        borderRadius: 14,
         padding : 10
       },
       textButtonRegister: {
