@@ -19,10 +19,7 @@ export default function HomeComponent(props) {
   });
 
   useEffect(() => {
-    setUser();
-
-    easeOutBackAnimation(state.animation.ChatBtn, 500, 50, { x: 0, y: 0 });
-    easeOutBackAnimation(state.animation.UserListBtn, 500, 200, { x: 0, y: 0 });
+    init();
 
     console.log("HomeComponent loaded");
     return () => {
@@ -32,10 +29,15 @@ export default function HomeComponent(props) {
 
   //FUNCTIONS ______________________________________________________________________ FUNCTIONS
 
-  const setUser = async () => {
+  const init = async () => {
+    easeOutBackAnimation(state.animation.ChatBtn, 500, 50, { x: 0, y: 0 });
+    easeOutBackAnimation(state.animation.UserListBtn, 500, 200, { x: 0, y: 0 });
+
+    const userResult = await JSON.parse(await StoreService.retrieveData('user'));
+
     setState({
       ...state,
-      user: await StoreService.retrieveData('user')
+      user: userResult
     });
   }
 
