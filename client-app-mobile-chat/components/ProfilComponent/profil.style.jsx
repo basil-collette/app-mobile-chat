@@ -41,11 +41,11 @@ export default StyleSheet.create({
   },
 
   buttonSave: {
+    width: 115,
+    height: 41,
     color: 'white',
     fontSize: 17,
     backgroundColor: "#8093FF",
-    height: 41,
-    width: 115,
     borderRadius: 14,
     padding : 10,
     marginTop:30,
@@ -58,8 +58,8 @@ export default StyleSheet.create({
 
   triangle: {
     position: "absolute",
-    width: 0,
     top: "112%",
+    width: 0,
     height: 0,
     borderStyle: "solid",
     borderRightWidth: 20,
