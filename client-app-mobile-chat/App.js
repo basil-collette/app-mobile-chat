@@ -72,7 +72,8 @@ export default function App() {
 
   return (
     <SocketContext.Provider value={socket}>
-      <AppContainer />
+      <AppContainer>
+      </AppContainer>
     </SocketContext.Provider>
   );
 }
