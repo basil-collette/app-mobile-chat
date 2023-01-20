@@ -1,5 +1,6 @@
-import { View, Text, StatusBar, TouchableWithoutFeedback, Animated } from "react-native";
-import { SvgProfil, SvgHome, SvgChat, SvgUser } from '@assets/svg/';
+
+import { Animated, View, Text, TouchableWithoutFeedback } from "react-native";
+import { SvgHome, SvgChat, SvgUser } from '@assets/svg/';
 import HomeStyle from "./home.style.jsx";
 
 export default function HomeTemplate(props) {
@@ -11,28 +12,27 @@ export default function HomeTemplate(props) {
 
       <View style={HomeStyle.containerBulle}>
         <TouchableWithoutFeedback
-          onPress={() => { props.goProfile() }}
+          onPress={() => {props.goRoom(1)}}
           underlayColor='#8093FF'
-        >
-          <Animated.View style={[HomeStyle.bulle,props.animationChatBtn]}>
+          >
+          <Animated.View style={[HomeStyle.bulle, props.animationChatBtn]}>
             <SvgChat width={30} height={30} fill="white" />
             <Text style={{ color: "white", fontSize: 18, marginLeft: 12 }}>Chat</Text>
             <View style={HomeStyle.triangleBulleGauche}></View>
           </Animated.View>
-
         </TouchableWithoutFeedback >
-
-
-        <Animated.View style={[HomeStyle.bulle,props.animationUserListBtn]} onPress={() => props.goUserList()}>
-          <SvgUser width={30} height={30} fill ="white" />
-          <Text style={{ color: "white", fontSize: 18, marginLeft: 12 }}>Users</Text>
-          <View style={HomeStyle.triangleBulleDroite}></View>
-        </Animated.View>
+      
+        <TouchableWithoutFeedback
+          onPress={() => {props.goUserList()}}
+          underlayColor='#8093FF'
+          >
+          <Animated.View style={[HomeStyle.bulle, props.animationUserListBtn]}>
+            <SvgUser width={30} height={30} fill ="white" />
+            <Text style={{ color: "white", fontSize: 18, marginLeft: 12 }}>Users</Text>
+            <View style={HomeStyle.triangleBulleDroite}></View>
+          </Animated.View>
+        </TouchableWithoutFeedback>
       </View>
-
-
-        
-  
     </>
   );
 };

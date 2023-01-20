@@ -27,13 +27,11 @@ export default function RegisterComponent(props) {
       && RegexService.testNameRegex(state. registerInputs.nom) //nom
       && RegexService.testEmailRegex(state. registerInputs.email) //email
       && RegexService.testPasswordRegex(state. registerInputs.password) //password
-      && RegexService.testPasswordRegex(state. registerInputs.confirmPassword) //confirmPassword
       && state. registerInputs.confirmPassword == state. registerInputs.password //password == confirmPassword
     );
   }
   
   const finalizeRegister = () => {
-
     props.navigation.navigate('Login');
   }
 
@@ -50,9 +48,7 @@ export default function RegisterComponent(props) {
         return;
       }
 
-
-      let result = await httpRequest('user/register/', 'POST', null, state.registerInputs);
-
+      let result = await apiHttpRequest('user/register/', 'POST', null, state.registerInputs);
 
       if (result) {
         finalizeRegister();

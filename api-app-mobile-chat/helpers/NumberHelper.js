@@ -8,7 +8,7 @@ const differentInt = (number, mbmax) => {
     let newnumber;
 
     do {
-        newnumber = randomInt(1, mbmax)
+        newnumber = randomInt(1, mbmax);
     } while (number === newnumber)
 
     return newnumber;

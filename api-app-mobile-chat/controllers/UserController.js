@@ -80,7 +80,7 @@ module.exports = class UserController {
     async login(email, password) {
         /*
         {
-            "email": "basil.collette@outlook.fr",
+            "email": "user@gmail.com",
             "password": "password"
         }
         */

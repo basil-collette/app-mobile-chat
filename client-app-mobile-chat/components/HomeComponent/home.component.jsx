@@ -1,9 +1,9 @@
-import React, { Component, useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import HomeTemplate from "./home.template.jsx";
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import { SocketContext } from '@context/socket.context';
 import * as StoreService from '@services/StoreService';
-import { Animated, Easing } from 'react-native';
+import { Animated } from 'react-native';
 import { easeOutBackAnimation } from '@assets/animation'
 
 export default function HomeComponent(props) {
@@ -16,13 +16,14 @@ export default function HomeComponent(props) {
       ChatBtn: new Animated.ValueXY({ x: -400, y: 0 }),
       UserListBtn: new Animated.ValueXY({ x: 400, y: 0 })
     }
-
   });
 
   useEffect(() => {
     setUser();
-    easeOutBackAnimation(state.animation.ChatBtn, 500, 50, { x: 0, y: 0 })
-    easeOutBackAnimation(state.animation.UserListBtn, 500, 200, { x: 0, y: 0 })
+
+    easeOutBackAnimation(state.animation.ChatBtn, 500, 50, { x: 0, y: 0 });
+    easeOutBackAnimation(state.animation.UserListBtn, 500, 200, { x: 0, y: 0 });
+
     console.log("HomeComponent loaded");
     return () => {
       console.log('HomeComponent Destruct');
@@ -51,9 +52,7 @@ export default function HomeComponent(props) {
       chatLibelle: 'Chat Général'
     };
 
-
     props.navigation.navigate('Chat', goRoomParams);
-
   }
 
   const goUserList = () => {
@@ -74,6 +73,5 @@ export default function HomeComponent(props) {
       />
 
     </GlobalTemplate>
-    );
-
+  );
 };

@@ -40,12 +40,9 @@ export default StyleSheet.create({
     backgroundColor: "#AAAABC",
     borderRadius: 7,
   },
-  userContainerGap: {
-    marginBottom: 5
-  },
   profilButton: {
     height: "100%",
-    borderRightWidth: 3,
+    borderRightWidth: 2,
     borderRightColor: "#3B55EB",
     justifyContent: "center",
     borderLeftRadius: 10,

@@ -1,16 +1,18 @@
+const SocketHelper = require('../helpers/SocketHelper');
+
 /**
  * Socket Events of the API, declared in server.js
  */
-module.exports = (io) => {
+module.exports = () => {
 
     /**
      * Triggered when new connexion is etablished with a client
      * setup all the socket events of this connexion
      */
-    io.on('connection', (socket) => {
+    global.io.on('connection', (socket) => {
     
         const socketId = socket.id;
-        global.clientSockets.push({socket: socket});
+        global.clientSockets.push({socket: socket, idUser: undefined});
         console.log(`New connection : ${socketId}`);
         //socket.client.conn.remoteAdress
     
@@ -19,37 +21,25 @@ module.exports = (io) => {
          */
         socket.on('disconnect', () => {
             console.log(`${socketId} disconnected`);
-
-            global.clientSockets.map((socketItem, index) => {
-                if (socketItem.socketId == socketId) {
-                    delete global.clientSockets[index];
-                    return null;
-                }
-            });
         });
     
         /**
          * Setup the user id associated to the socket connexion
          */
         socket.on('associate_userid_to_socket', (idUser) => {
-            socket.data.idUser = idUser;
+            //socket.data.idUser = idUser;
 
-            global.clientSockets.map((socketItem, index) => {
-                if (socketItem.socket.id == socketId) {
-                    global.clientSockets[index].idUser = idUser;
-                    return;
-                }
-            });
+            SocketHelper.associateUserToSocket(socketId, idUser);
         })
     
         // CHAT EVENTS ___________________________________________________________________ CHAT EVENTS
     
         socket.on('join_salon', (idSalon) => {
-            //socket.join('chatgeneral');
+            //socket.join(idSalon);
         });
-    
-        socket.on('api-chat', (message) => {
-            io.emit('client-chat', `${socketId} : ${message}`);
+
+        socket.on('leave_salon', (idSalon) => {
+            //socket.leave(idSalon);
         });
 
         socket.on('test', (test) => {

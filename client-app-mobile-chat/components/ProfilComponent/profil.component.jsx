@@ -1,53 +1,53 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProfilTemplate from "./profil.template.jsx";
-import { request } from '../../services/RequestService';
-import { SocketContext } from '../../context/socket.context';
 import StoreService from '@services/StoreService';
-import { ENDPOINT_API } from '@env';
-import { httpRequest } from '@services/RequestService';
+import { apiHttpRequest } from '@services/RequestService';
 import InputService from '@services/InputService';
 import RegexService from '@services/RegexService';
 
 export default function ProfilComponent(props) {
 
   const [state, setState] = useState({
-    userInputs: { idUser: '', prenom: '', nom: '', email: '', createdAt: '', password: '', confirmPassword: '' },
+    connectedUser: { idUser: '', prenom: '', nom: '', email: '', password: '' },
+    userInputs: { idUser: '', prenom: '', nom: '', email: '', password: '', confirmPassword: '' },
   });
 
-  const verifyUserInputs = () => {
-    if (state.userInputs.password !== '') {
-      return (
-        RegexService.testNameRegex(state.userInputs.prenom) //prenom
-        && RegexService.testNameRegex(state.userInputs.nom) //nom
-        && RegexService.testEmailRegex(state.userInputs.email)
-        && RegexService.testPasswordRegex(state.userInputs.password) //password
-        && RegexService.testPasswordRegex(state.userInputs.confirmPassword) //confirmPassword
-        && state.userInputs.confirmPassword == state.userInputs.password
-      )
-    }
-    return (
-      RegexService.testNameRegex(state.userInputs.prenom) //prenom
-      && RegexService.testNameRegex(state.userInputs.nom) //nom
-      && RegexService.testEmailRegex(state.userInputs.email)
-      //password == confirmPassword
-    );
-  }
   useEffect(() => {
-    getUserDetails();
+    init();
+
     console.log("HomeComponent loaded");
+    
     return () => {
       console.log('HomeComponent Destruct');
     };
   }, []);
 
-
-  const getUserDetails = async () => {
+  const init = async () => {
     let userDetails = await StoreService.retrieveData('user');
-    userDetails = userDetails
+  
     setState({
       ...state,
-      userInputs: { ...state.userInputs, ...userDetails }
-    })
+      connectedUser: userDetails,
+      userInputs: { ...userDetails, confirmPassword: '' }
+    });
+  }
+
+  const verifyUserInputs = () => {
+    let infoAreOk = (
+      RegexService.testNameRegex(state.userInputs.prenom)
+      && RegexService.testNameRegex(state.userInputs.nom)
+      && RegexService.testEmailRegex(state.userInputs.email)
+    );
+
+    if (state.userInputs.password !== '') {
+      infoAreOk = (
+        infoAreOk
+        && RegexService.testPasswordRegex(state.userInputs.password)
+        && state.userInputs.confirmPassword == state.userInputs.password
+      );
+    }
+
+    return infoAreOk;
   }
 
   const updateUserDetails = async () => {
@@ -56,14 +56,17 @@ export default function ProfilComponent(props) {
         //say that inputs are invalids
         return;
       }
+
       let userDetails = { ...state.userInputs };
-      delete userDetails['confirmPassword']
+      delete userDetails['confirmPassword'];
+
       if (userDetails.password == '') {
-        delete userDetails['password']
+        delete userDetails['password'];
       }
-      console.log(userDetails);
-      let request = await httpRequest(`user/auth/${userDetails.idUser}/update/`, 'POST', null, userDetails);
-      await StoreService.storeData('user', request)
+      
+      const request = await apiHttpRequest(`user/auth/${userDetails.idUser}/update/`, 'POST', null, userDetails);
+      await StoreService.storeData('user', request);
+
     } catch (err) {
       console.error(err);
     }
@@ -81,5 +84,12 @@ export default function ProfilComponent(props) {
     }
   }
 
-  return (<ProfilTemplate updateInput={updateInput} updateUserDetails={updateUserDetails} userDetails={state.userInputs} />);
+  return (
+    <ProfilTemplate
+      updateInput={updateInput}
+      updateUserDetails={updateUserDetails}
+      connectedUser={state.connectedUser}
+      userDetails={state.userInputs}
+    />
+  );
 };

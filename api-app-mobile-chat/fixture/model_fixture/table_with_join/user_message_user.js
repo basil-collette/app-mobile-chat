@@ -10,7 +10,7 @@ for (i = 0; i < 100; i++) {
     user_message_user.push({
         model: "user_message_user",
         data: {
-            content: faker.faker.lorem.words(12),
+            content: faker.faker.lorem.words(NumberHelper.randomInt(3, 20)),
             createdAt: faker.faker.date.past(),
             idUserSender : user_sender,
             idUserReceiver:  user_receiver

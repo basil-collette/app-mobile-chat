@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef} from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import ChatTemplate from './chat.template.jsx';
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import { apiHttpRequest } from '@services/RequestService';
@@ -9,45 +9,46 @@ export default function ChatComponent(props) {
   
   const socket = useContext(SocketContext);
   const scrollView = useRef();
+  const msgInput = useRef();
 
+  const [messages, setMessages] = useState([]); //messages in a separate state to avoid async crossing setStates errors
   const [state, setState] = useState({
     chatLibelle: props.navigation.state.params.chatLibelle,
-    user: {prenom: '', nom: ''},
+    connectedUser: { idUser: '', prenom: '', nom: '' },
     msgInput: '',
-    messages: [],
     typeChat: props.navigation.state.params.typeChat,
     idDestination: props.navigation.state.params.idDestination
   });
 
-  let orientationChangeListener;
   useEffect(() => {
-    setUser();
-    
-    socket.on('client-chat', (chatMsg) => {
-      addMsg(chatMsg);
-    });
+    init();
 
     console.log("ChatComponent loaded");
 
     return () => {
+      socket.off('new_chatmsg_to_client');
       console.log('ChatComponent Destruct');
     };
   }, []);
 
   //FUNCTIONS ________________________________________________________________________________________ FUNCTIONS
 
-  const setUser = async () => {
+  const init = async () => {
+    socket.on('new_chatmsg_to_client', addMsg);
+    
+    const userResult = await StoreService.retrieveData('user');
+
+    const messagesResult = await apiHttpRequest('messageuser/getdiscussion/' + state.idDestination, 'GET', null, null);
+    
+    setMessages(messages => messagesResult);
     setState({
       ...state,
-      user: await StoreService.retrieveData('user')
+      connectedUser: userResult
     });
   }
 
   const addMsg = (msg) => {
-    setState({
-      ...state,
-      message: [...state.message, msg]
-    });
+    setMessages(messages => [...messages, msg]);
   }
 
   const goProfile = () => {
@@ -62,20 +63,20 @@ export default function ChatComponent(props) {
 
   const sendMessage = async () => {
     const body = {
-      "content": state.msgInput
+      content: state.msgInput
     };
 
     let endPoint;
 
-    if (typeChat == 'salon') {
+    if (state.typeChat == 'salon') {
 
-      endPoint = 'messagesalon';
-      body['idSalon'] = state.idDestination;
+      endPoint = 'messagesalon/send/';
+      body.idSalon = state.idDestination;
 
-    } else if (typeChat == 'user') {
+    } else if (state.typeChat == 'user') {
 
-      endPoint = 'messageuser';
-      body['idUserReceiver'] = state.idDestination;
+      endPoint = 'messageuser/send/';
+      body.idUserReceiver = state.idDestination;
 
     } else {
       // error, say that typechat isnt correct
@@ -83,8 +84,13 @@ export default function ChatComponent(props) {
     }
 
     try {
-      const response = await apiHttpRequest(endPoint,'POST',headers, body);
+      const response = await apiHttpRequest(endPoint, 'POST', null, body);
 
+      msgInput.current.clear();
+      setState({
+        ...state,
+        msgInput: ''
+      });
     } catch(err) {
       console.error(err);
     }
@@ -101,17 +107,19 @@ export default function ChatComponent(props) {
 
   return (
     <GlobalTemplate
-      userName={state.user.prenom + ' ' + state.user.nom}
+      userName={state.connectedUser.prenom + ' ' + state.connectedUser.nom}
       goProfile={goProfile}
       title={state.chatLibelle}
       >
 
       <ChatTemplate
-        messages={state.messages}
+        connectedUser={state.connectedUser}
+        messages={messages}
         goBack={goBack}
         sendMessage={sendMessage}
         updateMsgInput={updateMsgInput}
         scrollView={scrollView}
+        msgInput={msgInput}
         /> 
       
     </GlobalTemplate>

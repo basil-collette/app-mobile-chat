@@ -19,7 +19,7 @@ export default function AuthTemplate(props) {
             <View style={styles.containerForm}>
                 <Image
                     style={styles.logo}
-                    source={require('../../assets/img/logo.png')}
+                    source={require('@assets/img/logo.png')}
                     />
                 <Text style={styles.title}>Connexion</Text>
 

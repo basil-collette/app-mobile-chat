@@ -11,7 +11,7 @@ export default StyleSheet.create({
   },
     containerHeader: {
       position : "relative",
-      height : "20%",
+      height : "25%",
       width: "100%"
     },
       circleLeft: {
@@ -64,7 +64,7 @@ export default StyleSheet.create({
         zIndex: 100
       }, 
     containerForm: {
-      height : "80%",
+      height : "75%",
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "flex-start",
@@ -148,10 +148,6 @@ export default StyleSheet.create({
       color: 'white',
       textAlign: 'center',
     },
-  
-  
-  
-  
   
 });
 

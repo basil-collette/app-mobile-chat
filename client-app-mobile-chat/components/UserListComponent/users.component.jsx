@@ -11,7 +11,7 @@ export default function HomeComponent(props) {
 
   const [state, setState] = useState({
     chatLibelle: props.navigation.state.params.chatLibelle,
-    connectedUser: {prenom: '', nom: ''},
+    connectedUser: {idUser: '', prenom: '', nom: ''},
     users: [],
   });
 
@@ -32,7 +32,7 @@ export default function HomeComponent(props) {
     
     const endpoint = 'user/auth/' + user.idUser + '/getall';
     
-    const allUsers = await apiHttpRequest(endpoint, null, null);
+    const allUsers = await apiHttpRequest(endpoint, 'GET', null, null);
     
     setState({
       ...state,
@@ -47,8 +47,18 @@ export default function HomeComponent(props) {
     props.navigation.goBack();
   }
 
-  const goProfile = () => {
-    props.navigation.navigate('Option', {});
+  const goProfile = (idUser) => {
+    props.navigation.navigate('Option', { idUser: idUser });
+  }
+
+  const goDiscussion = (user) => {
+    const goDiscussionParams = {
+      typeChat: 'user',
+      idDestination: user.idUser,
+      chatLibelle: user.prenom + ' ' + user.nom
+    };
+    
+    props.navigation.navigate('Chat', {...goDiscussionParams});
   }
     
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
@@ -60,8 +70,11 @@ export default function HomeComponent(props) {
       >
 
       <UserListTemplate
+        connectedUser={state.connectedUser}
         users={state.users}
         goBack={goBack}
+        goDiscussion={goDiscussion}
+        goProfile={goProfile}
         /> 
       
     </GlobalTemplate>

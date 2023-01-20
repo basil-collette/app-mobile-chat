@@ -1,6 +1,8 @@
 const UserController = new(require('../controllers/UserController'));
 const MessageUserController = new(require('../controllers/MessageUserController'));
+const Sequelize = require("sequelize");
 const Op = require("sequelize").Op;
+const SocketHelper = require('../helpers/SocketHelper');
 
 /**
  * get all message from salon
@@ -11,16 +13,15 @@ const getDiscussion = async (req, res, next) => {
         const idUserSender = res.locals.authentifiedUser.idUser;
         const idUserReceiver = req.params.idUserReceiver;
 
-        const wheres = {
-            [Op.and]: [
-                {idUserSender: {[Op.in]: [idUserReceiver, idUserSender]}},
-                {idUserReceiver: {[Op.in]: [idUserReceiver, idUserSender]}},
-                {idUserSender: {[Op.not]: idUserReceiver}}
-            ]
-        };
+        const wheres = [
+            {fk_id_user_sender: {[Op.in]: [idUserReceiver, idUserSender]}},
+            {fk_id_user_receiver: {[Op.in]: [idUserReceiver, idUserSender]}}
+        ]
 
-        let messagesUser = await MessageUserController.getDiscussion(wheres);
+        if (idUserSender != idUserReceiver) wheres.push({fk_id_user_sender: {[Op.not]: Sequelize.col('fk_id_user_receiver')}});
 
+        let messagesUser = await MessageUserController.getDiscussion({[Op.and]: wheres});
+        
         res.status(200);
         res.send(messagesUser);
         next();
@@ -60,23 +61,32 @@ const sendMessage = async (req, res, next) => {
         "idUserReceiver": 1
     }
     */
+    let messageSalon;
+
     try {
-        const messageSalon = await MessageUserController.insert(req.body);
-        
-        if (messageSalon) {
-            res.status(201);
-            res.send(messageSalon);
-            next();
-        } else {
-            res.status(404);
-            res.end();
+        messageSalon = await MessageUserController.insert(req.body);
+        if (!messageSalon) {
+            throw new Error();
         }
-        
     } catch (err) {
+        console.error(err);
         res.status(404);
         res.end('error_during_sending_message');
-        //next(err);
+        next(err);
     }
+
+    try {
+        SocketHelper.emitUserMsg(req.body.idUserSender, req.body.idUserReceiver, messageSalon);
+    } catch (err) {
+        console.error(err);
+        res.status(404);
+        res.end('error_during_socket_emit');
+        next(err);
+    }
+
+    res.status(201);
+    res.send(messageSalon);
+    next();
 }
 
 /**
