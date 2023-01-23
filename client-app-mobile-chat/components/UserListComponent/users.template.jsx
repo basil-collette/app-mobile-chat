@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, TouchableWithoutFeedback, Animated,} from "react-native";
 import UsersStyle from "./users.style.jsx";
-import { SvgProfil, SvgArrow } from '@assets/svg';
+import { SvgProfil, SvgArrow,SvgEnveloppe } from '@assets/svg';
 
 export default function userListTemplate(props) {
   return (
@@ -34,7 +34,7 @@ export default function userListTemplate(props) {
                   <View style = {UsersStyle.containerSendMessage}>
                     <Text style={UsersStyle.alignBoxUser}>{user.prenom + ' ' + user.nom}</Text>
                     <View style = {UsersStyle.SendButton}>
-                      <SvgArrow width={25} height={25} fill="#3B55EB" />
+                      <SvgEnveloppe height = {25} width = {25} fill = "#3B55EB"/>
                     </View>
                   </View>
                 </TouchableWithoutFeedback>

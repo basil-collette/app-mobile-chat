@@ -50,6 +50,7 @@ export default function ChatTemplate(props) {
           ref={props.msgInput}
           style={ChatStyle.InputMessage}
           onChangeText={(e) => { props.updateMsgInput(e) }}
+          onPressIn = {() => props.scrollView.current.scrollToEnd({ animated: true, index: -1 }, 200)}
         />
         <TouchableHighlight
           style={ChatStyle.sendButtonContainer}
