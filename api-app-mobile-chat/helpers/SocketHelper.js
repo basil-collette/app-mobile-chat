@@ -15,7 +15,7 @@ const associateUserToSocket = (socketId, idUser) => {
 
 const getSocketByIdUser = (idUser) => {
     const socketItem = global.clientSockets.find((socketItem) => socketItem.idUser == idUser);
-    return socketItem.socket;
+    return (socketItem) ? socketItem.socket : null;
 }
 
 const removeDisconnectedSockets = () => {
@@ -31,10 +31,10 @@ const removeDisconnectedSockets = () => {
 
 const emitUserMsg = (idUserSender, idUserReceiver, msg) => {
     const userSenderSocket = getSocketByIdUser(idUserSender);
-    if (userSenderSocket) global.io.to(userSenderSocket.socket.id).emit('new_chatmsg_to_client', msg);
+    if (userSenderSocket) global.io.to(userSenderSocket.id).emit('new_chatmsg_to_client', msg);
 
     const userReceiverSocket = getSocketByIdUser(idUserReceiver);
-    if (userReceiverSocket) global.io.to(userReceiverSocket.socket.id).emit('new_chatmsg_to_client', msg);
+    if (userReceiverSocket) global.io.to(userReceiverSocket.id).emit('new_chatmsg_to_client', msg);
 }
 
 module.exports = {

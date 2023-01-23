@@ -10,14 +10,13 @@ export default function ChatComponent(props) {
   const socket = useContext(SocketContext);
   const scrollView = useRef();
   const msgInput = useRef();
-
-  const [messages, setMessages] = useState([]); //messages in a separate state to avoid async crossing setStates errors
   const [state, setState] = useState({
     chatLibelle: props.navigation.state.params.chatLibelle,
+    typeChat: props.navigation.state.params.typeChat,
+    idDestination: props.navigation.state.params.idDestination,
     connectedUser: { idUser: '', prenom: '', nom: '' },
     msgInput: '',
-    typeChat: props.navigation.state.params.typeChat,
-    idDestination: props.navigation.state.params.idDestination
+    messages: []
   });
 
   useEffect(() => {
@@ -36,19 +35,26 @@ export default function ChatComponent(props) {
   const init = async () => {
     socket.on('new_chatmsg_to_client', addMsg);
     
-    const userResult = await StoreService.retrieveData('user');
+    const userResult = await JSON.parse(await StoreService.retrieveData('user'));
 
     const messagesResult = await apiHttpRequest('messageuser/getdiscussion/' + state.idDestination, 'GET', null, null);
-    
-    setMessages(messages => messagesResult);
-    setState({
-      ...state,
-      connectedUser: userResult
+
+    setState((currentState) => {
+      return {
+        ...currentState,
+        messages: messagesResult,
+        connectedUser: userResult
+      };
     });
   }
 
   const addMsg = (msg) => {
-    setMessages(messages => [...messages, msg]);
+    setState((currentState) => {
+      return {
+        ...currentState,
+        messages: [...currentState.messages, msg],
+      };
+    });
   }
 
   const goProfile = () => {
@@ -87,9 +93,11 @@ export default function ChatComponent(props) {
       const response = await apiHttpRequest(endPoint, 'POST', null, body);
 
       msgInput.current.clear();
-      setState({
-        ...state,
-        msgInput: ''
+      setState((currentState) => {
+        return {
+          ...currentState,
+          msgInput: ''
+        };
       });
     } catch(err) {
       console.error(err);
@@ -97,9 +105,11 @@ export default function ChatComponent(props) {
   }
 
   const updateMsgInput = (value) => {
-    setState({
-      ...state,
-      msgInput: value
+    setState((currentState) => {
+      return {
+        ...currentState,
+        msgInput: value
+      };
     });
   }
 
@@ -114,7 +124,7 @@ export default function ChatComponent(props) {
 
       <ChatTemplate
         connectedUser={state.connectedUser}
-        messages={messages}
+        messages={state.messages}
         goBack={goBack}
         sendMessage={sendMessage}
         updateMsgInput={updateMsgInput}

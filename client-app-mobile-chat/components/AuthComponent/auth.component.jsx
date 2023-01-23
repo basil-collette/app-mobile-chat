@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import AuthTemplate from './auth.template.jsx';
 import { SocketContext } from '@context/socket.context';
 import { apiHttpRequest } from '@services/RequestService';
@@ -17,7 +17,7 @@ export default function AuthComponent(props) {
 
   useEffect(() => {
     //check if remember login credentials
-
+    
     console.log("AuthComponent loaded");
 
     return () => {
@@ -76,9 +76,7 @@ export default function AuthComponent(props) {
       }
 
     } catch(err) {
-      console.error(err);
-      //throw new Error(err.message);
-      //console.error(err.message);
+      throw new Error(err);
     }
   }
 
