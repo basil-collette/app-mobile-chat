@@ -20,16 +20,12 @@ export default function GlobalTemplate(props) {
           <SvgCircleChevron width={25} height={25} fill="white" />
         </TouchableWithoutFeedback >}
 
-
-        
-
         {props.title &&
           <View style={{ flexDirection: "row", paddingVertical: 5, paddingRight : 15, paddingLeft : 5,backgroundColor:"white",paddingbackgroundColor: "white",alignItems:"center",borderRadius:15}}> 
           {props.SVGProfil && props.SVGProfil()}
           {props.title && <Text style={{ color: "blue", marginLeft: 10 }}>{props.title}</Text>}
           </View>}
 
-          
         <View style={!props.title && !props.SVGProfil ? {marginLeft : 'auto' } : {} }  >
         <TouchableWithoutFeedback
           onPress={() => props.goProfile()}

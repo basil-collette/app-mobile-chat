@@ -31,15 +31,15 @@ export default function userListComponent(props) {
   //FUNCTIONS ________________________________________________________________________________________ FUNCTIONS
 
   const init = async () => {
-    const user = await StoreService.retrieveData('user');
-
-    const endpoint = 'user/auth/' + user.idUser + '/getall';
-
+    const userResult = await JSON.parse(await StoreService.retrieveData('user'));
+    
+    const endpoint = 'user/auth/' + userResult.idUser + '/getall';
+    
     const allUsers = await apiHttpRequest(endpoint, 'GET', null, null);
 
     setState({
       ...state,
-      connectedUser: user,
+      connectedUser: userResult,
       users: allUsers
     });
   }
