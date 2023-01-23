@@ -4,17 +4,20 @@ import StoreService from '@services/StoreService';
 import { apiHttpRequest } from '@services/RequestService';
 import InputService from '@services/InputService';
 import RegexService from '@services/RegexService';
+import {Animated} from 'react-native'
+import { easeOutAnimation } from '@assets/animation'
 
 export default function ProfilComponent(props) {
 
   const [state, setState] = useState({
     connectedUser: { idUser: '', prenom: '', nom: '', email: '', password: '' },
     userInputs: { idUser: '', prenom: '', nom: '', email: '', password: '', confirmPassword: '' },
+    animation: { profilContainer: new Animated.ValueXY({ x: 0, y: 800 }) }
   });
 
   useEffect(() => {
     init();
-
+    easeOutAnimation(state.animation.profilContainer, 500, 200, { x: 0, y: 0 });
     console.log("HomeComponent loaded");
     
     return () => {
@@ -90,6 +93,7 @@ export default function ProfilComponent(props) {
       updateUserDetails={updateUserDetails}
       connectedUser={state.connectedUser}
       userDetails={state.userInputs}
+      profilAnimation = {{ transform: state.animation.profilContainer.getTranslateTransform() }}
     />
   );
 };

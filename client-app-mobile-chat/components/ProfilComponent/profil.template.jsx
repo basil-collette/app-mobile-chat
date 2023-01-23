@@ -1,11 +1,11 @@
-import { TextInput, View, TouchableHighlight, Text } from "react-native";
+import { TextInput, View, TouchableHighlight, Text,Animated } from "react-native";
 import { SvgProfil } from '@assets/svg';
 import ProfilStyle from './profil.style.jsx';
 
 export default function ProfilTemplate(props) {
   return (
     <View style={ProfilStyle.body}>
-      <View style={ProfilStyle.container}>
+      <Animated.View style={[ProfilStyle.container,props.profilAnimation]}>
 
         <View style={ProfilStyle.profilInfoContainer}>
           <View style={{ backgroundColor: "#AAAABC", borderRadius: 60 }}>
@@ -82,7 +82,7 @@ export default function ProfilTemplate(props) {
 
         <View style={ProfilStyle.triangle}></View>
 
-      </View>
+      </Animated.View>
     </View>
   );
 };
