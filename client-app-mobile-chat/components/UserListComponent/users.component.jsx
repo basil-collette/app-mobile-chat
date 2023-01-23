@@ -64,12 +64,16 @@ export default function userListComponent(props) {
     props.navigation.navigate('Chat', { ...goDiscussionParams });
   }
 
+  const goUserList = () => {
+    props.navigation.navigate('UserList', {});
+  }
+
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
 
   return (
     <GlobalTemplate
-      userName={state.connectedUser.prenom + ' ' + state.connectedUser.nom}
-      goProfile={goProfile}
+      backButton={goBack}
+
     >
 
       <UserListTemplate

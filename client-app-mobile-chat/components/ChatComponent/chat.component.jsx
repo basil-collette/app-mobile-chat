@@ -4,7 +4,7 @@ import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import { apiHttpRequest } from '@services/RequestService';
 import * as StoreService from '@services/StoreService';
 import { SocketContext } from '@context/socket.context';
-
+import { SvgProfil} from '../../assets/svg'
 export default function ChatComponent(props) {
   
   const socket = useContext(SocketContext);
@@ -107,9 +107,10 @@ export default function ChatComponent(props) {
 
   return (
     <GlobalTemplate
-      userName={state.connectedUser.prenom + ' ' + state.connectedUser.nom}
-      goProfile={goProfile}
-      title={state.chatLibelle}
+      backButton={goBack}
+      nameProfil = {state.chatLibelle}
+      SVGProfil = { state.typeChat =="user" ? () => <SvgProfil height={25} width = {25} fill="green"></SvgProfil> :null}
+      title ={state.chatLibelle}
       >
 
       <ChatTemplate
