@@ -1,15 +1,14 @@
-import { View, Text, ScrollView, TouchableWithoutFeedback } from "react-native";
+import { View, Text, ScrollView, TouchableWithoutFeedback, Animated,} from "react-native";
 import UsersStyle from "./users.style.jsx";
 import { SvgProfil, SvgArrow } from '@assets/svg';
 
-export default function HomeTemplate(props) {
+export default function userListTemplate(props) {
   return (
     <View style={UsersStyle.componentBody}>
-
+    <Animated.View style = {[props.userListContainer,{width:"100%",alignItems:"center"}]}>
       <View style={UsersStyle.userListContainer}>
         <Text style={UsersStyle.titleAlign}>Users</Text>
         <ScrollView contentContainerStyle={UsersStyle.scrollViewContainer}>
-
           {props.users.map((user, index) => {
             if (user.idUser == props.connectedUser.idUser) return;
 
@@ -47,7 +46,7 @@ export default function HomeTemplate(props) {
         </ScrollView>
       </View>
       <View style={UsersStyle.triangle}></View>
-
+      </Animated.View>
     </View>
   );
 };

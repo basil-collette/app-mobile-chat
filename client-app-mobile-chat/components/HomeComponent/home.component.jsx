@@ -44,7 +44,7 @@ export default function HomeComponent(props) {
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
 
   const goProfile = () => {
-    props.navigation.navigate('Profil',{});
+    props.navigation.navigate('UserDetail',{});
   }
 
   const goRoom = (idRoom) => {
@@ -64,10 +64,10 @@ export default function HomeComponent(props) {
   return (
     <GlobalTemplate
       userName={state.user.prenom + ' ' + state.user.nom}
+      goProfile={goProfile}
       >
 
       <HomeTemplate
-        goProfile={goProfile}
         goRoom={goRoom}
         goUserList={goUserList}
         animationChatBtn={{ transform: state.animation.ChatBtn.getTranslateTransform() }}

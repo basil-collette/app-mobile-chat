@@ -4,20 +4,23 @@ import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import { apiHttpRequest } from '@services/RequestService';
 import { SocketContext } from '@context/socket.context';
 import * as StoreService from '@services/StoreService';
+import { Animated } from 'react-native';
+import { easeOutAnimation } from '@assets/animation'
 
-export default function HomeComponent(props) {
+export default function userListComponent(props) {
 
   const socket = useContext(SocketContext);
 
   const [state, setState] = useState({
     chatLibelle: props.navigation.state.params.chatLibelle,
-    connectedUser: {idUser: '', prenom: '', nom: ''},
+    connectedUser: { idUser: '', prenom: '', nom: '' },
     users: [],
+    animation: { userListContainer: new Animated.ValueXY({ x: 0, y: 800 }) }
   });
 
   useEffect(() => {
     init();
-
+    easeOutAnimation(state.animation.userListContainer, 500, 200, { x: 0, y: 0 });
     console.log("UserListComponent loaded");
 
     return () => {
@@ -33,7 +36,7 @@ export default function HomeComponent(props) {
     const endpoint = 'user/auth/' + userResult.idUser + '/getall';
     
     const allUsers = await apiHttpRequest(endpoint, 'GET', null, null);
-    
+
     setState({
       ...state,
       connectedUser: userResult,
@@ -57,17 +60,17 @@ export default function HomeComponent(props) {
       idDestination: user.idUser,
       chatLibelle: user.prenom + ' ' + user.nom
     };
-    
-    props.navigation.navigate('Chat', {...goDiscussionParams});
+
+    props.navigation.navigate('Chat', { ...goDiscussionParams });
   }
-    
+
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
 
   return (
     <GlobalTemplate
       userName={state.connectedUser.prenom + ' ' + state.connectedUser.nom}
       goProfile={goProfile}
-      >
+    >
 
       <UserListTemplate
         connectedUser={state.connectedUser}
@@ -75,8 +78,9 @@ export default function HomeComponent(props) {
         goBack={goBack}
         goDiscussion={goDiscussion}
         goProfile={goProfile}
-        /> 
-      
+        userListContainer={{ transform: state.animation.userListContainer.getTranslateTransform() }}
+      />
+
     </GlobalTemplate>
   );
 };
