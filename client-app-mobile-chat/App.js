@@ -12,7 +12,7 @@ import { setJSExceptionHandler, setNativeExceptionHandler } from "react-native-e
 
 const errorHandler = (errorMessage) => {
   //toaster
-  alert(error.message);
+  alert(errorMessage);
 }
 
 setJSExceptionHandler((error, isFatal) => {
