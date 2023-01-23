@@ -128,7 +128,7 @@ module.exports = class UserController {
         if (!user) {
             throw new Error('isAdmin : user is undefined');
         }
-        console.log(user);
+        
         if (!user.roles) {
             user.roles = await user.getRoles();
         }
