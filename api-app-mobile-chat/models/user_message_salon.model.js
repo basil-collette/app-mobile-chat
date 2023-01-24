@@ -42,7 +42,7 @@ module.exports = (sequelize) => {
             name : 'idUser',
             field: 'fk_id_user'
           },
-          as: 'user'
+          as: 'userSender'
     });
 
     user_message_salonModel.belongsTo(salonModel, {

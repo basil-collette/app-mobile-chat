@@ -17,16 +17,17 @@ export default function ProfilComponent(props) {
 
   useEffect(() => {
     init();
-    easeOutAnimation(state.animation.profilContainer, 500, 200, { x: 0, y: 0 });
-    console.log("HomeComponent loaded");
     
+    console.log("HomeComponent loaded");
     return () => {
       console.log('HomeComponent Destruct');
     };
   }, []);
 
   const init = async () => {
-    let userDetails = await StoreService.retrieveData('user');
+    easeOutAnimation(state.animation.profilContainer, 500, 200, { x: 0, y: 0 });
+
+    const userDetails = await StoreService.retrieveData('user');
   
     setState({
       ...state,

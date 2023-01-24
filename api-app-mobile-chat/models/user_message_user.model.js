@@ -36,7 +36,6 @@ module.exports = (sequelize) => {
         tableName: 'user_message_user',
         updatedAt: false
     });
-
     
     user_message_userModel.belongsTo(userModel, {
         foreignKey: {

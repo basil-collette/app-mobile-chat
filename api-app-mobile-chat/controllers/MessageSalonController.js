@@ -25,12 +25,16 @@ module.exports = class MessageSalonController {
 
     async getDiscussion(wheres) {
         return await this.messageSalonModel.findAll({
-            wher: wheres,
-            include: {
+            where: wheres,
+            order: [['pk_id_salon_message', 'ASC']],
+            include: [{
                 model: this.userModel,
-                as: "user",
-                attributes: ['prenom', 'nom']
-            }
+                as: "userSender",
+                attributes: ['idUser', 'prenom', 'nom']
+            }, {
+                model: this.salonModel,
+                as: "salon"
+            }]
         });
     }
 

@@ -91,15 +91,15 @@ const sendMessage = async (req, res, next) => {
 
 /**
  * send a a message to salon
- * GET http://127.0.0.1:3000/messageuser/delete/:idUser
+ * GET http://127.0.0.1:3000/messageuser/delete/:idMessageUser
  */
 const deleteMessage = async (req, res, next) => {
     try {
-        const userFields = req.body;
-        let token = await UserController.login(userFields.email, userFields.password);
+        const idMessageUser = req.params.idMessageUser;
+        const result = await MessageUserController.delete(idMessageUser);
 
         res.status(200);
-        res.send(token);
+        res.send(result);
         next();
         
     } catch (err) {
