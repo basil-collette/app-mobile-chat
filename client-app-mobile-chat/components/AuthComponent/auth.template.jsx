@@ -4,6 +4,7 @@ import { TextInput, View, Image, TouchableHighlight, Text } from "react-native";
 
 import { Checkbox } from 'react-native-paper';
 
+
 export default function AuthTemplate(props) {
 
     return (

@@ -2,7 +2,7 @@ const faker = require('@faker-js/faker');
 const NumberHelper = require('../../../helpers/NumberHelper');
 
 let user_message_user = [];
-for (i = 0; i < 100; i++) {
+for (i = 0; i < 1000; i++) {
 
     let user_sender = NumberHelper.randomInt(1, 10);
     let user_receiver = NumberHelper.differentInt(user_sender, 10);
