@@ -7,7 +7,7 @@ const MessageSalonController = new(require('../controllers/MessageSalonControlle
  */
 const getDiscussion = async (req, res, next) => {
     try {
-        let messagesSalon = await MessageSalonController.getDiscussion({idSalon: req.params.idSalon});
+        const messagesSalon = await MessageSalonController.getDiscussion({fk_id_salon: req.params.idSalon});
 
         res.status(200);
         res.send(messagesSalon);

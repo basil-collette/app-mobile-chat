@@ -24,6 +24,8 @@ module.exports = class MessageUserController {
     async getDiscussion(wheres) {
         return await this.messageUserModel.findAll({
             where: wheres,
+            raw: true,
+            nest: true,
             order: [['pk_id_user_message', 'ASC']],
             include: [{
                 model: this.userModel,
@@ -71,7 +73,7 @@ module.exports = class MessageUserController {
                 }]
             });
 
-            return await this.getById(messageUser.dataValues.idUserMessageUser);
+            return await this.getById(messageUser.idUserMessageUser);
             
         } catch (err) {
             console.error(err);

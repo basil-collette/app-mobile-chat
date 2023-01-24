@@ -10,16 +10,6 @@ import RegisterComponent from '@comp/RegisterComponent/register.component.jsx';
 import ProfilComponent from '@comp/ProfilComponent/profil.component.jsx';
 import { setJSExceptionHandler, setNativeExceptionHandler } from "react-native-exception-handler";
 
-const errorHandler = (errorMessage) => {
-  //toaster
-  alert(errorMessage);
-}
-
-setJSExceptionHandler((error, isFatal) => {
-  console.error({error: error, isFatal: isFatal});
-  errorHandler(error.message);
-}, true);
-
 /*
 setNativeExceptionHandler((errorString) => {
   console.log('setNativeExceptionHandler');
@@ -30,6 +20,16 @@ setNativeExceptionHandler((errorString) => {
 export default function App() {
 
   useEffect(() => {
+    const errorHandler = (errorMessage) => {
+      //toaster
+      alert(errorMessage);
+    }
+    
+    setJSExceptionHandler((error, isFatal) => {
+      console.error({error: error, isFatal: isFatal});
+      errorHandler(error.message);
+    }, true);
+    
     require('./socket')(socket);
     
     console.log("AppComponent loaded");
@@ -87,13 +87,9 @@ export default function App() {
 
   const AppContainer = createAppContainer(AppStackNavigator);
 
-  try {
-    return (
-      <SocketContext.Provider value={socket}>
-        <AppContainer />
-      </SocketContext.Provider>
-    );
-  } catch(error) {
-    errorHandler(error.message);
-  }
+  return (
+    <SocketContext.Provider value={socket}>
+      <AppContainer />
+    </SocketContext.Provider>
+  );
 }
