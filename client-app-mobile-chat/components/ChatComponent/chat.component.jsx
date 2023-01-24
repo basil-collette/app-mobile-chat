@@ -19,40 +19,33 @@ export default function ChatComponent(props) {
     messages: []
   });
 
-  useEffect(() => {
-    init();
-
-    console.log("ChatComponent loaded");
-
-    return () => {
-      socket.off('new_chatmsg_to_client');
-      console.log('ChatComponent Destruct');
-    };
-  }, []);
-
   //FUNCTIONS ________________________________________________________________________________________ FUNCTIONS
-
-  const init = async () => {
-    socket.on('new_chatmsg_to_client', addMsg);
-    
-    const userResult = await JSON.parse(await StoreService.retrieveData('user'));
-
-    const messagesResult = await apiHttpRequest('messageuser/getdiscussion/' + state.idDestination, 'GET', null, null);
-
-    setState((currentState) => {
-      return {
-        ...currentState,
-        messages: messagesResult,
-        connectedUser: userResult
-      };
-    });
-  }
 
   const addMsg = (msg) => {
     setState((currentState) => {
       return {
         ...currentState,
         messages: [...currentState.messages, msg],
+      };
+    });
+  }
+  
+  const init = async () => {
+    socket.on('new_chatmsg_to_client', (msg) => {
+      addMsg(msg);
+    });
+  
+    const userResult = await JSON.parse(await StoreService.retrieveData('user'));
+
+    const endpoint = (state.typeChat == 'user' ? 'messageuser/getdiscussion/' : 'messagesalon/getall/') + state.idDestination;
+    
+    const messagesResult = await apiHttpRequest(endpoint, 'GET', null, null);
+    
+    setState((currentState) => {
+      return {
+        ...currentState,
+        messages: messagesResult,
+        connectedUser: userResult
       };
     });
   }
@@ -115,12 +108,22 @@ export default function ChatComponent(props) {
 
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
 
+  useEffect(() => {
+    console.log("ChatComponent loaded");
+
+    return () => {
+      socket.off('new_chatmsg_to_client');
+      console.log('ChatComponent Destruct');
+    };
+  }, []);
+
+  init();
+
   return (
     <GlobalTemplate
+      title={state.chatLibelle}
       backButton={goBack}
-      nameProfil = {state.chatLibelle}
       SVGProfil = { state.typeChat =="user" ? () => <SvgProfil height={25} width = {25} fill="green"></SvgProfil> :null}
-      title ={state.chatLibelle}
       >
 
       <ChatTemplate
