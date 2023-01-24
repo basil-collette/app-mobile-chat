@@ -1,15 +1,18 @@
-import { View, Text, ScrollView, TouchableWithoutFeedback, Animated,} from "react-native";
+import { View, Text, ScrollView, TouchableWithoutFeedback, Animated,TextInput} from "react-native";
 import UsersStyle from "./users.style.jsx";
 import { SvgProfil, SvgArrow,SvgEnveloppe } from '@assets/svg';
 
 export default function userListTemplate(props) {
   return (
     <View style={UsersStyle.componentBody}>
-    <Animated.View style = {[props.userListContainer,{width:"100%",alignItems:"center"}]}>
+    <Animated.View style = {[props.userListContainer,{width:"100%",alignItems:"center",marginBottom:"auto",marginTop:"auto"}]}>
       <View style={UsersStyle.userListContainer}>
         <Text style={UsersStyle.titleAlign}>Users</Text>
+        <TextInput style = {UsersStyle.input} onChangeText={(e) => {props.searchBar(e)}} placeholder="Search..."/>
         <ScrollView contentContainerStyle={UsersStyle.scrollViewContainer}>
-          {props.users.map((user, index) => {
+          {
+
+            props.users.filter((element) => props.filter == "" || (element.prenom + " "+ element.nom).toLowerCase().includes(props.filter.toLowerCase())|| (element.nom + " "+ element.prenom).toLowerCase().includes(props.filter.toLowerCase())).map((user, index) => {
             if (user.idUser == props.connectedUser.idUser) return;
 
             let finalStyle = (index + 1 != props.users.length) ? [UsersStyle.userContainer, {marginBottom: 5}] : UsersStyle.userContainer;

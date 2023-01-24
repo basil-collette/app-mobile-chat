@@ -35,7 +35,7 @@ export default function AuthTemplate(props) {
                     style={styles.inputPassword}
                     onChangeText={(e) => {props.updateInput('password', e)}}
                     title="Password"
-                    placeholder="Register"
+                    placeholder="Password"
                     placeholderTextColor="white"
                     secureTextEntry={true}
                 />

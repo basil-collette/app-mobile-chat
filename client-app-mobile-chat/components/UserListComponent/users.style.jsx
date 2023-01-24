@@ -2,16 +2,9 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   componentBody: {
-    width: '100%',
-    height: '100%',
-    flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingTop: 20,
-    paddingBottom: 41,
-    paddingHorizontal: 20,
-    overflow: 'hidden',
+    flex : 1,
+    width:"100%",
+    padding:20,
   },
   userListContainer: {
     width: '100%',
@@ -30,6 +23,15 @@ export default StyleSheet.create({
     width: "100%",
     backgroundColor: "#3B55EB",
     borderRadius: 10,
+  },
+  input: {
+    height: 35,
+    width: "100%",
+    color: 'white',
+    borderRadius: 15,
+    backgroundColor: 'white',
+    padding: 10,
+    marginBottom : 10
   },
   userContainer: {
     flexDirection: "row",
@@ -70,7 +72,8 @@ export default StyleSheet.create({
     borderTopWidth: 21,
     borderRightColor: "transparent",
     borderLeftColor: "transparent",
-    borderTopColor: "#3B55EB"
+    borderTopColor: "#3B55EB",
+    marginBottom:"auto"
   },
   titleAlign: {
     color: "white",

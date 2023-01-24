@@ -87,9 +87,15 @@ export default function App() {
 
   const AppContainer = createAppContainer(AppStackNavigator);
 
-  return (
-    <SocketContext.Provider value={socket}>
-      <AppContainer />
-    </SocketContext.Provider>
-  );
+
+  try {
+    return (
+      <SocketContext.Provider value={socket}>
+        <AppContainer />
+      </SocketContext.Provider>
+    );
+  } catch(error) {
+     errorHandler(error.message);
+  }
+
 }

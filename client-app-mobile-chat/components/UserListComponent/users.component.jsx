@@ -15,11 +15,13 @@ export default function userListComponent(props) {
     chatLibelle: props.navigation.state.params.chatLibelle,
     connectedUser: { idUser: '', prenom: '', nom: '' },
     users: [],
+    filter: "",
     animation: { userListContainer: new Animated.ValueXY({ x: 0, y: 800 }) }
   });
 
   useEffect(() => {
     init();
+
     easeOutAnimation(state.animation.userListContainer, 500, 200, { x: 0, y: 0 });
     console.log("UserListComponent loaded");
 
@@ -32,9 +34,9 @@ export default function userListComponent(props) {
 
   const init = async () => {
     const userResult = await JSON.parse(await StoreService.retrieveData('user'));
-    
+
     const endpoint = 'user/auth/' + userResult.idUser + '/getall';
-    
+
     const allUsers = await apiHttpRequest(endpoint, 'GET', null, null);
 
     setState({
@@ -64,24 +66,35 @@ export default function userListComponent(props) {
     props.navigation.navigate('Chat', { ...goDiscussionParams });
   }
 
-  const goUserList = () => {
-    props.navigation.navigate('UserList', {});
+  const searchBar = (e) => {
+    try {
+      setState((currentState) => {
+        return {
+          ...currentState,
+          filter: e
+        };
+      });
+    } catch (err) {
+      console.log(err)
+    }
   }
+
+
 
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
 
   return (
     <GlobalTemplate
       backButton={goBack}
-
     >
-
       <UserListTemplate
         connectedUser={state.connectedUser}
         users={state.users}
         goBack={goBack}
         goDiscussion={goDiscussion}
         goProfile={goProfile}
+        searchBar={searchBar}
+        filter={state.filter}
         userListContainer={{ transform: state.animation.userListContainer.getTranslateTransform() }}
       />
 

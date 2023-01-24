@@ -6,6 +6,7 @@ import InputService from '@services/InputService';
 import RegexService from '@services/RegexService';
 import {Animated} from 'react-native'
 import { easeOutAnimation } from '@assets/animation'
+import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 
 export default function ProfilComponent(props) {
 
@@ -87,8 +88,14 @@ export default function ProfilComponent(props) {
       console.error(err)
     }
   }
+  const goBack = () => {
+    props.navigation.goBack();
+  }
 
   return (
+    <GlobalTemplate
+      backButton={goBack}
+    >
     <ProfilTemplate
       updateInput={updateInput}
       updateUserDetails={updateUserDetails}
@@ -96,5 +103,6 @@ export default function ProfilComponent(props) {
       userDetails={state.userInputs}
       profilAnimation = {{ transform: state.animation.profilContainer.getTranslateTransform() }}
     />
+    </GlobalTemplate>
   );
 };
