@@ -10,15 +10,15 @@ import RegisterComponent from '@comp/RegisterComponent/register.component.jsx';
 import ProfilComponent from '@comp/ProfilComponent/profil.component.jsx';
 import { setJSExceptionHandler, setNativeExceptionHandler } from "react-native-exception-handler";
 
-const errorHandler = (errorMessage) => {
-  //toaster
-  alert(errorMessage);
-}
+// const errorHandler = (errorMessage) => {
+//   //toaster
+//   alert(errorMessage);
+// }
 
-setJSExceptionHandler((error, isFatal) => {
-  console.error({error: error, isFatal: isFatal});
-  errorHandler(error.message);
-}, true);
+// setJSExceptionHandler((error, isFatal) => {
+//   console.error({error: error, isFatal: isFatal});
+//   errorHandler(error.message);
+// }, true);
 
 /*
 setNativeExceptionHandler((errorString) => {
@@ -94,6 +94,6 @@ export default function App() {
       </SocketContext.Provider>
     );
   } catch(error) {
-    errorHandler(error.message);
+    // errorHandler(error.message);
   }
 }

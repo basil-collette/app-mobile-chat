@@ -2,13 +2,16 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   body: {
-    flex: 1,
+    flex:1,
+    width: '100%',
     flexDirection: "column",
     justifyContent: "center",
     alignItems : "center",
     backgroundColor: "#3C3C49",
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    overflow: 'hidden'
   },
+
   container: {
     width: "100%",
     backgroundColor: "#3B55EB",
