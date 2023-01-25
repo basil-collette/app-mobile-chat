@@ -67,7 +67,7 @@ module.exports = class MessageUserController {
                 include: [{
                     model: this.userModel,
                     as: "userSender"
-                },{
+                }, {
                     model: this.userModel,
                     as: "userReceiver"
                 }]

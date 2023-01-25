@@ -4,8 +4,6 @@ const express = require('express');
 const http = require('http');
 const socketIO = require("socket.io");
 const SocketHelper = require('./helpers/SocketHelper');
-//const cookieParser = require('cookie-parser');
-//const logger = require('morgan');
 require('dotenv').config();
 
 //SETUP ____________________________________________________________________ SETUP
@@ -15,8 +13,6 @@ const app = express();
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-//app.use(logger('dev'));
-//app.use(cookieParser());
 
 //const hostname = '127.0.0.1';
 const port = normalizePort(process.env.PORT || '3000');

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import { SocketContext, socket } from '@context/socket.context';
 import AuthComponent from '@comp/AuthComponent/auth.component.jsx';
 import HomeComponent from '@comp/HomeComponent/home.component.jsx';
@@ -11,26 +11,26 @@ import ProfilComponent from '@comp/ProfilComponent/profil.component.jsx';
 import OptionComponent from '@comp/OptionComponent/option.component.jsx';
 import { setJSExceptionHandler, setNativeExceptionHandler } from "react-native-exception-handler";
 
-/*
-setNativeExceptionHandler((errorString) => {
-  console.log('setNativeExceptionHandler');
-  console.log(errorString);
-}, false);
-*/
-
 export default function App() {
 
-  useEffect(() => {
-    const errorHandler = (errorMessage) => {
-      //toaster
-      alert(errorMessage);
-    }
-    
-    setJSExceptionHandler((error, isFatal) => {
-      console.error({error: error, isFatal: isFatal});
-      errorHandler(error.message);
-    }, true);
-    
+  const errorHandler = (errorMessage) => {
+    //toaster
+    alert(errorMessage);
+  }
+  /*
+  setJSExceptionHandler((error, isFatal) => {
+    console.error({error: error, isFatal: isFatal});
+    errorHandler(error.message);
+  }, true);
+  */
+  /*
+  setNativeExceptionHandler((errorString) => {
+    console.log('setNativeExceptionHandler');
+    console.log(errorString);
+  }, false);
+  */
+ 
+  useEffect(() => {    
     require('./socket')(socket);
     
     console.log("AppComponent loaded");
@@ -90,15 +90,9 @@ export default function App() {
 
   const AppContainer = createAppContainer(AppStackNavigator);
 
-
-  try {
-    return (
-      <SocketContext.Provider value={socket}>
-        <AppContainer />
-      </SocketContext.Provider>
-    );
-  } catch(error) {
-     errorHandler(error.message);
-  }
-
+  return (
+    <SocketContext.Provider value={socket}>
+      <AppContainer />
+    </SocketContext.Provider>
+  );
 }

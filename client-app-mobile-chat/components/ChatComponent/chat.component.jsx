@@ -4,7 +4,8 @@ import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import { apiHttpRequest } from '@services/RequestService';
 import * as StoreService from '@services/StoreService';
 import { SocketContext } from '@context/socket.context';
-import { SvgProfil} from '../../assets/svg'
+import { SvgProfil} from '@assets/svg'
+
 export default function ChatComponent(props) {
   
   const socket = useContext(SocketContext);
@@ -18,6 +19,15 @@ export default function ChatComponent(props) {
     msgInput: '',
     messages: []
   });
+
+  useEffect(() => {
+    console.log("ChatComponent loaded");
+
+    return () => {
+      socket.off('new_chatmsg_to_client');
+      console.log('ChatComponent Destruct');
+    };
+  }, []);
 
   //FUNCTIONS ________________________________________________________________________________________ FUNCTIONS
 
@@ -49,24 +59,27 @@ export default function ChatComponent(props) {
       };
     });
   }
-
-  const goProfile = () => {
-    props.navigation.navigate('Option', {});
-  }
   
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
+
+  const goOption = () => {
+    props.navigation.navigate('Option', {});
+  }
 
   const goBack = () => {
     props.navigation.goBack();
   }
 
   const sendMessage = async () => {
+    if (state.msgInput.trim() == "") {
+      return;
+    }
+
     const body = {
       content: state.msgInput
     };
 
     let endPoint;
-
     if (state.typeChat == 'salon') {
 
       endPoint = 'messagesalon/send/';
@@ -86,6 +99,7 @@ export default function ChatComponent(props) {
       const response = await apiHttpRequest(endPoint, 'POST', null, body);
 
       msgInput.current.clear();
+
       setState((currentState) => {
         return {
           ...currentState,
@@ -108,28 +122,19 @@ export default function ChatComponent(props) {
 
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
 
-  useEffect(() => {
-    console.log("ChatComponent loaded");
-
-    return () => {
-      socket.off('new_chatmsg_to_client');
-      console.log('ChatComponent Destruct');
-    };
-  }, []);
-
   init();
 
   return (
     <GlobalTemplate
       title={state.chatLibelle}
-      backButton={goBack}
-      SVGProfil = { state.typeChat =="user" ? () => <SvgProfil height={25} width = {25} fill="green"></SvgProfil> :null}
+      SVGProfil={state.typeChat =="user" ? () => <SvgProfil height={25} width = {25} fill="green"></SvgProfil> :null}
+      goBack={goBack}
+      goOption={goOption}
       >
 
       <ChatTemplate
         connectedUser={state.connectedUser}
         messages={state.messages}
-        goBack={goBack}
         sendMessage={sendMessage}
         updateMsgInput={updateMsgInput}
         scrollView={scrollView}
