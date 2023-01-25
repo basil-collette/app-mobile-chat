@@ -8,6 +8,7 @@ import UserListComponent from '@comp/UserListComponent/users.component.jsx';
 import ChatComponent from '@comp/ChatComponent/chat.component.jsx';
 import RegisterComponent from '@comp/RegisterComponent/register.component.jsx';
 import ProfilComponent from '@comp/ProfilComponent/profil.component.jsx';
+import OptionComponent from '@comp/OptionComponent/option.component.jsx';
 import { setJSExceptionHandler, setNativeExceptionHandler } from "react-native-exception-handler";
 
 /*
@@ -75,14 +76,16 @@ export default function App() {
       screen: ProfilComponent,
       navigationOptions: {
         headerShown: false
-      }
-    }
-    /*
+      },
+      
+    },
     Option: {
       screen: OptionComponent,
-      unmountOnBlur: true,
+      navigationOptions: {
+        headerShown: false
+      },
     }
-    */
+    
   });
 
   const AppContainer = createAppContainer(AppStackNavigator);

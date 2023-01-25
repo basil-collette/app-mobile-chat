@@ -92,6 +92,7 @@ export default function ProfilComponent(props) {
     props.navigation.goBack();
   }
 
+
   return (
     <GlobalTemplate
       backButton={goBack}

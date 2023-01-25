@@ -25,13 +25,15 @@ export default function GlobalTemplate(props) {
           {props.SVGProfil && props.SVGProfil()}
           {props.title && <Text style={{ color: "blue", marginLeft: 10 }}>{props.title}</Text>}
           </View>}
-
-        <View style={!props.title && !props.SVGProfil ? {marginLeft : 'auto' } : {} }  >
+        
+        <View style={!props.title && !props.SVGProfil ? {marginLeft : 'auto' } : {} }>
+        {props.goOption &&
         <TouchableWithoutFeedback
-          onPress={() => props.goProfile()}
+          onPress={() =>props.goOption ? props.goOption() : null}
         >
           <SvgGear width={25} height={25} fill="white" />
         </TouchableWithoutFeedback>
+}
         </View>
 
 
