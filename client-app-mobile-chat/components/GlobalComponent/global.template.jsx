@@ -31,12 +31,14 @@ export default function GlobalTemplate(props) {
           </View>
         }
 
-        <View style={!props.title && !props.SVGProfil ? {marginLeft : 'auto' } : {} }  >
-          <TouchableWithoutFeedback
-            onPress={() => props.goProfile()}
-            >
-            <SvgGear width={25} height={25} fill="white" />
-          </TouchableWithoutFeedback>
+        {
+          props.goOption
+          && <TouchableWithoutFeedback style={!props.title ? {marginLeft: 'auto'} : {}}>
+              onPress={() => props.goOption()}
+              >
+              <SvgGear width={25} height={25} fill="white" />
+            </TouchableWithoutFeedback>
+         }
         </View>
 
       </View>

@@ -83,6 +83,7 @@ export default function userListComponent(props) {
   return (
     <GlobalTemplate
       backButton={goBack}
+      goOption = {goOption}
       >
       <UserListTemplate
         connectedUser={state.connectedUser}

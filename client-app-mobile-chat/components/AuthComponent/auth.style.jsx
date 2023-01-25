@@ -84,7 +84,7 @@ export default StyleSheet.create({
       inputEmail: {
         height: 46,
         width: 242,
-        color: 'white',
+        color: 'white,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ',
         borderWidth: 2,
         borderRadius: 5,
         borderColor: 'white',
