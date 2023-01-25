@@ -27,7 +27,7 @@ export default StyleSheet.create({
   input: {
     height: 35,
     width: "100%",
-    color: 'white',
+    color: 'black',
     borderRadius: 15,
     backgroundColor: 'white',
     padding: 10,

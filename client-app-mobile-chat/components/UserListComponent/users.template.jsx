@@ -12,7 +12,9 @@ export default function userListTemplate(props) {
         <ScrollView contentContainerStyle={UsersStyle.scrollViewContainer}>
           {
 
-            props.users.filter((element) => props.filter == "" || (element.prenom + " "+ element.nom).toLowerCase().includes(props.filter.toLowerCase())|| (element.nom + " "+ element.prenom).toLowerCase().includes(props.filter.toLowerCase())).map((user, index) => {
+            props.users.filter((element) => props.filter == "" 
+            || (element.prenom + " "+ element.nom).toLowerCase().includes(props.filter.toLowerCase())
+            || (element.nom + " "+ element.prenom).toLowerCase().includes(props.filter.toLowerCase())).map((user, index) => {
             if (user.idUser == props.connectedUser.idUser) return;
 
             let finalStyle = (index + 1 != props.users.length) ? [UsersStyle.userContainer, {marginBottom: 5}] : UsersStyle.userContainer;

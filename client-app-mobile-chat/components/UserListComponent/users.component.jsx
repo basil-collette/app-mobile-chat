@@ -78,7 +78,9 @@ export default function userListComponent(props) {
       console.log(err)
     }
   }
-
+  const goOption = () => {
+    props.navigation.navigate('Option',{});
+  }
 
 
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
@@ -86,6 +88,7 @@ export default function userListComponent(props) {
   return (
     <GlobalTemplate
       backButton={goBack}
+      goOption = {goOption}
     >
       <UserListTemplate
         connectedUser={state.connectedUser}
