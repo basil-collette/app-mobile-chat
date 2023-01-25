@@ -24,10 +24,10 @@ export default StyleSheet.create({
     backgroundColor: "#3B55EB",
     borderRadius: 10,
   },
-  input: {
+  searchInput: {
     height: 35,
     width: "100%",
-    color: 'white',
+    color: 'black',
     borderRadius: 15,
     backgroundColor: 'white',
     padding: 10,
@@ -75,7 +75,7 @@ export default StyleSheet.create({
     borderTopColor: "#3B55EB",
     marginBottom:"auto"
   },
-  titleAlign: {
+  usersListTitle: {
     color: "white",
     textAlign: "center",
     fontSize: 16,

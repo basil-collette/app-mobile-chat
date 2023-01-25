@@ -57,14 +57,6 @@ module.exports = class MessageSalonController {
                 "created_at": messageSalonFields.createdAt,
                 "idUser": messageSalonFields.idUser,
                 "idSalon": messageSalonFields.idSalon,
-            }, {
-                include: [{
-                    model: this.userModel,
-                    as: "user"
-                }, {
-                    model: this.salonModel,
-                    as: "salon"
-                }]
             });
             
         } catch (err) {

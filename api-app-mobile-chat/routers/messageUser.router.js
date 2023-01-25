@@ -7,6 +7,6 @@ router.get('/getdiscussion/:idUserReceiver', UserMiddlewares.IsAuthentified, Mes
 
 router.post('/send', UserMiddlewares.IsAuthentified, MessageUserMiddleWares.prePersist, MessageUserMiddleWares.sendMessage);
 
-router.get('/delete/:idMessageUser', UserMiddlewares.IsAuthentified, UserMiddlewares.isAdmin, MessageUserMiddleWares.deleteMessage);
+router.delete('/delete/:idMessageUser', UserMiddlewares.IsAuthentified, UserMiddlewares.isAdmin, MessageUserMiddleWares.deleteMessage);
 
 module.exports = router;

@@ -111,14 +111,9 @@ const registerInputsAreSent = (req, res, next) => {
         || !userFields.prenom
         || !userFields.nom
         || !userFields.password
-        || !userFields.confirmPassword
     ) {
         res.status(400).send("list of needed inputs is required");
         throw new Error();
-    }
-
-    if (userFields.password != userFields.confirmPassword) {
-        throw new Error('confirmPassword different than password');
     }
 
     next();
