@@ -55,8 +55,12 @@ export default function userListComponent(props) {
     props.navigation.goBack();
   }
 
-  const goProfile = (idUser) => {
-    props.navigation.navigate('Option', { idUser: idUser });
+  const goOption = () => {
+    props.navigation.navigate('Option');
+  }
+
+  const goProfile = (user) => {
+    props.navigation.navigate('UserDetail', { userDetail: user });
   }
 
   const goDiscussion = (user) => {
@@ -82,8 +86,8 @@ export default function userListComponent(props) {
 
   return (
     <GlobalTemplate
-      backButton={goBack}
-      goOption = {goOption}
+      goBack={goBack}
+      goOption={goOption}
       >
       <UserListTemplate
         connectedUser={state.connectedUser}

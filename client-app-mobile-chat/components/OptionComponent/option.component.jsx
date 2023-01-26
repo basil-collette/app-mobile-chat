@@ -1,14 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Animated } from 'react-native';
 import OptionTemplate from "./option.template.jsx";
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
-import { SocketContext } from '@context/socket.context';
 import * as StoreService from '@services/StoreService';
-import { Animated } from 'react-native';
 import { easeOutBackAnimation } from '@assets/animation'
 
 export default function OptionComponent(props) {
-
-  const socket = useContext(SocketContext);
 
   const [state, setState] = useState({
     user: { prenom: '', nom: '' },
@@ -44,26 +41,19 @@ export default function OptionComponent(props) {
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
 
   const goProfile = () => {
-    props.navigation.navigate('UserDetail', {});
-  }
-
-  const goRoom = (idRoom) => {
-    const goRoomParams = {
-      typeChat: 'salon',
-      idDestination: idRoom,
-      chatLibelle: 'Chat Général'
-    };
-    props.navigation.navigate('Chat', goRoomParams);
+    props.navigation.navigate('UserDetail', {userDetail: state.user});
   }
 
   const goBack = () => {
     props.navigation.goBack();
   }
 
+  //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
+
   return (
     <GlobalTemplate
-    backButton = {goBack}
-    >
+      goBack={goBack}
+      >
 
       <OptionTemplate
         goProfile={goProfile}

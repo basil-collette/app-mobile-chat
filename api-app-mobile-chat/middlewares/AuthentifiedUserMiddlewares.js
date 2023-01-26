@@ -32,7 +32,7 @@ router.get('/getall', async (req, res, next) => {
         res.send(users);
         next();
     } catch (err) {
-        console.log(err);
+        console.error(err);
         next(err);
     }
 });
@@ -43,12 +43,18 @@ router.get('/getall', async (req, res, next) => {
  */
 router.get('/detail', async (req, res, next) => {
     try {
-        let user = await UserController.getFilteredById(res.locals.userId);
-
+        let user;
+        if (await UserController.isAdmin(res.locals.authentifiedUser)) {
+            user = await UserController.getNestedFilteredByFilters({pk_id_user: res.locals.userId});
+        } else {
+            user = await UserController.getFilteredById(res.locals.userId);
+        }
+        
         res.status(200);
-        res.send(JSON.stringify(user));
+        res.send(user);
         next();
     } catch (err) {
+        console.error(err);
         next(err);
     }
 });
@@ -68,7 +74,7 @@ const preUpdate = async (req, res, next) => {
 
         next();
     } catch (err) {
-        console.log(err);
+        console.error(err);
         next(err);
     }
 }
@@ -79,13 +85,15 @@ const preUpdate = async (req, res, next) => {
  */
 router.put('/update', UserMiddlewares.userDoesntExists, preUpdate, async (req, res, next) => {
     try {
-        const user = await UserController.update(
+        let user = await UserController.update(
             req.body,
-            { pk_id_user: res.locals.userId }
+            { idUser: res.locals.userId }
         );
+        user.dataValues.idUser = res.locals.userId;
+        user.roles = await user.getRoles();        
 
         res.status(201);
-        res.send(JSON.stringify(user));
+        res.send(user);
         next();
 
     } catch(err) {

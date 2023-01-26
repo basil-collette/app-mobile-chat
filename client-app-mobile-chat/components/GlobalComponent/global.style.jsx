@@ -18,6 +18,16 @@ export default StyleSheet.create({
     width: "100%",
     padding : 10
   },
+  titleContainer: {
+    flexDirection: "row",
+    paddingVertical: 5,
+    paddingRight: 15,
+    paddingLeft: 5,
+    backgroundColor: "white",
+    paddingbackgroundColor: "white",
+    alignItems:"center",
+    borderRadius: 15
+  },
   containerHomeLogo: {
     flex: 0.45,
     flexDirection: "row",
@@ -30,7 +40,6 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent:"center",
     width: "100%",
-    
   },
   bulle: {
     flexDirection: "row",

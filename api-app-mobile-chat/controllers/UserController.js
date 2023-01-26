@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const RoleController = new(require('./RoleController'));
+const Op = require("sequelize").Op;
 
 module.exports = class UserController {
 
@@ -94,12 +95,12 @@ module.exports = class UserController {
             }
         });
 
-        user.roles = await user.getRoles({attributes: ['idRole', 'code']});
-        
+        user.dataValues.roles = await user.getRoles({attributes: ['idRole', 'code']});
+
         if (user) {
             const match = await bcrypt.compare(password, user.password);
             if (match) {
-                const expireIn = 24 * 60 * 60; //hour * minutes * seconds
+                const expirationTime = 24 * 60 * 60; //hour * minutes * seconds
                 const token = jwt.sign(
                     {
                         idUser: user.idUser,
@@ -107,12 +108,11 @@ module.exports = class UserController {
                     },
                     process.env.TOKEN_KEY,
                     {
-                        expiresIn: expireIn
+                        expiresIn: expirationTime
                     }
                 );
 
-                user = JSON.parse(JSON.stringify(user));
-                delete user.password;
+                delete user.dataValues.password;
                 
                 return {user: user, token: token};
             } else {
@@ -132,7 +132,7 @@ module.exports = class UserController {
         if (!user.roles) {
             user.roles = await user.getRoles();
         }
-
+        
         return user.roles.find(role => role.code == 'admin') != undefined;
     }
 
@@ -179,7 +179,7 @@ module.exports = class UserController {
 
     async getFilteredByFilters(filters) {
         return await this.userModel.findOne({
-            attributes: ['prenom', 'nom', 'email', 'created_at'],
+            attributes: ['prenom', 'nom'],
             where: filters
         });
     }
@@ -191,8 +191,7 @@ module.exports = class UserController {
             include: {
                 attributes: ['code'],
                 model: this.roleModel,
-                as: "roles",
-                through: {attributes: []}
+                as: "roles"
             }
         });
     }
@@ -223,7 +222,7 @@ module.exports = class UserController {
                 user.roles = user.getRoles();
 
             } catch(err) {
-                console.log(err);
+                console.error(err);
                 throw new Error('error during updating user roles');
             }
         }
@@ -241,8 +240,8 @@ module.exports = class UserController {
 
     //OTHER ___________________________________________________________________ OTHER
 
-    async exists(testemail) {
-        const user = await this.getByFilters({email: testemail});
+    async exists(userEmail) {
+        const user = await this.getByFilters({ email: userEmail });
         return user != null;
     }
 
