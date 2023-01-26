@@ -39,22 +39,24 @@ export default StyleSheet.create({
     justifyContent: "flex-start",
     width: "100%",
     height: 50,
-    backgroundColor: "#AAAABC",
     borderRadius: 7,
   },
   profilButton: {
     height: "100%",
-    borderRightWidth: 2,
     borderRightColor: "#3B55EB",
     justifyContent: "center",
-    borderLeftRadius: 10,
-    padding: 10
+    padding: 10,
+    backgroundColor:"#AAAABC",
+    borderRadius : 10,
+    marginRight : 3
   },
   containerSendMessage: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 10
+    backgroundColor:"#AAAABC",
+    borderRadius : 10,
+    height:"100%"
   },
   SendButton: {
     height: "100%",

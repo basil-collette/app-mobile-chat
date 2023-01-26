@@ -28,7 +28,7 @@ user.push({
 })
 
 //adding 8 users to have 10 users in db
-for (i = 0; i < 8; i++) {
+for (i = 0; i < 18; i++) {
     user.push({
         model: 'user',
         data: {
