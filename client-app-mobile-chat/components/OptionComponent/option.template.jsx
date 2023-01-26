@@ -15,7 +15,7 @@ export default function OptionTemplate(props) {
           onPress={() => {props.goProfile()}}
           activeOpacity={0.5}
           >
-          <Animated.View style={[OptionStyle.bulle, props.animationProfileBtn]}>
+          <Animated.View style={[OptionStyle.bulle, props.animationProfileBtn,{backgroundColor:"#AAAABC"}]}>
             <SvgProfil width={25} height={25} fill="white" />
             <Text style={{ color: "white", fontSize: 18, marginLeft: 12 }}>Profile</Text>
             <View style={OptionStyle.triangleBulleGauche}></View>
@@ -26,7 +26,7 @@ export default function OptionTemplate(props) {
           onPress={() => {props.goProfile()}}
           activeOpacity={0.5}
           >
-          <Animated.View style={[OptionStyle.bulle, props.animationLogOutBtn]}>
+          <Animated.View style={[OptionStyle.bulle, props.animationLogOutBtn,{backgroundColor:"#CC5656"}]}>
             <SvgLogOut style = {{transform: [{rotate: "180deg"}]}} width={25} height={25} fill ="white" />
             <Text style={{ color: "white", fontSize: 18, marginLeft: 12 }}>Log out</Text>
             <View style={OptionStyle.triangleBulleDroite}></View>
