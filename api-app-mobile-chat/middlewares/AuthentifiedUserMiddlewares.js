@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const UserMiddlewares = require('./UserMiddlewares');
 const UserController = new(require('../controllers/UserController'));
-const Op = require("sequelize").Op;
 const bcrypt = require('bcrypt');
 
 // GET ____________________________________________________________________________________________________________________ GET
@@ -78,7 +77,7 @@ const preUpdate = async (req, res, next) => {
  * update a user by post attributes
  * POST http://127.0.0.1:3000/user/auth/:idUser/update
  */
-router.post('/update', UserMiddlewares.userDoesntExists, preUpdate, async (req, res, next) => {
+router.put('/update', UserMiddlewares.userDoesntExists, preUpdate, async (req, res, next) => {
     try {
         const user = await UserController.update(
             req.body,
