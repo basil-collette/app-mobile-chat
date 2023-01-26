@@ -101,6 +101,10 @@ export default function ProfilComponent(props) {
     const request = await apiHttpRequest(`user/auth/${state.userDetail.idUser}/update/`, 'PUT', null, userSent);
 
     await StoreService.storeData('user', request);
+    
+    setState((currentState) => {
+      return (Object.assign(currentState, request));
+    });
 
     //send toast
     alert('user updated');
