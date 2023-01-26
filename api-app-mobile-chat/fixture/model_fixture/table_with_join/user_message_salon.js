@@ -9,7 +9,7 @@ for (i = 0; i < 500; i++) {
         data: {
             content: faker.faker.lorem.words(NumberHelper.randomInt(3, 20)),
             createdAt: faker.faker.date.past(),
-            idUser: NumberHelper.randomInt(1, 10),
+            idUser: NumberHelper.randomInt(1, 20),
             idSalon: 1
         }
     })

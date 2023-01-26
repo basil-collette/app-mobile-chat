@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext,useRef } from 'react';
 import { Animated } from 'react-native';
 import UserListTemplate from './users.template.jsx';
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
@@ -16,8 +16,10 @@ export default function userListComponent(props) {
     connectedUser: { idUser: '', prenom: '', nom: '' },
     users: [],
     filter: "",
-    animation: { userListContainer: new Animated.ValueXY({ x: 0, y: 800 }) }
+    animation: { userListContainer: new Animated.ValueXY({ x: 0, y: 800 }) },
   });
+
+  const touchable = useRef();
 
   useEffect(() => {
     init();
