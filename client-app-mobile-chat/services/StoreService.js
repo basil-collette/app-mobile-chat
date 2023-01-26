@@ -19,7 +19,16 @@ const retrieveData = async (key) => {
     }
 };
 
+const forgetData= async (key) => {
+    try {
+    return await SecureStore.deleteItemAsync(key);
+    } catch (error) {
+        console.error(err);
+    }
+  };
+
 module.exports = {
     storeData,
-    retrieveData
+    retrieveData,
+    forgetData
 }
