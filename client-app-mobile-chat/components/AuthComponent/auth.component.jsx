@@ -63,6 +63,7 @@ export default function AuthComponent(props) {
       }
       
       let resultToken = await apiHttpRequest('user/login/', 'POST', null, state.connexionInputs);
+      
       if (resultToken) {
         await StoreService.storeData('user', resultToken.user);
         await StoreService.storeData('jwttoken', resultToken.token);

@@ -123,9 +123,8 @@ const registerInputsAreSent = (req, res, next) => {
  * check if the email send in body is already used by a user
  */
 const userDoesntExists = async (req, res, next) => {
-    if (await UserController.exists(req.body.email)) {
+    if (req.body.email && await UserController.exists(req.body.email)) {
         throw new Error("Error during registration. Please contact support");
-        //return res.status(409).send("Error during registration. Please contact support");
     }
     next();
 }
