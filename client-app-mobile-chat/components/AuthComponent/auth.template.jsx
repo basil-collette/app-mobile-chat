@@ -30,6 +30,7 @@ export default function AuthTemplate(props) {
                     title="Email"
                     placeholder="Email" 
                     placeholderTextColor="white"
+                    value = {props.rememberMe.email}
                 />
                 <TextInput
                     style={styles.inputPassword}
@@ -38,15 +39,17 @@ export default function AuthTemplate(props) {
                     placeholder="Password"
                     placeholderTextColor="white"
                     secureTextEntry={true}
+                    value = {props.rememberMe.password}
                 />
 
                 <View style={styles.containerCheckBox}>
                     <Checkbox
-                        value="first"
                         color="white"
                         uncheckedColor="white"
                         status={props.rememberStatus === true ? 'checked' : 'unchecked'}
                         onPress={() => props.setRememberStatusCheck()}
+                        onValueChange={(value) => this.toggleRememberMe(value)
+                        }
                     />
                     <Text style={styles.textTextRadio}>remember me</Text>
                 </View>
