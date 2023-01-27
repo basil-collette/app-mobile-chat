@@ -19,8 +19,6 @@ export default function userListComponent(props) {
     animation: { userListContainer: new Animated.ValueXY({ x: 0, y: 800 }) },
   });
 
-  const touchable = useRef();
-
   useEffect(() => {
     init();
     
@@ -38,14 +36,28 @@ export default function userListComponent(props) {
   const init = async () => {
     const userResult = await JSON.parse(await StoreService.retrieveData('user'));
 
-    const endpoint = `user/auth/${userResult.idUser}/getall`;
+    setState((currentState) => {
+      return {
+        ...currentState,
+        connectedUser: userResult
+      };
+    });
+
+    setUserList(userResult.idUser);
+
+    let setUserListRemoverInterval = setInterval(() => {
+      setUserList(userResult.idUser);
+    }, 3000);
+  }
+
+  const setUserList = async (idUser) => {
+    const endpoint = `user/auth/${idUser}/getall`;
 
     const allUsers = await apiHttpRequest(endpoint, 'GET', null, null);
 
     setState((currentState) => {
       return {
         ...currentState,
-        connectedUser: userResult,
         users: allUsers
       };
     });

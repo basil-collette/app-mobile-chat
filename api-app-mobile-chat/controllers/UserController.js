@@ -183,14 +183,14 @@ module.exports = class UserController {
 
     async getFilteredByFilters(filters) {
         return await this.userModel.findOne({
-            attributes: ['prenom', 'nom'],
+            attributes: ['idUser', 'prenom', 'nom'],
             where: filters
         });
     }
 
     async getNestedFilteredByFilters(filters) {
         return await this.userModel.findOne({
-            attributes: ['prenom', 'nom', 'email', 'created_at'],
+            attributes: ['idUser', 'prenom', 'nom', 'email', 'created_at'],
             where: filters,
             include: {
                 attributes: ['code'],

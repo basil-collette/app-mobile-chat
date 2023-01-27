@@ -19,12 +19,9 @@ const getSocketByIdUser = (idUser) => {
 }
 
 const removeDisconnectedSockets = () => {
-    global.clientSockets.map((socketItem, index) => {
-        if (!socketItem.socket.connected) {
-            global.clientSockets = global.clientSockets.splice(index, 1);
-            return null;
-        }
-    });
+    global.clientSockets = global.clientSockets.filter((item) => {
+        return item.socket.connected;
+    })
 }
 
 //EMIT ___________________________________________________________________________________________ EMIT
@@ -44,7 +41,7 @@ const emitRoomMsg = (idSalon, msg) => {
 module.exports = {
     associateUserToSocket,
     getSocketByIdUser,
+    removeDisconnectedSockets,
     emitUserMsg,
     emitRoomMsg,
-    removeDisconnectedSockets
 };

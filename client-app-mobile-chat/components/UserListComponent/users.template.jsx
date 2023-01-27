@@ -12,13 +12,15 @@ export default function userListTemplate(props) {
           <Text style={UsersStyle.usersListTitle}>Users</Text>
 
           <TextInput style={UsersStyle.searchInput} placeholder="Search..." onChangeText={(e) => {props.searchBar(e)}} />
-          <ScrollView contentContainerStyle={UsersStyle.scrollViewContainer}>
+          <ScrollView contentContainerStyle={UsersStyle.scrollViewContainer} persistentScrollbar={true}>
             {
               props.users.filter((element) => {return(
                   props.filter.trim() == ""
                   || (element.prenom + " " + element.nom).toLowerCase().includes(props.filter.toLowerCase())
                   || (element.nom + " " + element.prenom).toLowerCase().includes(props.filter.toLowerCase())
-              )}).map((user, index) => {
+              )}).sort((a, b) => {
+                b.isConnected - a.isConnected
+              }).map((user, index) => {
                 if (user.idUser == props.connectedUser.idUser) return;
 
                 const finalStyle = (index != props.users.length - 1) ? [UsersStyle.userContainer, {marginBottom: 5}] : UsersStyle.userContainer;
@@ -30,7 +32,7 @@ export default function userListTemplate(props) {
                       style={UsersStyle.profilButton}
                       activeOpacity ={0.5}
                       >
-                        <View style={{ backgroundColor: "#43C851", borderRadius: 20 }}>
+                        <View style={{ backgroundColor: user.isConnected ? "#43C851" : "#CC5656", borderRadius: 20 }}>
                           <SvgProfil width={25} height={25} fill="white" />
                         </View>
                     </TouchableOpacity>
