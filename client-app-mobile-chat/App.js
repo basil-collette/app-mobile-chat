@@ -9,28 +9,36 @@ import ChatComponent from '@comp/ChatComponent/chat.component.jsx';
 import RegisterComponent from '@comp/RegisterComponent/register.component.jsx';
 import ProfilComponent from '@comp/ProfilComponent/profil.component.jsx';
 import OptionComponent from '@comp/OptionComponent/option.component.jsx';
-import { setJSExceptionHandler, setNativeExceptionHandler } from "react-native-exception-handler";
+/*
+import { setJSExceptionHandler } from "react-native-exception-handler";
+*/
 
 export default function App() {
 
-  const errorHandler = (errorMessage) => {
-    //toaster
-    alert(errorMessage);
-  }
   /*
+  const errorHandler = (errorMessage) => {
+    setState((currentstate) => {
+      return ({
+        ...currentstate,
+        toast: { show: true, toastType: true, msg: errorMessage }
+      });
+    });
+  }
+  
   setJSExceptionHandler((error, isFatal) => {
-    console.error({error: error, isFatal: isFatal});
-    errorHandler(error.message);
+    if (isFatal) {
+      return (
+        <View>
+          <Text>{error.message}</Text>
+        </View>
+      );
+    } else {
+      errorHandler('no fatal : ' + error.message);
+    }
   }, true);
   */
-  /*
-  setNativeExceptionHandler((errorString) => {
-    console.log('setNativeExceptionHandler');
-    console.log(errorString);
-  }, false);
-  */
  
-  useEffect(() => {    
+  useEffect(() => {
     require('./socket')(socket);
     
     console.log("AppComponent loaded");
@@ -85,7 +93,6 @@ export default function App() {
         headerShown: false
       },
     }
-    
   });
 
   const AppContainer = createAppContainer(AppStackNavigator);

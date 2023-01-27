@@ -37,9 +37,14 @@ const emitUserMsg = (idUserSender, idUserReceiver, msg) => {
     if (userReceiverSocket) global.io.to(userReceiverSocket.id).emit('new_chatmsg_to_client', msg);
 }
 
+const emitRoomMsg = (idSalon, msg) => {
+    global.io.in(idSalon).emit('new_chatmsg_to_client', msg);
+}
+
 module.exports = {
     associateUserToSocket,
     getSocketByIdUser,
     emitUserMsg,
+    emitRoomMsg,
     removeDisconnectedSockets
 };

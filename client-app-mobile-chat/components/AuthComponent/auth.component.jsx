@@ -5,10 +5,11 @@ import { apiHttpRequest } from '@services/RequestService';
 import StoreService from '@services/StoreService';
 import InputService from '@services/InputService';
 import RegexService from '@services/RegexService';
+import AccountService from '@services/AccountService';
 
 export default function AuthComponent(props) {
 
-  const currentSocket = useContext(SocketContext);
+  const socket = useContext(SocketContext);
 
   const [state, setState] = useState({
     rememberStatusCheck: false,
@@ -17,6 +18,7 @@ export default function AuthComponent(props) {
 
   useEffect(() => {
     getRememberMe();
+
     console.log("AuthComponent loaded");
     return () => {
       console.log('AuthComponent Destruct');
@@ -27,6 +29,7 @@ export default function AuthComponent(props) {
 
   const getRememberMe = async () => {
     let rememberMe = await JSON.parse(await StoreService.retrieveData('rememberMe'));
+
     if (rememberMe) {
       setState((currentState) => {
         return {
@@ -36,7 +39,6 @@ export default function AuthComponent(props) {
         };
       });
     }
-
   }
 
   const verifyLoginInputs = () => {
@@ -46,54 +48,35 @@ export default function AuthComponent(props) {
     );
   }
 
-  const finalizeLogin = () => {
-    //check if remember login credentials
-    props.navigation.navigate('Home');
-  }
-
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
 
   const updateInput = (inputName, value) => {
-    try {
-      const newConnexionInputs = InputService.setInputStates(state.connexionInputs, inputName, value);
+    const newConnexionInputs = InputService.setInputStates(state.connexionInputs, inputName, value);
 
-      setState({
-        ...state,
-        connexionInputs: newConnexionInputs
-      });
-    } catch (err) {
-      //
-    }
+    setState({
+      ...state,
+      connexionInputs: newConnexionInputs
+    });
   }
 
   const loginRequest = async () => {
+    if (!verifyLoginInputs()) {
+      throw new Error('login are in an invalid format');
+    }
+    
+    const resultToken = await apiHttpRequest('user/login/', 'POST', null, state.connexionInputs);
 
-    try {
-      if (!verifyLoginInputs()) {
-        //say that inputs are invalids
-        return;
-      }
+    if (resultToken) {
+      const rememberMe = (state.rememberStatusCheck) ? state.connexionInputs : false;
 
-      let resultToken = await apiHttpRequest('user/login/', 'POST', null, state.connexionInputs);
+      await AccountService.login(resultToken.user, resultToken.token, rememberMe);
 
-      if (resultToken) {
-        await StoreService.storeData('user', resultToken.user);
-        await StoreService.storeData('jwttoken', resultToken.token);
-        if (state.rememberStatusCheck) {
-          await StoreService.storeData('rememberMe', state.connexionInputs)
-        } else {
-          await StoreService.forgetData('rememberMe')
-        }
-        currentSocket.emit('associate_userid_to_socket', resultToken.user.idUser);
+      socket.emit('associate_userid_to_socket', resultToken.user.idUser);
 
-        finalizeLogin();
-
-      } else {
-        //say that error occured during connexion
-      }
-
-    } catch (err) {
-      throw new Error(err);
+      props.navigation.navigate('Home');
+      
+    } else {
+      throw new Error('error_occured_during_login');
     }
   }
 

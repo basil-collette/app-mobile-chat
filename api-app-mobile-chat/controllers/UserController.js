@@ -95,6 +95,10 @@ module.exports = class UserController {
             }
         });
 
+        if (!user) {
+            throw new Error('user dosen\'t exist');
+        }
+
         user.dataValues.roles = await user.getRoles({attributes: ['idRole', 'code']});
 
         if (user) {

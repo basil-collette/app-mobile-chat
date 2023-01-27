@@ -7,7 +7,8 @@ const storeData = async (key, value) => {
         }
         return await SecureStore.setItemAsync(key, value);
     } catch (err) {
-        console.error(err);
+        throw new Error(err);
+        
     }
 }
 
@@ -19,9 +20,9 @@ const retrieveData = async (key) => {
     }
 };
 
-const forgetData= async (key) => {
+const deleteData= async (key) => {
     try {
-    return await SecureStore.deleteItemAsync(key);
+        return await SecureStore.deleteItemAsync(key);
     } catch (error) {
         console.error(err);
     }
@@ -30,5 +31,5 @@ const forgetData= async (key) => {
 module.exports = {
     storeData,
     retrieveData,
-    forgetData
+    deleteData
 }

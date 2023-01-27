@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Animated } from 'react-native';
 import OptionTemplate from "./option.template.jsx";
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
-import * as StoreService from '@services/StoreService';
+import StoreService from '@services/StoreService';
+import AccountService from '@services/AccountService';
 import { easeOutBackAnimation } from '@assets/animation'
 
 export default function OptionComponent(props) {
@@ -48,6 +49,12 @@ export default function OptionComponent(props) {
     props.navigation.goBack();
   }
 
+  const disconnect = async () => {
+    await AccountService.disconnect();
+    
+    props.navigation.navigate('Login');
+  }
+
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
 
   return (
@@ -57,6 +64,7 @@ export default function OptionComponent(props) {
 
       <OptionTemplate
         goProfile={goProfile}
+        disconnect={disconnect}
         animationProfileBtn={{ transform: state.animation.ProfileBtn.getTranslateTransform() }}
         animationLogOutBtn={{ transform: state.animation.LogOutBtn.getTranslateTransform() }}
       />

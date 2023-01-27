@@ -4,7 +4,7 @@ import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import { SocketContext } from '@context/socket.context';
 import * as StoreService from '@services/StoreService';
 import { Animated } from 'react-native';
-import { easeOutBackAnimation } from '@assets/animation'
+import { easeOutBackAnimation } from '@assets/animation';
 
 export default function HomeComponent(props) {
 

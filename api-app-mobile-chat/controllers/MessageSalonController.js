@@ -39,17 +39,20 @@ module.exports = class MessageSalonController {
     }
 
     async getById(idMessage) {
-        return await this.messageSalonModel.findByPk(idMessage);
+        //return await this.messageSalonModel.findByPk(idMessage);
+        return await this.messageSalonModel.findOne({
+            where: { pk_id_salon_message: idMessage },
+            raw: true,
+            nest: true,
+            include: {
+                model: this.userModel,
+                as: "userSender"
+            }
+        });
     }
 
     //INSERT 
     async insert(messageSalonFields) {
-        /*
-        {
-            "content": "test",
-            "idSalon": 1
-        }
-        */
         let messageSalon;
         try {
             messageSalon = await this.messageSalonModel.create({
@@ -57,14 +60,19 @@ module.exports = class MessageSalonController {
                 "created_at": messageSalonFields.createdAt,
                 "idUser": messageSalonFields.idUser,
                 "idSalon": messageSalonFields.idSalon,
+            }, {
+                include: {
+                    model: this.userModel,
+                    as: "userSender"
+                }
             });
+
+            return await this.getById(messageSalon.idUserMessageSalon);
             
         } catch (err) {
             console.error(err);
             throw new Error('error during inserting messageSalon');
         }
-
-        return messageSalon;
     }
 
     //DELETE __________________________________________________________________ DELETE

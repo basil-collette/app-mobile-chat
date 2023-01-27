@@ -61,11 +61,11 @@ const sendMessage = async (req, res, next) => {
         "idUserReceiver": 1
     }
     */
-    let messageSalon;
+    let message;
 
     try {
-        messageSalon = await MessageUserController.insert(req.body);
-        if (!messageSalon) {
+        message = await MessageUserController.insert(req.body);
+        if (!message) {
             throw new Error();
         }
     } catch (err) {
@@ -76,7 +76,7 @@ const sendMessage = async (req, res, next) => {
     }
 
     try {
-        SocketHelper.emitUserMsg(req.body.idUserSender, req.body.idUserReceiver, messageSalon);
+        SocketHelper.emitUserMsg(req.body.idUserSender, req.body.idUserReceiver, message);
     } catch (err) {
         console.error(err);
         res.status(404);
@@ -85,7 +85,7 @@ const sendMessage = async (req, res, next) => {
     }
 
     res.status(201);
-    res.send(messageSalon);
+    res.send(message);
     next();
 }
 

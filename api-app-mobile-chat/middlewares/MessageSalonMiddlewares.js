@@ -1,5 +1,6 @@
 const UserController = new(require('../controllers/UserController'));
 const MessageSalonController = new(require('../controllers/MessageSalonController'));
+const SocketHelper = require('../helpers/SocketHelper');
 
 /**
  * get all message from salon
@@ -48,23 +49,32 @@ const sendMessage = async (req, res, next) => {
         "idSalon": 1
     }
     */
+    let messageSalon;
+
     try {
-        const messageSalon = await MessageSalonController.insert(req.body);
-        
-        if (messageSalon) {
-            res.status(201);
-            res.send(messageSalon);
-            next();
-        } else {
-            res.status(404);
-            res.end();
+        messageSalon = await MessageSalonController.insert(req.body);
+        if (!messageSalon) {
+            throw new Error();
         }
-        
     } catch (err) {
+        console.error(err);
         res.status(404);
         res.end('error_during_sending_message');
-        //next(err);
+        next(err);
     }
+
+    try {
+        SocketHelper.emitRoomMsg(req.body.idSalon, messageSalon);
+    } catch (err) {
+        console.error(err);
+        res.status(404);
+        res.end('error_during_socket_emit');
+        next(err);
+    }
+
+    res.status(201);
+    res.send(messageSalon);
+    next();
 }
 
 /**
