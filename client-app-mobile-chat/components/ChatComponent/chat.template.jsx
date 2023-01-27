@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ScrollView, TouchableHighlight } from 'react-native';
+import { View, Text, TextInput, ScrollView, TouchableHighlight,TouchableOpacity } from 'react-native';
 import ChatStyle from "./chat.style.jsx";
 import { SvgArrow } from '@assets/svg'
 
@@ -53,7 +53,7 @@ export default function ChatTemplate(props) {
           onPressIn = {() => props.scrollView.current.scrollToEnd({ animated: true, index: -1 }, 200)}
         />
 
-        <TouchableHighlight
+        <TouchableOpacity
           style={ChatStyle.sendButtonContainer}
           ref={props.refSendBtn}
           onPress={() => {
@@ -61,7 +61,7 @@ export default function ChatTemplate(props) {
           }}
           >
           <SvgArrow width={25} height={25} fill="#3B55EB"></SvgArrow>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
 
     </View>

@@ -1,5 +1,5 @@
 
-import { Animated, View, Text, TouchableWithoutFeedback } from "react-native";
+import { Animated, View, Text, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import {SvgLogOut, SvgProfil,SvgGear} from '@assets/svg/';
 import OptionStyle from "./option.style.jsx";
 
@@ -11,27 +11,27 @@ export default function OptionTemplate(props) {
       </View>
 
       <View style={OptionStyle.containerBulle}>
-        <TouchableWithoutFeedback
+        <TouchableOpacity
           onPress={() => {props.goProfile()}}
-          underlayColor='#8093FF'
+          activeOpacity={0.5}
           >
-          <Animated.View style={[OptionStyle.bulle, props.animationProfileBtn]}>
+          <Animated.View style={[OptionStyle.bulle, props.animationProfileBtn,{backgroundColor:"#AAAABC"}]}>
             <SvgProfil width={25} height={25} fill="white" />
             <Text style={{ color: "white", fontSize: 18, marginLeft: 12 }}>Profile</Text>
             <View style={OptionStyle.triangleBulleGauche}></View>
           </Animated.View>
-        </TouchableWithoutFeedback >
+        </TouchableOpacity >
       
-        <TouchableWithoutFeedback
-          onPress={() => {props.disconnect()}}
-          underlayColor='#8093FF'
+        <TouchableOpacity
+          onPress={() => {props.goProfile()}}
+          activeOpacity={0.5}
           >
-          <Animated.View style={[OptionStyle.bulle, props.animationLogOutBtn]}>
+          <Animated.View style={[OptionStyle.bulle, props.animationLogOutBtn,{backgroundColor:"#CC5656"}]}>
             <SvgLogOut style = {{transform: [{rotate: "180deg"}]}} width={25} height={25} fill ="white" />
             <Text style={{ color: "white", fontSize: 18, marginLeft: 12 }}>Log out</Text>
             <View style={OptionStyle.triangleBulleDroite}></View>
           </Animated.View>
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
       </View>
     </>
   );
