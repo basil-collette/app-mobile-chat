@@ -9,6 +9,7 @@ export default function ChatTemplate(props) {
 
       <ScrollView
         contentContainerStyle={ChatStyle.messageList}
+        persistentScrollbar={true}
         ref={props.scrollView}
         onContentSizeChange={() => {
           props.scrollView.current.scrollToEnd({ animated: true, index: -1 }, 200);

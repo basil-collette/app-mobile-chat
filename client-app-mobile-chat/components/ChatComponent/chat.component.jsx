@@ -19,7 +19,7 @@ export default function ChatComponent(props) {
     connectedUser: { idUser: '', prenom: '', nom: '' },
     msgInput: '',
     messages: [],
-    sendBtnClicked: false
+    interlocutorIsConnected: false
   });
 
   useEffect(() => {
@@ -55,7 +55,15 @@ export default function ChatComponent(props) {
     });
 
     if (state.typeChat == 'salon') {
+
       socket.emit('join_room', state.idDestination);
+
+    } else if (state.typeChat == 'user') {
+      setInterlocutorState();
+    
+      let setInterlocuteurStateRemoverInterval = setInterval(() => {
+        setInterlocutorState();
+      }, 3000);
     }
   
     const userResult = await JSON.parse(await StoreService.retrieveData('user'));
@@ -70,6 +78,17 @@ export default function ChatComponent(props) {
         messages: messagesResult,
         connectedUser: userResult
       };
+    });
+  }
+
+  const setInterlocutorState = async () => {
+    const interlocutor = await apiHttpRequest(`user/auth/${state.idDestination}/detail`, 'GET', null, null);
+    
+    setState((currentState) => {
+      return ({
+        ...currentState,
+        interlocutorIsConnected: interlocutor.isConnected
+      });
     });
   }
   
@@ -138,7 +157,7 @@ export default function ChatComponent(props) {
   return (
     <GlobalTemplate
       title={state.chatLibelle}
-      SVGProfil={state.typeChat =="user" ? () => <SvgProfil height={25} width = {25} fill="green"></SvgProfil> :null}
+      SVGProfil={state.typeChat =="user" ? () => <SvgProfil height={25} width = {25} fill={state.interlocutorIsConnected == true ? "#43C851" : "#CC5656"}></SvgProfil> :null}
       goBack={goBack}
       goOption={goOption}
       >

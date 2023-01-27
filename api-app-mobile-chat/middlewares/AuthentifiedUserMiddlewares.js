@@ -7,10 +7,12 @@ const bcrypt = require('bcrypt');
 // GET ____________________________________________________________________________________________________________________ GET
 
 const getUsersState = (users) => {
+    const socketUserIds = global.clientSockets.map((socketItem) => {return socketItem.idUser;});
+    
     return users.map((user) => {
-        let newUser = {...user.dataValues}
+        let newUser = {...user.dataValues};
 
-        if (global.clientSockets.find((socket) => socket.idUser == user.dataValues.idUser)) {
+        if (socketUserIds.includes(newUser.idUser)) {
             newUser.isConnected = true;
         } else {
             newUser.isConnected = false;
@@ -49,6 +51,8 @@ router.get('/detail', async (req, res, next) => {
         } else {
             user = await UserController.getFilteredById(res.locals.userId);
         }
+
+        user = getUsersState([user])[0];
         
         res.status(200);
         res.send(user);
