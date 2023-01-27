@@ -1,15 +1,31 @@
-const setInputStates = (originalInputs, inputName, value) => {
+/**
+ * Service that manage the user connexion in application
+ */
+import StoreService from '@services/StoreService';
 
-    if (!Object.keys(originalInputs).includes(inputName)) {
-      throw new Error('event is binding on a wrong object property');
-    }
+const login = async (user, jwt, remembermeInputs) => {
 
-    let tempRegisterInputs = {...originalInputs};
-    tempRegisterInputs[inputName] = value;
+  await StoreService.storeData('user', user);
+  await StoreService.storeData('jwttoken', jwt);
 
-    return tempRegisterInputs;
+  if (remembermeInputs) {
+    await StoreService.storeData('rememberMe', remembermeInputs);
+  } else {
+    await StoreService.deleteData('rememberMe');
+  }
+
+  return true;
+}
+
+const disconnect = async () => {
+  await StoreService.deleteData('user');
+  await StoreService.deleteData('jwttoken');
+  await StoreService.deleteData('rememberMe');
+
+  return true;
 }
 
 module.exports = {
-    setInputStates,
+  login,
+  disconnect
 }

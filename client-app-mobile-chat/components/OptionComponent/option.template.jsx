@@ -23,7 +23,7 @@ export default function OptionTemplate(props) {
         </TouchableWithoutFeedback >
       
         <TouchableWithoutFeedback
-          onPress={() => {props.goProfile()}}
+          onPress={() => {props.disconnect()}}
           underlayColor='#8093FF'
           >
           <Animated.View style={[OptionStyle.bulle, props.animationLogOutBtn]}>

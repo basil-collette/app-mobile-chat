@@ -1,8 +1,9 @@
-const SocketHelper = require('../helpers/SocketHelper');
-
 /**
  * Socket Events of the API, declared in server.js
  */
+
+const SocketHelper = require('../helpers/SocketHelper');
+
 module.exports = () => {
 
     /**
@@ -32,18 +33,12 @@ module.exports = () => {
             SocketHelper.associateUserToSocket(socketId, idUser);
         })
     
-        // CHAT EVENTS ___________________________________________________________________ CHAT EVENTS
-    
-        socket.on('join_salon', (idSalon) => {
-            //socket.join(idSalon);
+        socket.on('join_room', (idSalon) => {
+            socket.join(idSalon);
         });
 
-        socket.on('leave_salon', (idSalon) => {
-            //socket.leave(idSalon);
-        });
-
-        socket.on('test', (test) => {
-            console.log(global.clientSockets);
+        socket.on('leave_room', (idSalon) => {
+            socket.leave(idSalon);
         });
     
     })

@@ -17,10 +17,9 @@ const httpRequest = async (endpoint, method, headers, body) => {
     }
 
     const response = await fetch(endpoint, requestOptions);
-
     if (!response.ok) {
-        const textError = await JSON.parse(await response.text());
-        throw new Error(textError.message);
+        const textError = await response.text();
+        throw new Error(textError);
     }
 
     return await response.json();

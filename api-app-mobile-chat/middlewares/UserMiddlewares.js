@@ -15,9 +15,7 @@ const login = async (req, res, next) => {
         next();
     } catch (err) {
         console.log(err);
-        res.status(404);
-        res.end('error_during_authentification');
-        //next(err);
+        res.status(404).send('error_during_authentification');
     }
 }
 

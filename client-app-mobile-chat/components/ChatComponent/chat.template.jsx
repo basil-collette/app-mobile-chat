@@ -52,8 +52,10 @@ export default function ChatTemplate(props) {
           onChangeText={(e) => { props.updateMsgInput(e) }}
           onPressIn = {() => props.scrollView.current.scrollToEnd({ animated: true, index: -1 }, 200)}
         />
+
         <TouchableHighlight
           style={ChatStyle.sendButtonContainer}
+          ref={props.refSendBtn}
           onPress={() => {
             props.sendMessage();
           }}

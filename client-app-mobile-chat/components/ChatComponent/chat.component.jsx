@@ -9,22 +9,31 @@ import { SvgProfil} from '@assets/svg'
 export default function ChatComponent(props) {
   
   const socket = useContext(SocketContext);
-  const scrollView = useRef();
-  const msgInput = useRef();
+  const refScrollView = useRef();
+  const refMsgInput = useRef();
+  const refSendBtn = useRef();
   const [state, setState] = useState({
     chatLibelle: props.navigation.state.params.chatLibelle,
     typeChat: props.navigation.state.params.typeChat,
     idDestination: props.navigation.state.params.idDestination,
     connectedUser: { idUser: '', prenom: '', nom: '' },
     msgInput: '',
-    messages: []
+    messages: [],
+    sendBtnClicked: false
   });
 
   useEffect(() => {
+    init();
+
     console.log("ChatComponent loaded");
 
     return () => {
       socket.off('new_chatmsg_to_client');
+
+      if (state.typeChat == 'salon') {
+        socket.emit('leave_room', state.idDestination);
+      }
+
       console.log('ChatComponent Destruct');
     };
   }, []);
@@ -44,6 +53,10 @@ export default function ChatComponent(props) {
     socket.on('new_chatmsg_to_client', (msg) => {
       addMsg(msg);
     });
+
+    if (state.typeChat == 'salon') {
+      socket.emit('join_room', state.idDestination);
+    }
   
     const userResult = await JSON.parse(await StoreService.retrieveData('user'));
 
@@ -98,7 +111,7 @@ export default function ChatComponent(props) {
     try {
       const response = await apiHttpRequest(endPoint, 'POST', null, body);
 
-      msgInput.current.clear();
+      refMsgInput.current.clear();
 
       setState((currentState) => {
         return {
@@ -122,8 +135,6 @@ export default function ChatComponent(props) {
 
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN
 
-  init();
-
   return (
     <GlobalTemplate
       title={state.chatLibelle}
@@ -137,8 +148,9 @@ export default function ChatComponent(props) {
         messages={state.messages}
         sendMessage={sendMessage}
         updateMsgInput={updateMsgInput}
-        scrollView={scrollView}
-        msgInput={msgInput}
+        scrollView={refScrollView}
+        msgInput={refMsgInput}
+        refSendBtn={refSendBtn}
         /> 
       
     </GlobalTemplate>
