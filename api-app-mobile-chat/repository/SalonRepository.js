@@ -1,20 +1,25 @@
-module.exports = class SalonController {
+'use strict';
+/**
+ * Singleton de repository gérant les salons.
+ */
 
+let instance = null;
+
+class SalonRepository {
+    
     connexion;
     salonModel;
 
     constructor() {
-        this.connexion = require('../database/sequelize');
+        if (!instance) {
+            this.connexion = require('../database/sequelize');
 
-        /*
-        this.connexion.authenticate().then(() => {
-            console.log('Database Connection has been established successfully.');
-        }).catch((error) => {
-            console.error('Unable to connect to the database: ', error);
-        });
-        */
+            this.salonModel = require("../models/salon.model")(this.connexion);
 
-        this.salonModel = require("../models/salon.model")(this.connexion);
+            instance = this;
+        }
+    
+        return instance;
     }
 
     //GET ________________________________________________________________________ GET
@@ -34,4 +39,7 @@ module.exports = class SalonController {
             { where: {pk_id_salon: idSalon} }
         );
     }
+    
 }
+
+module.exports = new SalonRepository();

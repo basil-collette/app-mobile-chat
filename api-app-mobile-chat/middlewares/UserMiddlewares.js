@@ -1,5 +1,46 @@
-const UserController = new(require('../controllers/UserController'));
+const UserRepository = require('../repository/UserRepository');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
+/**
+ * process the insert of the user, with fields sent in body req
+ */
+const register = async (req, res, next) => {
+    try {
+        const user = await UserRepository.register(req.body);
+        
+        if (user) {
+            res.status(201);
+            res.send(user);
+            next();
+        } else {
+            res.status(404);
+            res.end();
+        }
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
+}
+
+/**
+ * 
+ */
+const getJwtToken = (user) => {
+    const ONE_DAY = 24 * 60 * 60; //hour * minutes * seconds
+    
+    return jwt.sign(
+        {
+            idUser: user.idUser,
+            roles: user.roles,
+        },
+        process.env.TOKEN_KEY,
+        {
+            expiresIn: ONE_DAY
+        }
+    );
+}
 
 /**
  * send a jwttoken tu user, using his credentials
@@ -8,11 +49,36 @@ const login = async (req, res, next) => {
     try {
         const userFields = req.body;
         
-        let result = await UserController.login(userFields.email, userFields.password);
+        let userResult = await UserRepository.getByFilters({
+            email: userFields.email
+        }, {
+            include: {
+                model: this.roleModel,
+                as: "roles"
+            }
+        });
+    
+        if (!userResult) {
+            throw new Error('authentification_failed');
+        }
+    
+        const match = await bcrypt.compare(userFields.password, userResult.password);
+        if (!match) {
+            throw new Error('authentification_failed');
+        }
+
+        delete userResult.dataValues.password;
+
+        userResult.dataValues.roles = await userResult.getRoles({attributes: ['idRole', 'code']});
+        
+        const tokenResult = getJwtToken(userResult);
+
+        const finalResponse = {user: userResult, token: tokenResult};
 
         res.status(200);
-        res.send(result);
+        res.send(finalResponse);
         next();
+
     } catch (err) {
         console.log(err);
         res.status(404).send('error_during_authentification');
@@ -25,13 +91,35 @@ const login = async (req, res, next) => {
 const isAdmin = async (req, res, next) => {
     try {
         if(!res.locals.authentifiedUser) {
-            res.locals.authentifiedUser = await UserController.getAuthentifiedUser(req);
+            res.locals.authentifiedUser = await UserRepository.getAuthentifiedUser(req);
         }
 
-        if (!UserController.isAdmin(res.locals.authentifiedUser)) {
+        if (!UserRepository.isAdmin(res.locals.authentifiedUser)) {
             throw new Error('not_autorized');
         }
         next();
+    } catch(err) {
+        console.log(err);
+        next(err);
+    }
+}
+
+/**
+ * check if user is authentified using jwt token
+ * set the user object returned, in the res.locals
+ */
+const IsAuthentified = async (req, res, next) => {
+    try {
+        const authentifiedUser = await UserRepository.getAuthentifiedUser(req);
+
+        if (!authentifiedUser) {
+            res.status(400).send('not_authentified');
+            throw new Error('not_authentified');
+        }
+    
+        res.locals.authentifiedUser = authentifiedUser;
+        next();
+
     } catch(err) {
         console.log(err);
         next(err);
@@ -50,33 +138,11 @@ const isAuthorized = async (req, res, next) => {
         res.locals.userId = parseInt(req.params.idUser);
 
         if (res.locals.authentifiedUser.idUser != res.locals.userId
-            && !UserController.isAdmin(res.locals.authentifiedUser)
+            && !UserRepository.isAdmin(res.locals.authentifiedUser)
         ) {
             res.status(400).send('not_authorized');
             throw new Error('not_authorized');
         }
-        next();
-
-    } catch(err) {
-        console.log(err);
-        next(err);
-    }
-}
-
-/**
- * check if user is authentified using jwt token
- * set the user object returned, in the res.locals
- */
-const IsAuthentified = async (req, res, next) => {
-    try {
-        const authentifiedUser = await UserController.getAuthentifiedUser(req);
-
-        if (!authentifiedUser) {
-            res.status(400).send('not_authentified');
-            throw new Error('not_authentified');
-        }
-    
-        res.locals.authentifiedUser = authentifiedUser;
         next();
 
     } catch(err) {
@@ -121,7 +187,7 @@ const registerInputsAreSent = (req, res, next) => {
  * check if the email send in body is already used by a user
  */
 const userDoesntExists = async (req, res, next) => {
-    if (req.body.email && await UserController.exists(req.body.email)) {
+    if (req.body.email && await UserRepository.exists(req.body.email)) {
         throw new Error("Error during registration. Please contact support");
     }
     next();
@@ -152,24 +218,22 @@ const prePersist = async (req, res, next) => {
 }
 
 /**
- * process the insert of the user, with fields sent in body req
+ * 
  */
-const register = async (req, res, next) => {
-    try {
-        const user = await UserController.register(req.body);
-        
-        if (user) {
-            res.status(201);
-            res.send(user);
-            next();
+const getUsersState = (users) => {
+    const socketUserIds = global.clientSockets.map((socketItem) => {return socketItem.idUser;});
+    
+    return users.map((user) => {
+        let newUser = {...user.dataValues};
+
+        if (socketUserIds.includes(newUser.idUser)) {
+            newUser.isConnected = true;
         } else {
-            res.status(404);
-            res.end();
+            newUser.isConnected = false;
         }
-    } catch (err) {
-        console.log(err);
-        next(err);
-    }
+        
+        return newUser;
+    });
 }
 
 module.exports = {
@@ -179,7 +243,9 @@ module.exports = {
     register,
     registerInputsAreSent,
     isAdmin,
-    isAuthorized,
     IsAuthentified,
-    login
+    login,
+    getJwtToken,
+    getUsersState,
+    isAuthorized
 };

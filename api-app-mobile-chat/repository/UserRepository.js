@@ -1,28 +1,27 @@
+'use strict';
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 require('dotenv').config();
-const RoleController = new(require('./RoleController'));
-const Op = require("sequelize").Op;
+const RoleController = require('./RoleRepository');
 
-module.exports = class UserController {
+let instance = null;
 
+class UserRepository {
+    
     connexion;
     userModel;
     roleModel;
 
     constructor() {
-        this.connexion = require('../database/sequelize');
+        if (!instance) {
+            this.connexion = require('../database/sequelize');
+        
+            this.userModel = require("../models/user.model")(this.connexion);
+            this.roleModel = require("../models/role.model")(this.connexion);
 
-        /*
-        this.connexion.authenticate().then(() => {
-            console.log('Database Connection has been established successfully.');
-        }).catch((error) => {
-            console.error('Unable to connect to the database: ', error);
-        });
-        */
-       
-        this.userModel = require("../models/user.model")(this.connexion);
-        this.roleModel = require("../models/role.model")(this.connexion);
+            instance = this;
+        }
+    
+        return instance;
     }
 
     //Account ________________________________________________________________________ Account
@@ -78,56 +77,6 @@ module.exports = class UserController {
         return user;
     }
 
-    async login(email, password) {
-        /*
-        {
-            "email": "user@gmail.com",
-            "password": "password"
-        }
-        */
-
-        let user = await this.getByFilters({
-            email: email
-        }, {
-            include: {
-                model: this.roleModel,
-                as: "roles"
-            }
-        });
-
-        if (!user) {
-            throw new Error('user dosen\'t exist');
-        }
-
-        user.dataValues.roles = await user.getRoles({attributes: ['idRole', 'code']});
-
-        if (user) {
-            const match = await bcrypt.compare(password, user.password);
-            if (match) {
-                const expirationTime = 24 * 60 * 60; //hour * minutes * seconds
-                const token = jwt.sign(
-                    {
-                        idUser: user.idUser,
-                        roles: user.roles,
-                    },
-                    process.env.TOKEN_KEY,
-                    {
-                        expiresIn: expirationTime
-                    }
-                );
-
-                delete user.dataValues.password;
-                
-                return {user: user, token: token};
-            } else {
-                throw new Error('user_not_found');
-            }
-            
-        } else {
-            throw new Error('user_not_found');
-        }
-	}
-
     async isAdmin(user) {
         if (!user) {
             throw new Error('isAdmin : user is undefined');
@@ -178,7 +127,7 @@ module.exports = class UserController {
     }
 
     async getByFilters(filters) {
-        return await this.userModel.findOne({ where: filters });
+        return await this.userModel.findOne({where: filters });
     }
 
     async getFilteredByFilters(filters) {
@@ -248,5 +197,7 @@ module.exports = class UserController {
         const user = await this.getByFilters({ email: userEmail });
         return user != null;
     }
-
+    
 }
+
+module.exports = new UserRepository();
