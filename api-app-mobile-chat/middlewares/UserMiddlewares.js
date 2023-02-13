@@ -155,6 +155,7 @@ const isAuthorized = async (req, res, next) => {
  * check if all inputs required for login are send in body
  */
 const loginInputsAreSent = (req, res, next) => {
+    console.log('test');
     const userFields = req.body;
 
     if (!userFields.email || !userFields.password) {

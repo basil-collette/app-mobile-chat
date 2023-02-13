@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import ChatTemplate from './chat.template.jsx';
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import { apiHttpRequest } from '@services/RequestService';
+import { getGetMessageUserURL, getGetMessageSalonURL, getGetUserURL, getSendMessageSalonURL, getSendMessageUserURL } from '@endpoint/ApiEndpoint';
 import * as StoreService from '@services/StoreService';
 import { SocketContext } from '@context/socket.context';
 import { SvgProfil} from '@assets/svg'
@@ -68,7 +69,7 @@ export default function ChatComponent(props) {
   
     const userResult = await JSON.parse(await StoreService.retrieveData('user'));
 
-    const endpoint = (state.typeChat == 'user' ? 'messageuser/getdiscussion/' : 'messagesalon/getall/') + state.idDestination;
+    const endpoint = (state.typeChat == 'user') ? getGetMessageUserURL(state.idDestination) : getGetMessageSalonURL(state.idDestination);
     
     const messagesResult = await apiHttpRequest(endpoint, 'GET', null, null);
     
@@ -82,7 +83,7 @@ export default function ChatComponent(props) {
   }
 
   const setInterlocutorState = async () => {
-    const interlocutor = await apiHttpRequest(`user/auth/${state.idDestination}/detail`, 'GET', null, null);
+    const interlocutor = await apiHttpRequest(getGetUserURL(state.idDestination), 'GET', null, null);
     
     setState((currentState) => {
       return ({
@@ -113,15 +114,11 @@ export default function ChatComponent(props) {
 
     let endPoint;
     if (state.typeChat == 'salon') {
-
-      endPoint = 'messagesalon/send/';
+      endPoint = getSendMessageSalonURL();
       body.idSalon = state.idDestination;
-
     } else if (state.typeChat == 'user') {
-
-      endPoint = 'messageuser/send/';
+      endPoint = getSendMessageUserURL();
       body.idUserReceiver = state.idDestination;
-
     } else {
       // error, say that typechat isnt correct
       return;
