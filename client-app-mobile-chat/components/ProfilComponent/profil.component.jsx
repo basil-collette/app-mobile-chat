@@ -3,6 +3,7 @@ import { Animated } from 'react-native'
 import ProfilTemplate from "./profil.template.jsx";
 import StoreService from '@services/StoreService';
 import { apiHttpRequest } from '@services/RequestService';
+import { getGetUserURL, getUpdateUserURL } from '@endpoint/ApiEndpoint';
 import InputService from '@services/InputService';
 import RegexService from '@services/RegexService';
 import { easeOutAnimation } from '@assets/animation'
@@ -32,7 +33,7 @@ export default function ProfilComponent(props) {
     
     const connectedUser = await JSON.parse(await StoreService.retrieveData('user'));
 
-    let finalUserDetails = (connectedUser.idUser == state.userDetail.idUser) ? connectedUser : await apiHttpRequest(`user/auth/${state.userDetail.idUser}/detail`, 'GET', null, null);
+    let finalUserDetails = (connectedUser.idUser == state.userDetail.idUser) ? connectedUser : await apiHttpRequest(getGetUserURL(state.userDetail.idUser), 'GET', null, null);
   
     setState((currentState) => {
       return ({
@@ -98,7 +99,7 @@ export default function ProfilComponent(props) {
       throw new Error('nothing changed !');
     }
 
-    const request = await apiHttpRequest(`user/auth/${state.userDetail.idUser}/update/`, 'PUT', null, userSent);
+    const request = await apiHttpRequest(getUpdateUserURL(state.userDetail.idUser), 'PUT', null, userSent);
 
     await StoreService.storeData('user', request);
     

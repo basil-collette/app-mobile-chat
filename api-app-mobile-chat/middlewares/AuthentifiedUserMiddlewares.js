@@ -4,7 +4,7 @@ const router = require('express').Router();
 
 /**
  * send all the users firstname and lastname
- * GET http://127.0.0.1:3000/user/auth/:idUser/getall
+ * GET http://127.0.0.1:3000/user/auth/getall
  */
 router.get('/getall', async (req, res, next) => {
     try {

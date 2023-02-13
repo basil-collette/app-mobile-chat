@@ -3,6 +3,7 @@ import { Animated } from 'react-native';
 import UserListTemplate from './users.template.jsx';
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import { apiHttpRequest } from '@services/RequestService';
+import { getGetAllUsersURL } from '@endpoint/ApiEndpoint';
 import * as StoreService from '@services/StoreService';
 import { SocketContext } from '@context/socket.context';
 import { easeOutAnimation } from '@assets/animation'
@@ -51,9 +52,7 @@ export default function userListComponent(props) {
   }
 
   const setUserList = async (idUser) => {
-    const endpoint = `user/auth/getall`;
-
-    const allUsers = await apiHttpRequest(endpoint, 'GET', null, null);
+    const allUsers = await apiHttpRequest(getGetAllUsersURL(), 'GET', null, null);
 
     setState((currentState) => {
       return {

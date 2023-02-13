@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import AuthTemplate from './auth.template.jsx';
 import { SocketContext } from '@context/socket.context';
 import { apiHttpRequest } from '@services/RequestService';
+import { getLoginURL } from '@endpoint/ApiEndpoint';
 import StoreService from '@services/StoreService';
 import InputService from '@services/InputService';
 import RegexService from '@services/RegexService';
@@ -64,7 +65,7 @@ export default function AuthComponent(props) {
       throw new Error('login are in an invalid format');
     }
     
-    const resultToken = await apiHttpRequest('user/login/', 'POST', null, state.connexionInputs);
+    const resultToken = await apiHttpRequest(getLoginURL(), 'POST', null, state.connexionInputs);
 
     if (resultToken) {
       const rememberMe = (state.rememberStatusCheck) ? state.connexionInputs : false;

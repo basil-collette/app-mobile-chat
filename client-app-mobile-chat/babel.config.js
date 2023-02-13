@@ -17,6 +17,7 @@ module.exports = function(api) {
           "underscore": "lodash",
           "@comp": "./components",
           "@services": "./services",
+          "@endpoint": "./endpoint",
           "@assets": "./assets",
           "@context": "./context",
           "@socket": "./socket",
