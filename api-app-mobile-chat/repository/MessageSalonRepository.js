@@ -1,24 +1,29 @@
-module.exports = class MessageSalonController {
+'use strict';
+/**
+ * Singleton de repository gérant les messages privés.
+ */
 
+let instance = null;
+
+class MessageSalonRepository {
+    
     connexion;
     messageSalonModel;
     userModel;
     salonModel;
 
     constructor() {
-        this.connexion = require('../database/sequelize');
+        if (!instance) {
+            this.connexion = require('../database/sequelize');
+        
+            this.messageSalonModel = require("../models/user_message_salon.model")(this.connexion);
+            this.userModel = require("../models/user.model")(this.connexion);
+            this.salonModel = require("../models/salon.model")(this.connexion);
 
-        /*
-        this.connexion.authenticate().then(() => {
-            console.log('Database Connection has been established successfully.');
-        }).catch((error) => {
-            console.error('Unable to connect to the database: ', error);
-        });
-        */
-       
-        this.messageSalonModel = require("../models/user_message_salon.model")(this.connexion);
-        this.userModel = require("../models/user.model")(this.connexion);
-        this.salonModel = require("../models/salon.model")(this.connexion);
+            instance = this;
+        }
+    
+        return instance;
     }
 
     //GET ________________________________________________________________________ GET
@@ -51,7 +56,8 @@ module.exports = class MessageSalonController {
         });
     }
 
-    //INSERT 
+    //INSERT ________________________________________________________________ INSERT
+
     async insert(messageSalonFields) {
         let messageSalon;
         try {
@@ -82,4 +88,7 @@ module.exports = class MessageSalonController {
             { where: {pk_id_salon_message: idMessage} }
         );
     }
+    
 }
+
+module.exports = new MessageSalonRepository();

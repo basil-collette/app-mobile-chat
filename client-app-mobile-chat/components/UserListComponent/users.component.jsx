@@ -51,7 +51,7 @@ export default function userListComponent(props) {
   }
 
   const setUserList = async (idUser) => {
-    const endpoint = `user/auth/${idUser}/getall`;
+    const endpoint = `user/auth/getall`;
 
     const allUsers = await apiHttpRequest(endpoint, 'GET', null, null);
 

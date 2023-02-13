@@ -1,6 +1,6 @@
-const UserController = new(require('../controllers/UserController'));
-const MessageSalonController = new(require('../controllers/MessageSalonController'));
-const MessageUserController = new(require('../controllers/MessageUserController'));
+const UserRepository = require('../repository/UserRepository');
+const MessageSalonRepository = require('../repository/MessageSalonRepository');
+const MessageUserRepository = require('../repository/MessageUserRepository');
 
 /**
  * delete a user by getparams id
@@ -8,7 +8,7 @@ const MessageUserController = new(require('../controllers/MessageUserController'
  */
 const deleteUser = async (req, res, next) => {
     try {
-        await UserController.delete(parseInt(req.params.idUser));
+        await UserRepository.delete(parseInt(req.params.idUser));
 
         res.status(200);
         res.send('user_deleted');
@@ -25,7 +25,7 @@ const deleteUser = async (req, res, next) => {
  */
 const deleteSalonMessage = async (req, res, next) => {
     try {
-        await MessageSalonController.delete(parseInt(req.params.idMessage));
+        await MessageSalonRepository.delete(parseInt(req.params.idMessage));
 
         res.status(200);
         res.send('message_message_deleted');
@@ -42,7 +42,7 @@ const deleteSalonMessage = async (req, res, next) => {
  */
 const deleteUserMessage = async (req, res, next) => {
     try {
-        await MessageUserController.delete(parseInt(req.params.idMessage));
+        await MessageUserRepository.delete(parseInt(req.params.idMessage));
 
         res.status(200);
         res.send('user_message_deleted');

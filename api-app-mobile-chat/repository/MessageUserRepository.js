@@ -1,22 +1,27 @@
-module.exports = class MessageUserController {
+'use strict';
+/**
+ * Singleton de repository gérant les messages privés.
+ */
 
+let instance = null;
+
+class MessageUserRepository {
+    
     connexion;
     messageUserModel;
     userModel;
 
     constructor() {
-        this.connexion = require('../database/sequelize');
+        if (!instance) {
+            this.connexion = require('../database/sequelize');
+        
+            this.messageUserModel = require("../models/user_message_user.model")(this.connexion);
+            this.userModel = require("../models/user.model")(this.connexion);
 
-        /*
-        this.connexion.authenticate().then(() => {
-            console.log('Database Connection has been established successfully.');
-        }).catch((error) => {
-            console.error('Unable to connect to the database: ', error);
-        });
-        */
-       
-        this.messageUserModel = require("../models/user_message_user.model")(this.connexion);
-        this.userModel = require("../models/user.model")(this.connexion);
+            instance = this;
+        }
+    
+        return instance;
     }
 
     //GET ________________________________________________________________________ GET
@@ -54,7 +59,8 @@ module.exports = class MessageUserController {
         });
     }
 
-    //INSERT 
+    //INSERT __________________________________________________________________ INSERT
+
     async insert(messageUserFields) {
         let messageUser;
         try {
@@ -88,4 +94,7 @@ module.exports = class MessageUserController {
             { where: {pk_id_user_message: idMessage} }
         );
     }
+    
 }
+
+module.exports = new MessageUserRepository();

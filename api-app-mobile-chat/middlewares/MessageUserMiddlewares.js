@@ -1,5 +1,4 @@
-const UserController = new(require('../controllers/UserController'));
-const MessageUserController = new(require('../controllers/MessageUserController'));
+const MessageUserRepository = require('../repository/MessageUserRepository');
 const Sequelize = require("sequelize");
 const Op = require("sequelize").Op;
 const SocketHelper = require('../helpers/SocketHelper');
@@ -20,7 +19,7 @@ const getDiscussion = async (req, res, next) => {
 
         if (idUserSender != idUserReceiver) wheres.push({fk_id_user_sender: {[Op.not]: Sequelize.col('fk_id_user_receiver')}});
 
-        let messagesUser = await MessageUserController.getDiscussion({[Op.and]: wheres});
+        let messagesUser = await MessageUserRepository.getDiscussion({[Op.and]: wheres});
         
         res.status(200);
         res.send(messagesUser);
@@ -64,7 +63,7 @@ const sendMessage = async (req, res, next) => {
     let message;
 
     try {
-        message = await MessageUserController.insert(req.body);
+        message = await MessageUserRepository.insert(req.body);
         if (!message) {
             throw new Error();
         }
@@ -96,7 +95,7 @@ const sendMessage = async (req, res, next) => {
 const deleteMessage = async (req, res, next) => {
     try {
         const idMessageUser = req.params.idMessageUser;
-        const result = await MessageUserController.delete(idMessageUser);
+        const result = await MessageUserRepository.delete(idMessageUser);
 
         res.status(200);
         res.send(result);

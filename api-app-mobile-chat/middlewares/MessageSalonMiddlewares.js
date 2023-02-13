@@ -1,5 +1,5 @@
-const UserController = new(require('../controllers/UserController'));
-const MessageSalonController = new(require('../controllers/MessageSalonController'));
+const UserRepository = require('../repository/UserRepository');
+const MessageSalonRepository = require('../repository/MessageSalonRepository');
 const SocketHelper = require('../helpers/SocketHelper');
 
 /**
@@ -8,7 +8,7 @@ const SocketHelper = require('../helpers/SocketHelper');
  */
 const getDiscussion = async (req, res, next) => {
     try {
-        const messagesSalon = await MessageSalonController.getDiscussion({fk_id_salon: req.params.idSalon});
+        const messagesSalon = await MessageSalonRepository.getDiscussion({fk_id_salon: req.params.idSalon});
 
         res.status(200);
         res.send(messagesSalon);
@@ -52,7 +52,7 @@ const sendMessage = async (req, res, next) => {
     let messageSalon;
 
     try {
-        messageSalon = await MessageSalonController.insert(req.body);
+        messageSalon = await MessageSalonRepository.insert(req.body);
         if (!messageSalon) {
             throw new Error();
         }
@@ -84,7 +84,7 @@ const sendMessage = async (req, res, next) => {
 const deleteMessage = async (req, res, next) => {
     try {
         const userFields = req.body;
-        let token = await UserController.login(userFields.email, userFields.password);
+        let token = await UserRepository.login(userFields.email, userFields.password);
 
         res.status(200);
         res.send(token);
