@@ -15,7 +15,7 @@ const register = async (req, res, next) => {
             res.send(user);
             next();
         } else {
-            res.status(404).send('error_during_registration');
+            nex(new Error('error_during_registration'));
         }
     } catch (err) {
         console.log(err);
