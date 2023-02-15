@@ -1,21 +1,36 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  Toastcontainer: {
+  toastcontainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-start",
-    alignItems :"center",
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    backgroundColor:"#CC5656",
-    borderRadius : 10
+    justifyContent: "center",
+    zIndex: 999,
+    paddingTop: 20,
+    paddingHorizontal: 20
   },
-  messageToast : {
+  toast: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    borderRadius : 10,
+  },
+  toastError: {
+    backgroundColor: '#CC5656'
+  },
+  toastInfo: {
+    backgroundColor: '#3BCBEB'
+  },
+  toastSuccess: {
+    backgroundColor: '#46C843'
+  } ,
+
+  toastMessage: {
     color : "white",
     marginLeft : 10
-
   }
-    
-      
 });

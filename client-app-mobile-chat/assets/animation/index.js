@@ -1,4 +1,4 @@
-import {Animated,Easing} from "react-native"
+import { Animated, Easing } from "react-native"
 
 const easeOutBackAnimation = (properties, duration, delay, toValue) => {
   Animated.timing(properties, {
@@ -19,7 +19,6 @@ const easeOutBackAnimation = (properties, duration, delay, toValue) => {
     useNativeDriver: true,
   }).start();
 }
-
 
 module.exports = {
   easeOutBackAnimation,

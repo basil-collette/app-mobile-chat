@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Animated } from 'react-native'
 import ProfilTemplate from "./profil.template.jsx";
 import StoreService from '@services/StoreService';
@@ -8,8 +8,17 @@ import InputService from '@services/InputService';
 import RegexService from '@services/RegexService';
 import { easeOutAnimation } from '@assets/animation'
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
+import ChappyError from '@error/ChappyError';
+//CONTEXT
+import { ToastContext, ChappyToast } from '@context/toast.context';
+import { ErrorContext } from '@context/error.context';
 
 export default function ProfilComponent(props) {
+
+  const CONTEXTS = {
+    ErrorContext: useContext(ErrorContext),
+    addToast: useContext(ToastContext)
+  }
 
   const [state, setState] = useState({
     userDetail: props.navigation.state.params.userDetail,
@@ -29,19 +38,25 @@ export default function ProfilComponent(props) {
   //FUNCTIONS ______________________________________________________________________ FUNCTIONS
 
   const init = async () => {
-    easeOutAnimation(state.animation.profilContainer, 500, 200, { x: 0, y: 0 });
+    try {
+      easeOutAnimation(state.animation.profilContainer, 500, 200, { x: 0, y: 0 });
     
-    const connectedUser = await JSON.parse(await StoreService.retrieveData('user'));
+      const connectedUser = await JSON.parse(await StoreService.retrieveData('user'));
 
-    let finalUserDetails = (connectedUser.idUser == state.userDetail.idUser) ? connectedUser : await apiHttpRequest(getGetUserURL(state.userDetail.idUser), 'GET', null, null);
-  
-    setState((currentState) => {
-      return ({
-        ...currentState,
-        userDetail: finalUserDetails,
-        userInputs: { ...finalUserDetails, password: '', confirmPassword: '' }
+      let finalUserDetails = (connectedUser.idUser == state.userDetail.idUser) ? connectedUser : await apiHttpRequest(getGetUserURL(state.userDetail.idUser), 'GET', null, null);
+    
+      setState((currentState) => {
+        return ({
+          ...currentState,
+          userDetail: finalUserDetails,
+          userInputs: { ...finalUserDetails, password: '', confirmPassword: '' }
+        });
       });
-    });
+
+    } catch (err) {
+      if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "ProfilComponent.init()");
+      CONTEXTS.ErrorContext.handleError(err, err.isFatal);
+    }
   }
 
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
@@ -51,31 +66,31 @@ export default function ProfilComponent(props) {
 
     if (state.userInputs.email != state.userDetail.email) {
       if (!RegexService.testEmailRegex(state.userInputs.email)) {
-        throw new Error('email incorrect');
+        throw new ChappyError('email input format is incorrect', false, "ProfilComponent.verifyUserInputs()");
       }
       userSent.email = state.userInputs.email;
     }
 
     if (state.userInputs.prenom != state.userDetail.prenom) {
       if (!RegexService.testNameRegex(state.userInputs.prenom)) {
-        throw new Error('prenom incorrect');
+        throw new ChappyError('firstname input format is incorrect', false, "ProfilComponent.verifyUserInputs()");
       }
       userSent.prenom = state.userInputs.prenom;
     }
 
     if (state.userInputs.nom != state.userDetail.nom) {
       if (!RegexService.testNameRegex(state.userInputs.nom)) {
-        throw new Error('nom incorrect');
+        throw new ChappyError('lastname input format is incorrect', false, "ProfilComponent.verifyUserInputs()");
       }
       userSent.nom = state.userInputs.nom;
     }
 
     if (state.userInputs.password != '') {
       if (!RegexService.testPasswordRegex(state.userInputs.password)) {
-        throw new Error('password incorrect');
+        throw new ChappyError('password input format is incorrect', false, "ProfilComponent.verifyUserInputs()");
       }
       if (state.userInputs.password != state.userInputs.confirmPassword) {
-        throw new Error('confirm password different that password');
+        throw new ChappyError('confirm password must be identical to password', false, "ProfilComponent.verifyUserInputs()");
       }
       userSent.password = state.userInputs.password;
     }
@@ -93,22 +108,33 @@ export default function ProfilComponent(props) {
   }
 
   const requestUpdateUser = async () => {
-    let userSent = verifyUserInputs();
+    try {
+      let userSent = verifyUserInputs();
 
-    if (!Object.keys(userSent).length > 0) {
-      throw new Error('nothing changed !');
+      if (!Object.keys(userSent).length > 0) {
+        const error = new ChappyError('user informations are identical to before !', false, "ProfilComponent.requestUpdateUser()");
+        CONTEXTS.ErrorContext.handleError(error, error.isFatal);
+      }
+
+      const request = await apiHttpRequest(getUpdateUserURL(state.userDetail.idUser), 'PUT', null, userSent);
+
+      await StoreService.storeData('user', request);
+      
+      setState((currentState) => {
+        const tempUser = {...currentState.userDetail, request};
+        return ({
+          ...currentState,
+          userDetail: tempUser
+        });
+      });
+
+      //alert('user updated');
+      addToast(new ChappyToast('success', 'user updated !'));
+
+    } catch (err) {
+      if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "ProfilComponent.requestUpdateUser()");
+      CONTEXTS.ErrorContext.handleError(err, err.isFatal);
     }
-
-    const request = await apiHttpRequest(getUpdateUserURL(state.userDetail.idUser), 'PUT', null, userSent);
-
-    await StoreService.storeData('user', request);
-    
-    setState((currentState) => {
-      return (Object.assign(currentState, request));
-    });
-
-    //send toast
-    alert('user updated');
   }
 
   const updateInput = (inputName, value) => {

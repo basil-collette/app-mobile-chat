@@ -15,8 +15,7 @@ const register = async (req, res, next) => {
             res.send(user);
             next();
         } else {
-            res.status(404);
-            res.end();
+            res.status(404).send('error_during_registration');
         }
     } catch (err) {
         console.log(err);
@@ -59,12 +58,12 @@ const login = async (req, res, next) => {
         });
     
         if (!userResult) {
-            throw new Error('authentification_failed');
+            next(new Error("authentification_failed"));
         }
     
         const match = await bcrypt.compare(userFields.password, userResult.password);
         if (!match) {
-            throw new Error('authentification_failed');
+            next(new Error("authentification_failed"));
         }
 
         delete userResult.dataValues.password;
@@ -95,7 +94,7 @@ const isAdmin = async (req, res, next) => {
         }
 
         if (!UserRepository.isAdmin(res.locals.authentifiedUser)) {
-            throw new Error('not_autorized');
+            next(new Error("not_autorized"));
         }
         next();
     } catch(err) {
@@ -113,8 +112,7 @@ const IsAuthentified = async (req, res, next) => {
         const authentifiedUser = await UserRepository.getAuthentifiedUser(req);
 
         if (!authentifiedUser) {
-            res.status(400).send('not_authentified');
-            throw new Error('not_authentified');
+            next(new Error("not_authentified"));
         }
     
         res.locals.authentifiedUser = authentifiedUser;
@@ -133,15 +131,14 @@ const IsAuthentified = async (req, res, next) => {
 const isAuthorized = async (req, res, next) => {
     try {
         if (!req.params.idUser) {
-            throw new Error('userId GET params is missing');
+            next(new Error("idUser GET params is missing"));
         }
         res.locals.userId = parseInt(req.params.idUser);
 
         if (res.locals.authentifiedUser.idUser != res.locals.userId
             && !UserRepository.isAdmin(res.locals.authentifiedUser)
         ) {
-            res.status(400).send('not_authorized');
-            throw new Error('not_authorized');
+            next(new Error("not_authorized"));
         }
         next();
 
@@ -155,12 +152,10 @@ const isAuthorized = async (req, res, next) => {
  * check if all inputs required for login are send in body
  */
 const loginInputsAreSent = (req, res, next) => {
-    console.log('test');
     const userFields = req.body;
 
     if (!userFields.email || !userFields.password) {
-        res.status(400).send("list of needed inputs is required");
-        throw new Error();
+        next(new Error("list of needed inputs is required"));
     }
     next();
 }
@@ -177,8 +172,7 @@ const registerInputsAreSent = (req, res, next) => {
         || !userFields.nom
         || !userFields.password
     ) {
-        res.status(400).send("list of needed inputs is required");
-        throw new Error();
+        next(new Error("list of needed inputs is required"));
     }
 
     next();
@@ -188,9 +182,28 @@ const registerInputsAreSent = (req, res, next) => {
  * check if the email send in body is already used by a user
  */
 const userDoesntExists = async (req, res, next) => {
-    if (req.body.email && await UserRepository.exists(req.body.email)) {
-        throw new Error("Error during registration. Please contact support");
+    const userAllreadyExists = await UserRepository.exists(req.body.email);
+
+    if (!req.params.idUser) {
+
+        if (userAllreadyExists) {
+            next(new Error("Error during registration. This email is already used"));
+            //res.status(400).send("Error during registration. This email is already used");
+        }
+        
+    } else {
+        if (
+            req.body.email
+            && userAllreadyExists != null
+            && userAllreadyExists.idUser != null
+            && userAllreadyExists.idUser != undefined
+            && userAllreadyExists.idUser != req.params.idUser
+        ) {
+            next(new Error("Update Failed, this email is already used"));
+            //res.status(400).send("Update Failed, this email is already used");
+        }
     }
+    
     next();
 }
 

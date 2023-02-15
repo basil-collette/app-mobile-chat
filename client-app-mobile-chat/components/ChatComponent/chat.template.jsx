@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ScrollView, TouchableHighlight,TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, ScrollView, TouchableHighlight, TouchableOpacity } from 'react-native';
 import ChatStyle from "./chat.style.jsx";
 import { SvgArrow } from '@assets/svg'
 

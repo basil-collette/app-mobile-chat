@@ -195,7 +195,8 @@ class UserRepository {
 
     async exists(userEmail) {
         const user = await this.getByFilters({ email: userEmail });
-        return user != null;
+        //return user != null;
+        return user;
     }
     
 }

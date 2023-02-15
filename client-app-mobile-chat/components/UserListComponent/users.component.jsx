@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext,useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Animated } from 'react-native';
 import UserListTemplate from './users.template.jsx';
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
@@ -6,7 +6,7 @@ import { apiHttpRequest } from '@services/RequestService';
 import { getGetAllUsersURL } from '@endpoint/ApiEndpoint';
 import * as StoreService from '@services/StoreService';
 import { SocketContext } from '@context/socket.context';
-import { easeOutAnimation } from '@assets/animation'
+import { easeOutAnimation } from '@assets/animation';
 
 export default function userListComponent(props) {
 
@@ -46,9 +46,10 @@ export default function userListComponent(props) {
 
     setUserList(userResult.idUser);
 
+    const GET_USERS_CONNEXIONS_INTERVAL = 3000; //units in milliseconds
     let setUserListRemoverInterval = setInterval(() => {
       setUserList(userResult.idUser);
-    }, 3000);
+    }, GET_USERS_CONNEXIONS_INTERVAL);
   }
 
   const setUserList = async (idUser) => {
