@@ -1,11 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import RegisterTemplate from './register.template.jsx';
 import { apiHttpRequest } from '@services/RequestService';
 import RegexService from '@services/RegexService';
 import InputService from '@services/InputService';
+import ChappyError from '@error/ChappyError';
+import {getRegisterURL} from '@endpoint/ApiEndpoint';
+//CONTEXT
+import { SocketContext } from '@context/socket.context';
+import { ToastContext, ChappyToast } from '@context/toast.context';
+import { ErrorContext } from '@context/error.context';
 
 export default function RegisterComponent(props) {
   
+  const CONTEXTS = {
+    socket: useContext(SocketContext),
+    ErrorContext: useContext(ErrorContext),
+    addToast: useContext(ToastContext)
+  }
+
   const [state, setState] = useState({
     textBackButton: false,
     registerInputs: {prenom: '', nom: '', email: '', password: '', confirmPassword: ''}
@@ -32,7 +44,12 @@ export default function RegisterComponent(props) {
   }
   
   const finalizeRegister = () => {
-    props.navigation.navigate('Login');
+    CONTEXTS.addToast(new ChappyToast('success', 'user updated !'));
+
+    const REDIRECT_DELAY = 2000; //time in milliseconds
+    setTimeout(() => {
+      props.navigation.navigate('Login');
+    }, REDIRECT_DELAY);
   }
 
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
@@ -44,43 +61,36 @@ export default function RegisterComponent(props) {
   const registerRequest = async () => {
     try {
       if (!verifyRegisterInputs()) {
-        //say that inputs are invalids
-        return;
+        throw new ChappyError('register inputs aren\'t in a valid format', false, "RegisterComponent.registerRequest");
       }
 
-      let result = await apiHttpRequest(getRegisterURL(), 'POST', null, state.registerInputs);
-
-      if (result) {
-        finalizeRegister();
-
-      } else {
-        //say that error occured during connexion, toaster
-      }
+      const result = await apiHttpRequest(getRegisterURL(), 'POST', null, state.registerInputs);
+      finalizeRegister();
 
     } catch(err) {
-      //say that error occured during connexion, toaster
-      console.error(err);
+      if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "RegisterComponent.registerRequest");
+      CONTEXTS.ErrorContext.handleError(err, err.isFatal);
     }
   }
 
   const toggleBackButtonState = () => {
-    setState({
-      ...state,
-      textBackButton: !state.textBackButton
-    })
+    setState((currentState) => {
+      return ({
+        ...currentState,
+        textBackButton: !state.textBackButton
+      });
+    });
   }
 
   const updateInput = (inputName, value) => {
-    try {
-      const newRegisterInputs = InputService.setInputStates(state.registerInputs, inputName, value);
+    const newRegisterInputs = InputService.setInputStates(state.registerInputs, inputName, value);
 
-      setState({
-        ...state,
+    setState((currentState) => {
+      return ({
+        ...currentState,
         registerInputs: newRegisterInputs
       });
-    } catch(err) {
-      //
-    }
+    });
   }
 
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN

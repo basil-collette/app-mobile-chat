@@ -5,14 +5,7 @@ import GlobalStyle from "./global.style.jsx";
 export default function GlobalTemplate(props) {
   return (
     <View style={GlobalStyle.container}>
-
-      <StatusBar
-        animated={true}
-        backgroundColor="black"
-        barStyle="dark"
-        showHideTransition="fade"
-      />
-
+      
       <View style={GlobalStyle.containerHeader}>
         {
           props.goBack

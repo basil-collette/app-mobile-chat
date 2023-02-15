@@ -1,14 +1,17 @@
 import React, { useContext, useState, useEffect } from 'react';
 import HomeTemplate from "./home.template.jsx";
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
-import { SocketContext } from '@context/socket.context';
 import * as StoreService from '@services/StoreService';
 import { Animated } from 'react-native';
 import { easeOutBackAnimation } from '@assets/animation';
+//CONTEXT
+import { ErrorContext } from '@context/error.context';
 
 export default function HomeComponent(props) {
 
-  const socket = useContext(SocketContext);
+  const CONTEXTS = {
+    ErrorContext: useContext(ErrorContext)
+  }
 
   const [state, setState] = useState({
     user: { prenom: '', nom: '' },
@@ -30,15 +33,21 @@ export default function HomeComponent(props) {
   //FUNCTIONS ______________________________________________________________________ FUNCTIONS
 
   const init = async () => {
-    easeOutBackAnimation(state.animation.ChatBtn, 500, 50, { x: 0, y: 0 });
-    easeOutBackAnimation(state.animation.UserListBtn, 500, 200, { x: 0, y: 0 });
+    try {
+      easeOutBackAnimation(state.animation.ChatBtn, 500, 50, { x: 0, y: 0 });
+      easeOutBackAnimation(state.animation.UserListBtn, 500, 200, { x: 0, y: 0 });
 
-    const userResult = await JSON.parse(await StoreService.retrieveData('user'));
+      const userResult = await JSON.parse(await StoreService.retrieveData('user'));
 
-    setState({
-      ...state,
-      user: userResult
-    });
+      setState({
+        ...state,
+        user: userResult
+      });
+
+    } catch (err) {
+      if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "HomeComponent.init()");
+      CONTEXTS.ErrorContext.handleError(err, err.isFatal);
+    }
   }
 
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK

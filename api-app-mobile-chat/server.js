@@ -56,9 +56,12 @@ app.use('/admin', require('./middlewares/UserMiddlewares').isAdmin, require('./r
 
 // error handler
 app.use((err, req, res, next) => {
+    console.log(err);
     if (res.headersSent) {
         return next(err);
     }
+
+    console.log('error need to be handled');
 
     let error = {
         status: err.status,

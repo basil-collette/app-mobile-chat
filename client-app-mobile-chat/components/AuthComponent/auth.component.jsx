@@ -1,16 +1,24 @@
 import { useState, useEffect, useContext } from 'react';
-import AuthTemplate from './auth.template.jsx';
-import { SocketContext } from '@context/socket.context';
 import { apiHttpRequest } from '@services/RequestService';
-import { getLoginURL } from '@endpoint/ApiEndpoint';
 import StoreService from '@services/StoreService';
 import InputService from '@services/InputService';
 import RegexService from '@services/RegexService';
 import AccountService from '@services/AccountService';
+import { getLoginURL } from '@endpoint/ApiEndpoint';
+import ChappyError from '@error/ChappyError';
+import AuthTemplate from './auth.template.jsx';
+//CONTEXT
+import { SocketContext } from '@context/socket.context';
+import { ToastContext, ChappyToast } from '@context/toast.context';
+import { ErrorContext } from '@context/error.context';
 
 export default function AuthComponent(props) {
 
-  const socket = useContext(SocketContext);
+  const CONTEXTS = {
+    socket: useContext(SocketContext),
+    ErrorContext: useContext(ErrorContext),
+    addToast: useContext(ToastContext)
+  }
 
   const [state, setState] = useState({
     rememberStatusCheck: false,
@@ -61,31 +69,38 @@ export default function AuthComponent(props) {
   }
 
   const loginRequest = async () => {
-    if (!verifyLoginInputs()) {
-      throw new Error('login are in an invalid format');
-    }
-    
-    const resultToken = await apiHttpRequest(getLoginURL(), 'POST', null, state.connexionInputs);
-
-    if (resultToken) {
+    try {
+      if (!verifyLoginInputs()) {
+        throw new ChappyError('login inputs are in an invalid format', false, "AuthComponent.loginRequest()");
+      }
+      
+      const resultToken = await apiHttpRequest(getLoginURL(), 'POST', null, state.connexionInputs);
+      
       const rememberMe = (state.rememberStatusCheck) ? state.connexionInputs : false;
-
+  
       await AccountService.login(resultToken.user, resultToken.token, rememberMe);
 
-      socket.emit('associate_userid_to_socket', resultToken.user.idUser);
+      CONTEXTS.socket.emit('associate_userid_to_socket', resultToken.user.idUser);
 
       props.navigation.navigate('Home');
-      
-    } else {
-      throw new Error('error_occured_during_login');
+
+    } catch (err) {
+      if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "AuthComponent.loginRequest()");
+      CONTEXTS.ErrorContext.handleError(err, err.isFatal);
     }
   }
 
   const goToRegister = () => {
     props.navigation.navigate('Signin');
   }
+
   const setRememberMe = () => {
-    { setState({ ...state, rememberStatusCheck: !state.rememberStatusCheck }) }
+    setState((currentState) => {
+      return ({
+        ...currentState,
+        rememberStatusCheck: !state.rememberStatusCheck
+      });
+    });
   }
 
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN

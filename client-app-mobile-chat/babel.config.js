@@ -21,6 +21,7 @@ module.exports = function(api) {
           "@assets": "./assets",
           "@context": "./context",
           "@socket": "./socket",
+          "@error": "./error",
         }
       }]
     ]

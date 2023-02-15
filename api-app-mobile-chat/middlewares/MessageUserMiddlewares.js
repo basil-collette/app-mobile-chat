@@ -65,22 +65,16 @@ const sendMessage = async (req, res, next) => {
     try {
         message = await MessageUserRepository.insert(req.body);
         if (!message) {
-            throw new Error();
+            next(new Error("error during sending private message"));
         }
     } catch (err) {
-        console.error(err);
-        res.status(404);
-        res.end('error_during_sending_message');
-        next(err);
+        next(new Error("error during sending private message"));
     }
 
     try {
         SocketHelper.emitUserMsg(req.body.idUserSender, req.body.idUserReceiver, message);
     } catch (err) {
-        console.error(err);
-        res.status(404);
-        res.end('error_during_socket_emit');
-        next(err);
+        next(new Error("error_during_socket_emit"));
     }
 
     res.status(201);
@@ -102,9 +96,7 @@ const deleteMessage = async (req, res, next) => {
         next();
         
     } catch (err) {
-        res.status(404);
-        res.end('error_during_deleting_message');
-        //next(err);
+        next(new Error("error_during_deleting_message"));
     }
 }
 

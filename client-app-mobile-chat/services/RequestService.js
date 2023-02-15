@@ -1,28 +1,34 @@
 import * as StoreService from '@services/StoreService';
-import { ENDPOINT_API } from '@env'
+import { ENDPOINT_API } from '@env';
+import ChappyError from '@error/ChappyError';
 
 const httpRequest = async (endpoint, method, headers, body) => {
+    try {
+        let requestOptions = {
+            method: method,
+            headers: { 'Content-Type': 'application/json' }
+        };
+    
+        if(headers) {
+            Object.assign(requestOptions.headers, headers);
+        }
+    
+        if(body) {
+            requestOptions.body = JSON.stringify(body);
+        }
+    
+        const response = await fetch(endpoint, requestOptions);
+        if (!response.ok) {
+            const textError = await response.text();
+            throw new ChappyError(textError, false, "RequestService.httpRequest : if(!response.ok)");
+        }
+    
+        return await response.json();
 
-    let requestOptions = {
-        method: method,
-        headers: { 'Content-Type': 'application/json' }
-    };
-
-    if(headers) {
-        Object.assign(requestOptions.headers, headers);
+    } catch (err) {
+        if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "RequestService.httpRequest");
+        throw err;
     }
-
-    if(body) {
-        requestOptions.body = JSON.stringify(body);
-    }
-
-    const response = await fetch(endpoint, requestOptions);
-    if (!response.ok) {
-        const textError = await response.text();
-        throw new Error(textError);
-    }
-
-    return await response.json();
 }
 
 const apiHttpRequest = async (endpoint, method, headers, body) => {

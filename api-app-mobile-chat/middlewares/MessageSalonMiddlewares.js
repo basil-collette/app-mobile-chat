@@ -54,22 +54,16 @@ const sendMessage = async (req, res, next) => {
     try {
         messageSalon = await MessageSalonRepository.insert(req.body);
         if (!messageSalon) {
-            throw new Error();
+            next(new Error("error during sending message to room"));
         }
     } catch (err) {
-        console.error(err);
-        res.status(404);
-        res.end('error_during_sending_message');
-        next(err);
+        next(new Error("error during sending message to room"));
     }
 
     try {
         SocketHelper.emitRoomMsg(req.body.idSalon, messageSalon);
     } catch (err) {
-        console.error(err);
-        res.status(404);
-        res.end('error_during_socket_emit');
-        next(err);
+        next(new Error("error_during_socket_emit"));
     }
 
     res.status(201);
@@ -91,9 +85,7 @@ const deleteMessage = async (req, res, next) => {
         next();
         
     } catch (err) {
-        res.status(404);
-        res.end('error_during_deleting_message');
-        //next(err);
+        next(new Error("error_during_deleting_message"));
     }
 }
 

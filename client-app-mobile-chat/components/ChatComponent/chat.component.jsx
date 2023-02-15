@@ -4,15 +4,24 @@ import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import { apiHttpRequest } from '@services/RequestService';
 import { getGetMessageUserURL, getGetMessageSalonURL, getGetUserURL, getSendMessageSalonURL, getSendMessageUserURL } from '@endpoint/ApiEndpoint';
 import * as StoreService from '@services/StoreService';
-import { SocketContext } from '@context/socket.context';
 import { SvgProfil} from '@assets/svg'
+//CONTEXT
+import { SocketContext } from '@context/socket.context';
+import { ToastContext, ChappyToast } from '@context/toast.context';
+import { ErrorContext } from '@context/error.context';
 
 export default function ChatComponent(props) {
   
-  const socket = useContext(SocketContext);
+  const CONTEXTS = {
+    socket: useContext(SocketContext),
+    ErrorContext: useContext(ErrorContext),
+    addToast: useContext(ToastContext)
+  }
+  
   const refScrollView = useRef();
   const refMsgInput = useRef();
   const refSendBtn = useRef();
+
   const [state, setState] = useState({
     chatLibelle: props.navigation.state.params.chatLibelle,
     typeChat: props.navigation.state.params.typeChat,
@@ -29,10 +38,10 @@ export default function ChatComponent(props) {
     console.log("ChatComponent loaded");
 
     return () => {
-      socket.off('new_chatmsg_to_client');
+      CONTEXTS.socket.off('new_chatmsg_to_client');
 
       if (state.typeChat == 'salon') {
-        socket.emit('leave_room', state.idDestination);
+        CONTEXTS.socket.emit('leave_room', state.idDestination);
       }
 
       console.log('ChatComponent Destruct');
@@ -51,46 +60,58 @@ export default function ChatComponent(props) {
   }
   
   const init = async () => {
-    socket.on('new_chatmsg_to_client', (msg) => {
-      addMsg(msg);
-    });
-
-    if (state.typeChat == 'salon') {
-
-      socket.emit('join_room', state.idDestination);
-
-    } else if (state.typeChat == 'user') {
-      setInterlocutorState();
-    
-      let setInterlocuteurStateRemoverInterval = setInterval(() => {
-        setInterlocutorState();
-      }, 3000);
-    }
+    try {
+      CONTEXTS.socket.on('new_chatmsg_to_client', (msg) => {
+        addMsg(msg);
+      });
   
-    const userResult = await JSON.parse(await StoreService.retrieveData('user'));
+      if (state.typeChat == 'salon') {
+  
+        CONTEXTS.socket.emit('join_room', state.idDestination);
+  
+      } else if (state.typeChat == 'user') {
+        setInterlocutorState();
+      
+        let setInterlocuteurStateRemoverInterval = setInterval(() => {
+          setInterlocutorState();
+        }, 3000);
+      }
+    
+      const userResult = await JSON.parse(await StoreService.retrieveData('user'));
+  
+      const endpoint = (state.typeChat == 'user') ? getGetMessageUserURL(state.idDestination) : getGetMessageSalonURL(state.idDestination);
+      
+      const messagesResult = await apiHttpRequest(endpoint, 'GET', null, null);
+      
+      setState((currentState) => {
+        return {
+          ...currentState,
+          messages: messagesResult,
+          connectedUser: userResult
+        };
+      });
 
-    const endpoint = (state.typeChat == 'user') ? getGetMessageUserURL(state.idDestination) : getGetMessageSalonURL(state.idDestination);
-    
-    const messagesResult = await apiHttpRequest(endpoint, 'GET', null, null);
-    
-    setState((currentState) => {
-      return {
-        ...currentState,
-        messages: messagesResult,
-        connectedUser: userResult
-      };
-    });
+    } catch (err) {
+      if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "ChatComponent.init()");
+      CONTEXTS.ErrorContext.handleError(err, err.isFatal);
+    }
   }
 
   const setInterlocutorState = async () => {
-    const interlocutor = await apiHttpRequest(getGetUserURL(state.idDestination), 'GET', null, null);
+    try {
+      const interlocutor = await apiHttpRequest(getGetUserURL(state.idDestination), 'GET', null, null);
     
-    setState((currentState) => {
-      return ({
-        ...currentState,
-        interlocutorIsConnected: interlocutor.isConnected
+      setState((currentState) => {
+        return ({
+          ...currentState,
+          interlocutorIsConnected: interlocutor.isConnected
+        });
       });
-    });
+
+    } catch (err) {
+      if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "ChatComponent.setInterlocutorState()");
+      CONTEXTS.ErrorContext.handleError(err, err.isFatal);
+    }
   }
   
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
@@ -120,8 +141,7 @@ export default function ChatComponent(props) {
       endPoint = getSendMessageUserURL();
       body.idUserReceiver = state.idDestination;
     } else {
-      // error, say that typechat isnt correct
-      return;
+      throw new ChappyError("typechat isnt correct", false, "ChatComponent.sendMessage()");
     }
 
     try {
@@ -135,8 +155,10 @@ export default function ChatComponent(props) {
           msgInput: ''
         };
       });
-    } catch(err) {
-      console.error(err);
+
+    } catch (err) {
+      if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "ChatComponent.sendMessage()");
+      CONTEXTS.ErrorContext.handleError(err, err.isFatal);
     }
   }
 
