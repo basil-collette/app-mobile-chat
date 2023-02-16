@@ -44,6 +44,14 @@ class MessageUserRepository {
         });
     }
 
+    async getAllMessage() {
+        return await this.messageUserModel.findAll({
+            raw: true,
+            nest: true,
+            order: [['pk_id_user_message', 'ASC']]
+        });
+    }
+
     async getById(idMessage) {
         return await this.messageUserModel.findOne({
             where: { pk_id_user_message: idMessage },

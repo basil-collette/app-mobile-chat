@@ -30,6 +30,22 @@ const getDiscussion = async (req, res, next) => {
     }
 }
 
+
+const getAllMessage = async (req, res, next) => {
+    try {
+
+        let messagesUser = await MessageUserController.getAllMessage();
+        
+        res.status(200);
+        res.send(messagesUser);
+        next();
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
+}
+
+
 /**
  * process before a messageSalon insert
  * valorise the fields 'createdAt' & idUserSender
@@ -111,5 +127,6 @@ module.exports = {
     getDiscussion,
     prePersist,
     sendMessage,
-    deleteMessage
+    deleteMessage,
+    getAllMessage
 };
