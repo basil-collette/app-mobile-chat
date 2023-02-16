@@ -1,0 +1,74 @@
+
+
+.containerGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding : 65px;
+
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.contBtn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.onglets {
+  width: 250px;
+  height: 40px;
+  background: #AAAABC;
+  color: #f1f1f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
+  border : solid 1px gray;
+}
+
+.container-grid {
+  background-color: rgba(255, 255, 255, 0.13);
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+  padding: 20px 35px;
+  width: 100%;
+}
+
+.container-grid p {
+  padding: 10px;
+  margin: 0;
+}
+
+.active {
+  background: white;
+  color: black;
+}
+
+
+.containerInput {
+  gap: 10px;
+}
+
+.button {
+  padding : 5px;
+  height: 40px;
+  width: 150px;
+  align-self: flex-end;
+  background-color: #8093FF;
+  border : none;
+  color : white;
+  font-size: small;
+  margin : 0;
+}

@@ -43,7 +43,7 @@ class MessageSalonRepository {
         });
     }
 
-    async getAllMessage() {
+    async getAll() {
         return await this.messageSalonModel.findAll({
             order: [['pk_id_salon_message', 'ASC']],
         });

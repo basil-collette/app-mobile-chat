@@ -1,25 +1,10 @@
 const UserRepository = require('../repository/UserRepository');
 const MessageSalonRepository = require('../repository/MessageSalonRepository');
 const MessageUserRepository = require('../repository/MessageUserRepository');
-const SalonRepository = new (require('../controllers/SalonRepository'));
+const SalonRepository = require('../repository/SalonRepository');
+const {getUsersState} = require('./UserMiddlewares');
 
 //USER _________________________________________________________________________________________________________________ USER
-
-const getUsersState = (users) => {
-    const socketUserIds = global.clientSockets.map((socketItem) => { return socketItem.idUser; });
-
-    return users.map((user) => {
-        let newUser = { ...user.dataValues };
-
-        if (socketUserIds.includes(newUser.idUser)) {
-            newUser.isConnected = true;
-        } else {
-            newUser.isConnected = false;
-        }
-
-        return newUser;
-    });
-}
 
 /**
  * retourne tout les users nested
@@ -57,10 +42,28 @@ const deleteUser = async (req, res, next) => {
 //SALON MESSAGE _________________________________________________________________________________________________________________ SALON MESSAGE
 
 /**
+ * retourne tout les SalonMessages
+ * GET http://127.0.0.1:3000/admin/getall/salonmessage'
+ */
+const getAllRoomMessages = async (req, res, next) => {
+    try {
+        const roomMessages = await MessageSalonRepository.getAll();
+        
+        res.status(200);
+        res.send(roomMessages);
+        next();
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('error during getting all room messages');
+    }
+}
+
+/**
  * delete a room message
  * DELETE http://127.0.0.1:3000/admin/delete/salonmessage/:idMessage
  */
-const deleteSalonMessage = async (req, res, next) => {
+const deleteRoomMessage = async (req, res, next) => {
     try {
         const result = await MessageSalonRepository.delete(parseInt(req.params.idMessage));
 
@@ -78,7 +81,7 @@ const deleteSalonMessage = async (req, res, next) => {
 
 /**
  * retourne tout les UserMessages
- * GET http://127.0.0.1:3000/admin/getall'
+ * GET http://127.0.0.1:3000/admin/getall/usermessage'
  */
 const getAllUserMessages = async (req, res, next) => {
     try {
@@ -153,14 +156,35 @@ const updateSalon = async (req, res, next) => {
     }
 }
 
+/**
+ * delete a room
+ * DELETE http://127.0.0.1:3000/admin/delete/salon/:idSalon
+ */
+const deleteSalon = async (req, res, next) => {
+    try {
+        const idSalon = req.params.idSalon;
+        let result = await SalonRepository.delete(idSalon);
+
+        res.status(200);
+        res.send("room_delete");
+        next();
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('error_during_delete_room');
+    }
+}
+
 //MODULE EXPORT ___________________________________________________________________________________________________________ MODULE EXPORT
 
 module.exports = {
     deleteUser,
-    deleteSalonMessage,
+    deleteRoomMessage,
     deleteUserMessage,
     createSalon,
     getAllUser,
     updateSalon,
-    getAllUserMessages
+    getAllUserMessages,
+    deleteSalon,
+    getAllRoomMessages
 };

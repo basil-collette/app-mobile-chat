@@ -20,7 +20,7 @@ const getDiscussion = async (req, res, next) => {
 
 const getAllMessage = async(req,res,next) => {
     try{
-        const getAllMessage = await MessageSalonController.getAllMessage();
+        const getAllMessage = await MessageSalonRepository.getAllMessage();
         res.status(200);
         res.send(getAllMessage);
         next();

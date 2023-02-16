@@ -1,7 +1,7 @@
 'use strict';
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const RoleController = require('./RoleRepository');
+const RoleRepository = require('./RoleRepository');
 
 let instance = null;
 
@@ -60,11 +60,11 @@ class UserRepository {
         
         try {
             if (!userFields.roles) {
-                const roleUser = RoleController.getOneByFilters({code: 'user'});
+                const roleUser = RoleRepository.getOneByFilters({code: 'user'});
                 user.addRole(roleUser);
             } else {
                 for(const idRole of userFields.roles) {
-                    if (await RoleController.getById(idRole) != null) {
+                    if (await RoleRepository.getById(idRole) != null) {
                         user.addRole(idRole);
                     }
                 }
@@ -109,21 +109,17 @@ class UserRepository {
 
     //GET ________________________________________________________________________ GET
 
-    async getAll() {
-        this.roleModel = require("../models/role.model")(this.connexion);
-
+    async getAllFiltered() {
         return await this.userModel.findAll({
             //include: {model: this.roleModel, as: 'roles', attributes: ['libelle']},
             attributes: ['idUser', 'prenom', 'nom']
         });
     }
 
-    async getAllAdmin() {
-        this.roleModel = require("../models/role.model")(this.connexion);
-
+    async getAll() {
         return await this.userModel.findAll({
             //include: {model: this.roleModel, as: 'roles', attributes: ['libelle']},
-            attributes: ['idUser','email','prenom', 'nom','createdAt']
+            attributes: ['idUser', 'email', 'prenom', 'nom', 'createdAt']
         });
     }
 

@@ -1,20 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const AdminMiddlewares = require('../middlewares/AdminMiddlewares');
-const SalonMiddleWares = require('../middlewares/SalonMiddleWares');
 
+router.get('/getall/user', AdminMiddlewares.getAllUser);
 router.delete('/delete/user/:idUser', AdminMiddlewares.deleteUser);
 
-router.delete('/delete/salonmessage/:idMessage', AdminMiddlewares.deleteSalonMessage);
+router.post('/create/salon', AdminMiddlewares.createSalon);
+router.put('/update/salon/:idSalon', AdminMiddlewares.updateSalon);
+router.use('/delete/salon/:idSalon', AdminMiddlewares.deleteSalon);
 
+router.get('/getall/salonmessage', AdminMiddlewares.getAllRoomMessages);
+router.delete('/delete/salonmessage/:idMessage', AdminMiddlewares.deleteRoomMessage);
+
+router.get('/getall/usermesage', AdminMiddlewares.getAllUserMessages);
 router.delete('/delete/usermessage/:idMessage', AdminMiddlewares.deleteUserMessage);
-
-router.use('/delete/salon/:idSalon', SalonMiddleWares.deleteSalon);
-
-router.use('/create/salon',AdminMiddlewares.createSalon);
-
-router.use('/getall/user',AdminMiddlewares.getAllUser);
-
-router.use('/update/salon/:idSalon',AdminMiddlewares.updateSalon);
 
 module.exports = router;

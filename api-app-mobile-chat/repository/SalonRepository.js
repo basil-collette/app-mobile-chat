@@ -5,7 +5,7 @@
 
 let instance = null;
 
-export default class SalonRepository {
+class SalonRepository {
     
     connexion;
     salonModel;
@@ -62,3 +62,5 @@ export default class SalonRepository {
     }
  
 }
+
+module.exports = new SalonRepository();

@@ -24,27 +24,12 @@ const getDiscussion = async (req, res, next) => {
         res.status(200);
         res.send(messagesUser);
         next();
+        
     } catch (err) {
         console.log(err);
         res.status(500).send('error during getting private discussion');
     }
 }
-
-
-const getAllMessage = async (req, res, next) => {
-    try {
-
-        let messagesUser = await MessageUserController.getAllMessage();
-        
-        res.status(200);
-        res.send(messagesUser);
-        next();
-    } catch (err) {
-        console.log(err);
-        next(err);
-    }
-}
-
 
 /**
  * process before a messageSalon insert
@@ -104,29 +89,8 @@ const sendMessage = async (req, res, next) => {
     next();
 }
 
-/**
- * send a a message to salon
- * GET http://127.0.0.1:3000/messageuser/delete/:idMessageUser
- */
-const deleteMessage = async (req, res, next) => {
-    try {
-        const idMessageUser = req.params.idMessageUser;
-        const result = await MessageUserRepository.delete(idMessageUser);
-
-        res.status(200);
-        res.send(result);
-        next();
-        
-    } catch (err) {
-        console.log(err);
-        res.status(500).send('error_during_deleting_message');
-    }
-}
-
 module.exports = {
     getDiscussion,
     prePersist,
-    sendMessage,
-    deleteMessage,
-    getAllMessage
+    sendMessage
 };

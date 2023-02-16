@@ -44,7 +44,7 @@ class MessageUserRepository {
         });
     }
 
-    async getAllMessage() {
+    async getAll() {
         return await this.messageUserModel.findAll({
             raw: true,
             nest: true,
