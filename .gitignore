@@ -13,5 +13,6 @@ client-app-mobile-chat/web-build/
 # macOS
 client-app-mobile-chat/.DS_Store
 
-
 api-app-mobile-chat/node_modules/
+
+client-admin-app-mobile-chat/node_modules

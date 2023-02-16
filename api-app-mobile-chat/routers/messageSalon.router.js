@@ -5,6 +5,8 @@ const MessageSalonMiddleWares = require('../middlewares/MessageSalonMiddleWares'
 
 router.get('/getall/:idSalon', UserMiddlewares.IsAuthentified, MessageSalonMiddleWares.getDiscussion);
 
+router.get('/getall', UserMiddlewares.IsAuthentified, MessageSalonMiddleWares.getAllMessage);
+
 router.post('/send', UserMiddlewares.IsAuthentified, MessageSalonMiddleWares.prePersist, MessageSalonMiddleWares.sendMessage);
 
 router.delete('/delete/:idSalon/:idMessage', UserMiddlewares.IsAuthentified, UserMiddlewares.isAdmin, MessageSalonMiddleWares.deleteMessage);

@@ -169,6 +169,15 @@ module.exports = class UserController {
         });
     }
 
+    async getAllAdmin() {
+        this.roleModel = require("../models/role.model")(this.connexion);
+
+        return await this.userModel.findAll({
+            //include: {model: this.roleModel, as: 'roles', attributes: ['libelle']},
+            attributes: ['idUser','email','prenom', 'nom','createdAt']
+        });
+    }
+
     async getById(idUser) {
         return await this.userModel.findByPk(idUser);
     }

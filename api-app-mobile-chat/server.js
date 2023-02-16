@@ -4,15 +4,21 @@ const express = require('express');
 const http = require('http');
 const socketIO = require("socket.io");
 const SocketHelper = require('./helpers/SocketHelper');
+const cors = require('cors');
 require('dotenv').config();
 
 //SETUP ____________________________________________________________________ SETUP
 
 const app = express();
 
+const corsOption = {
+    origin : "*"
+}
+
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors(corsOption));
 
 //const hostname = '127.0.0.1';
 const port = normalizePort(process.env.PORT || '3000');
@@ -45,6 +51,8 @@ let disconnectedSocketRemoverInterval = setInterval(() => {
 
 //USER
 app.use('/user', require('./routers/user.router'));
+//Salon
+app.use('/salon', require('./routers/salon.router'));
 //MessageSalon
 app.use('/messagesalon', require('./routers/messageSalon.router'));
 //MessageUser

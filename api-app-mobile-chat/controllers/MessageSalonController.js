@@ -38,6 +38,12 @@ module.exports = class MessageSalonController {
         });
     }
 
+    async getAllMessage() {
+        return await this.messageSalonModel.findAll({
+            order: [['pk_id_salon_message', 'ASC']],
+        });
+    }
+
     async getById(idMessage) {
         //return await this.messageSalonModel.findByPk(idMessage);
         return await this.messageSalonModel.findOne({
