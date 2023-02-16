@@ -5,6 +5,7 @@ import { apiHttpRequest } from '@services/RequestService';
 import { getGetMessageUserURL, getGetMessageSalonURL, getGetUserURL, getSendMessageSalonURL, getSendMessageUserURL } from '@endpoint/ApiEndpoint';
 import * as StoreService from '@services/StoreService';
 import { SvgProfil} from '@assets/svg'
+import ChappyError from '@error/ChappyError';
 //CONTEXT
 import { SocketContext } from '@context/socket.context';
 import { ToastContext, ChappyToast } from '@context/toast.context';
@@ -35,6 +36,14 @@ export default function ChatComponent(props) {
   useEffect(() => {
     init();
 
+    if (state.typeChat == 'user') {
+      setInterlocutorState();
+    
+      var setInterlocuteurStateRemoverInterval = setInterval(() => {
+        setInterlocutorState();
+      }, 3000);
+    }
+
     console.log("ChatComponent loaded");
 
     return () => {
@@ -43,6 +52,8 @@ export default function ChatComponent(props) {
       if (state.typeChat == 'salon') {
         CONTEXTS.socket.emit('leave_room', state.idDestination);
       }
+
+      clearInterval(setInterlocuteurStateRemoverInterval);
 
       console.log('ChatComponent Destruct');
     };
@@ -69,12 +80,6 @@ export default function ChatComponent(props) {
   
         CONTEXTS.socket.emit('join_room', state.idDestination);
   
-      } else if (state.typeChat == 'user') {
-        setInterlocutorState();
-      
-        let setInterlocuteurStateRemoverInterval = setInterval(() => {
-          setInterlocutorState();
-        }, 3000);
       }
     
       const userResult = await JSON.parse(await StoreService.retrieveData('user'));

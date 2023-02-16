@@ -129,7 +129,7 @@ export default function ProfilComponent(props) {
       });
 
       //alert('user updated');
-      addToast(new ChappyToast('success', 'user updated !'));
+      CONTEXTS.addToast(new ChappyToast('success', 'user updated !'));
 
     } catch (err) {
       if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "ProfilComponent.requestUpdateUser()");

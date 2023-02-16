@@ -157,7 +157,6 @@ class UserRepository {
     //UPDATE __________________________________________________________________ UPDATE
 
     async update(attributes, wheres) {
-        //set attributes
         await this.userModel.update(
             attributes,
             {
