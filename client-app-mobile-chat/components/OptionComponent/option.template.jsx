@@ -23,7 +23,7 @@ export default function OptionTemplate(props) {
         </TouchableOpacity >
       
         <TouchableOpacity
-          onPress={() => {props.goProfile()}}
+          onPress={() => {props.disconnect()}}
           activeOpacity={0.5}
           >
           <Animated.View style={[OptionStyle.bulle, props.animationLogOutBtn,{backgroundColor:"#CC5656"}]}>

@@ -12,7 +12,7 @@ export default function userListTemplate(props) {
           <Text style={UsersStyle.usersListTitle}>Users</Text>
 
           <TextInput style={UsersStyle.searchInput} placeholder="Search..." onChangeText={(e) => {props.searchBar(e)}} />
-          <ScrollView contentContainerStyle={UsersStyle.scrollViewContainer} persistentScrollbar={true}>
+          <ScrollView contentContainerStyle={UsersStyle.scrollViewContainer} persistentScrollbar={true} >
             {
               props.users.filter((element) => {return(
                   props.filter.trim() == ""

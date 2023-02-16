@@ -26,7 +26,7 @@ const getDiscussion = async (req, res, next) => {
         next();
     } catch (err) {
         console.log(err);
-        next(err);
+        res.status(500).send('error during getting private discussion');
     }
 }
 
@@ -45,7 +45,7 @@ const prePersist = async (req, res, next) => {
         next();
     } catch (err) {
         console.log(err);
-        next(err);
+        res.status(500).send('error during prepersist private message');
     }
 }
 
@@ -65,16 +65,22 @@ const sendMessage = async (req, res, next) => {
     try {
         message = await MessageUserRepository.insert(req.body);
         if (!message) {
-            next(new Error("error during sending private message"));
+            res.status(500).send('error during sending private message');
+            return;
         }
     } catch (err) {
-        next(new Error("error during sending private message"));
+        console.log(err);
+        res.status(500).send('error during sending private message');
+        return;
     }
 
     try {
         SocketHelper.emitUserMsg(req.body.idUserSender, req.body.idUserReceiver, message);
     } catch (err) {
-        next(new Error("error_during_socket_emit"));
+        console.log(err);
+        /*
+        res.status(500).send('error_during_socket_emit');
+        */
     }
 
     res.status(201);
@@ -96,7 +102,8 @@ const deleteMessage = async (req, res, next) => {
         next();
         
     } catch (err) {
-        next(new Error("error_during_deleting_message"));
+        console.log(err);
+        res.status(500).send('error_during_deleting_message');
     }
 }
 

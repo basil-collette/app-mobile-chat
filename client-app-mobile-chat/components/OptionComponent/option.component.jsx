@@ -5,6 +5,7 @@ import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import StoreService from '@services/StoreService';
 import AccountService from '@services/AccountService';
 import { easeOutBackAnimation } from '@assets/animation'
+import ChappyError from '@error/ChappyError';
 //CONTEXT
 import { ErrorContext } from '@context/error.context';
 
@@ -62,9 +63,15 @@ export default function OptionComponent(props) {
   }
 
   const disconnect = async () => {
-    await AccountService.disconnect();
+    try {
+      await AccountService.disconnect();
     
-    props.navigation.navigate('Login');
+      props.navigation.navigate('Login');
+
+    } catch (err) {
+      if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "OptionComponent.disconnect()");
+      CONTEXTS.ErrorContext.handleError(err, err.isFatal);
+    }
   }
 
   //TEMPLATE RETURN __________________________________________________________________________________ TEMPLATE RETURN

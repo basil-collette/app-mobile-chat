@@ -1,28 +1,33 @@
-/**
- * Service that manage the user connexion in application
- */
 import StoreService from '@services/StoreService';
+import ChappyError from '@error/ChappyError';
 
 const login = async (user, jwt, remembermeInputs) => {
+  try {
+    await StoreService.storeData('user', user);
+    await StoreService.storeData('jwttoken', jwt);
 
-  await StoreService.storeData('user', user);
-  await StoreService.storeData('jwttoken', jwt);
+    if (remembermeInputs) {
+      await StoreService.storeData('rememberMe', remembermeInputs);
+    } else {
+      await StoreService.deleteData('rememberMe');
+    }
 
-  if (remembermeInputs) {
-    await StoreService.storeData('rememberMe', remembermeInputs);
-  } else {
-    await StoreService.deleteData('rememberMe');
+  } catch (err) {
+    if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "AccountService.login()");
+    throw err;
   }
-
-  return true;
 }
 
 const disconnect = async () => {
-  await StoreService.deleteData('user');
-  await StoreService.deleteData('jwttoken');
-  await StoreService.deleteData('rememberMe');
+  try {
+    await StoreService.deleteData('user');
+    await StoreService.deleteData('jwttoken');
+    await StoreService.deleteData('rememberMe');
 
-  return true;
+  } catch (err) {
+    if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "AccountService.disconnect()");
+    throw err;
+  }
 }
 
 module.exports = {

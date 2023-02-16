@@ -15,11 +15,12 @@ const register = async (req, res, next) => {
             res.send(user);
             next();
         } else {
-            nex(new Error('error_during_registration'));
+            res.status(406).send('error_during_registration');
+            return;
         }
     } catch (err) {
         console.log(err);
-        next(err);
+        res.status(500).send('error_during_registration');
     }
 }
 
@@ -58,12 +59,14 @@ const login = async (req, res, next) => {
         });
     
         if (!userResult) {
-            next(new Error("authentification_failed"));
+            res.status(401).send('authentification_failed');
+            return;
         }
     
         const match = await bcrypt.compare(userFields.password, userResult.password);
         if (!match) {
-            next(new Error("authentification_failed"));
+            res.status(401).send('authentification_failed');
+            return;
         }
 
         delete userResult.dataValues.password;
@@ -80,7 +83,7 @@ const login = async (req, res, next) => {
 
     } catch (err) {
         console.log(err);
-        res.status(404).send('error_during_authentification');
+        res.status(500).send('error_during_authentification');
     }
 }
 
@@ -94,12 +97,13 @@ const isAdmin = async (req, res, next) => {
         }
 
         if (!UserRepository.isAdmin(res.locals.authentifiedUser)) {
-            next(new Error("not_autorized"));
+            res.status(406).send('not_autorized');
+            return;
         }
         next();
     } catch(err) {
         console.log(err);
-        next(err);
+        res.status(500).send('error_during_adminrole_check');
     }
 }
 
@@ -112,7 +116,8 @@ const IsAuthentified = async (req, res, next) => {
         const authentifiedUser = await UserRepository.getAuthentifiedUser(req);
 
         if (!authentifiedUser) {
-            next(new Error("not_authentified"));
+            res.status(401).send('not_authentified');
+            return;
         }
     
         res.locals.authentifiedUser = authentifiedUser;
@@ -120,7 +125,7 @@ const IsAuthentified = async (req, res, next) => {
 
     } catch(err) {
         console.log(err);
-        next(err);
+        res.status(500).send('error_during_authentification_check');
     }
 }
 
@@ -131,20 +136,22 @@ const IsAuthentified = async (req, res, next) => {
 const isAuthorized = async (req, res, next) => {
     try {
         if (!req.params.idUser) {
-            next(new Error("idUser GET params is missing"));
+            res.status(406).send('idUser GET params is missing');
+            return;
         }
         res.locals.userId = parseInt(req.params.idUser);
 
         if (res.locals.authentifiedUser.idUser != res.locals.userId
             && !UserRepository.isAdmin(res.locals.authentifiedUser)
         ) {
-            next(new Error("not_authorized"));
+            res.status(406).send('not_authorized');
+            return;
         }
         next();
 
     } catch(err) {
         console.log(err);
-        next(err);
+        res.status(500).send('error_during_authorization_check');
     }
 }
 
@@ -155,7 +162,8 @@ const loginInputsAreSent = (req, res, next) => {
     const userFields = req.body;
 
     if (!userFields.email || !userFields.password) {
-        next(new Error("list of needed inputs is required"));
+        res.status(406).send('list of needed inputs is required');
+        return;
     }
     next();
 }
@@ -172,7 +180,8 @@ const registerInputsAreSent = (req, res, next) => {
         || !userFields.nom
         || !userFields.password
     ) {
-        next(new Error("list of needed inputs is required"));
+        res.status(406).send('list of needed inputs is required');
+        return;
     }
 
     next();
@@ -187,8 +196,8 @@ const userDoesntExists = async (req, res, next) => {
     if (!req.params.idUser) {
 
         if (userAllreadyExists) {
-            next(new Error("Error during registration. This email is already used"));
-            //res.status(400).send("Error during registration. This email is already used");
+            res.status(406).send('Error during registration. This email is already used');
+            return
         }
         
     } else {
@@ -199,8 +208,8 @@ const userDoesntExists = async (req, res, next) => {
             && userAllreadyExists.idUser != undefined
             && userAllreadyExists.idUser != req.params.idUser
         ) {
-            next(new Error("Update Failed, this email is already used"));
-            //res.status(400).send("Update Failed, this email is already used");
+            res.status(406).send('Update Failed, this email is already used');
+            return;
         }
     }
     
@@ -227,7 +236,7 @@ const prePersist = async (req, res, next) => {
         next();
     } catch (err) {
         console.log(err);
-        next(err);
+        res.status(500).send('error_during_prePersist_user');
     }
 }
 

@@ -41,6 +41,12 @@ const getSendMessageSalonURL = () => {
     return 'messagesalon/send/';
 }
 
+// TRANSLATION _____________________________________________________________________ TRANSLATION
+
+const getTranslationsURL = () => {
+    return 'getAllTranslate/';
+}
+
 // EXPORT MODULE ___________________________________________________________________ EXPORT MODULE
 
 module.exports = {
@@ -55,5 +61,7 @@ module.exports = {
     getSendMessageUserURL,
     //message room
     getGetMessageSalonURL,
-    getSendMessageSalonURL
+    getSendMessageSalonURL,
+    //translations
+    getTranslationsURL
 }

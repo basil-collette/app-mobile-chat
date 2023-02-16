@@ -15,7 +15,8 @@ const deleteUser = async (req, res, next) => {
         next();
 
     } catch(err) {
-        next(err);
+        console.log(err);
+        res.status(500).send('error during deleting user');
     }
 };
 
@@ -32,7 +33,8 @@ const deleteSalonMessage = async (req, res, next) => {
         next();
 
     } catch(err) {
-        next(err);
+        console.log(err);
+        res.status(500).send('error during deleting room');
     }
 };
 
@@ -49,7 +51,8 @@ const deleteUserMessage = async (req, res, next) => {
         next();
 
     } catch(err) {
-        next(err);
+        console.log(err);
+        res.status(500).send('error during deleting private message');
     }
 };
 
