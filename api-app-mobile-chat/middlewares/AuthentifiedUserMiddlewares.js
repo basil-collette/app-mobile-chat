@@ -8,7 +8,7 @@ const router = require('express').Router();
  */
 router.get('/getall', async (req, res, next) => {
     try {
-        let users = getUsersState(await UserRepository.getAll());
+        let users = getUsersState(await UserRepository.getAllFiltered());
         
         res.status(200);
         res.send(users);

@@ -25,21 +25,42 @@ class SalonRepository {
     //GET ________________________________________________________________________ GET
 
     async getAll() {
-        return await this.messageSalon.findAll();
+        return await this.salonModel.findAll();
     }
 
     async getById(idMessage) {
-        return await this.messageSalon.findByPk(idMessage);
+        return await this.salonModel.findByPk(idMessage);
     }
 
+    async create(salonFields) {
+        try {
+            let salon;
+            salon = await this.salonModel.create({
+                "libelle": salonFields.libelle,
+                "created_at": new Date(),
+            })
+        } catch (err) {
+            console.error(err);
+            throw new Error('error during inserting user');
+        }
+    }
     //DELETE __________________________________________________________________ DELETE
 
     async delete(idSalon) {
-        return await this.messageSalon.destroy(
-            { where: {pk_id_salon: idSalon} }
+        return await this.salonModel.destroy(
+            { where: { pk_id_salon: idSalon } }
         );
     }
-    
+
+    async update(attributes, wheres) {
+        return await this.salonModel.update(
+            attributes,
+            {
+                where: wheres
+            }
+        );
+    }
+ 
 }
 
 module.exports = new SalonRepository();

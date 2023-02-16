@@ -7,6 +7,4 @@ router.get('/getall/:idSalon', UserMiddlewares.IsAuthentified, MessageSalonMiddl
 
 router.post('/send', UserMiddlewares.IsAuthentified, MessageSalonMiddleWares.prePersist, MessageSalonMiddleWares.sendMessage);
 
-router.delete('/delete/:idMessage', UserMiddlewares.IsAuthentified, UserMiddlewares.isAdmin, MessageSalonMiddleWares.deleteMessage);
-
 module.exports = router;
