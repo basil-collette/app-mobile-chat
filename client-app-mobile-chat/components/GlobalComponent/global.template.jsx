@@ -20,7 +20,12 @@ export default function GlobalTemplate(props) {
           props.title
           && <View style={GlobalStyle.titleContainer}>
             {props.SVGProfil && props.SVGProfil()}
-            {props.title && <Text style={{ color: "blue", marginLeft: 10 }}>{props.title}</Text>}
+            <Text style={{ color: "blue", marginLeft: 10 }}>{props.title}</Text>
+            {/*
+            props.SVGProfil ?
+              <Text onPress={() => props.goBack()} style={{ color: "blue", marginLeft: 10 }}>{props.title}</Text>
+              : <Text style={{ color: "blue", marginLeft: 10 }}>{props.title}</Text>
+            */}
           </View>
         }
 

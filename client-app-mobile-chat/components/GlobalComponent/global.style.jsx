@@ -16,7 +16,15 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "#3B55EB",
     width: "100%",
-    padding : 10
+    padding : 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.00,
+    elevation: 24,
   },
   titleContainer: {
     flexDirection: "row",

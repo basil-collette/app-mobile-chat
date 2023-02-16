@@ -32,6 +32,18 @@ const testNameRegex = (value) => {
     return getNameRegex().test(value);
 }
 
+//WORD __________________________________________________________________________ WORD
+
+const getWordRegex = (value) => {
+    return new RegExp(`(?<=[^a-zA-Z])${value}(?=[^a-zA-Z])`);
+}
+
+const testWordRegex = (text, word) => {
+    return getWordRegex(word).test(text);
+}
+
+// MODULE EXPORT _________________________________________________________________
+
 module.exports = {
     getEmailRegex,
     testEmailRegex,
@@ -39,4 +51,6 @@ module.exports = {
     testPasswordRegex,
     getNameRegex,
     testNameRegex,
+    getWordRegex,
+    testWordRegex
 }

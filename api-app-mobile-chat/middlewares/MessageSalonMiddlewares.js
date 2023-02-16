@@ -1,4 +1,3 @@
-const UserRepository = require('../repository/UserRepository');
 const MessageSalonRepository = require('../repository/MessageSalonRepository');
 const SocketHelper = require('../helpers/SocketHelper');
 
@@ -15,7 +14,7 @@ const getDiscussion = async (req, res, next) => {
         next();
     } catch (err) {
         console.log(err);
-        next(err);
+        res.status(500).send('error during getting room messages');
     }
 }
 
@@ -34,7 +33,7 @@ const prePersist = async (req, res, next) => {
         next();
     } catch (err) {
         console.log(err);
-        next(err);
+        res.status(500).send('error during prepersist room message');
     }
 }
 
@@ -54,16 +53,22 @@ const sendMessage = async (req, res, next) => {
     try {
         messageSalon = await MessageSalonRepository.insert(req.body);
         if (!messageSalon) {
-            next(new Error("error during sending message to room"));
+            res.status(500).send('error during sending message to room');
+            return;
         }
     } catch (err) {
-        next(new Error("error during sending message to room"));
+        console.log(err);
+        res.status(500).send('error during sending message to room');
+        return;
     }
 
     try {
         SocketHelper.emitRoomMsg(req.body.idSalon, messageSalon);
     } catch (err) {
-        next(new Error("error_during_socket_emit"));
+        console.log(err);
+        /*
+        res.status(500).send('error_during_socket_emit');
+        */
     }
 
     res.status(201);
@@ -85,7 +90,8 @@ const deleteMessage = async (req, res, next) => {
         next();
         
     } catch (err) {
-        next(new Error("error_during_deleting_message"));
+        console.log(err);
+        res.status(500).send('error_during_deleting_message');
     }
 }
 

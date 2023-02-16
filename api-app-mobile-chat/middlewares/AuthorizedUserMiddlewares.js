@@ -25,7 +25,7 @@ router.get('/detail', async (req, res, next) => {
         next();
     } catch (err) {
         console.error(err);
-        next(err);
+        res.status(500).send('error during getting user detail');
     }
 });
 
@@ -45,7 +45,7 @@ const preUpdate = async (req, res, next) => {
         next();
     } catch (err) {
         console.error(err);
-        next(err);
+        res.status(500).send('error during preupdate user');
     }
 }
 
@@ -67,7 +67,8 @@ router.put('/update', userDoesntExists, preUpdate, async (req, res, next) => {
         next();
 
     } catch(err) {
-        next(err);
+        console.log(err);
+        res.status(500).send('error during update user');
     }
 });
 

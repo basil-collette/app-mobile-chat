@@ -14,8 +14,8 @@ router.get('/getall', async (req, res, next) => {
         res.send(users);
         next();
     } catch (err) {
-        console.error(err);
-        next(err);
+        console.log(err);
+        res.status(500).send('error during getting allUsers');
     }
 });
 
