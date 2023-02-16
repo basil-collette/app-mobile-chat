@@ -12,7 +12,7 @@ router.use('/delete/salon/:idSalon', AdminMiddlewares.deleteSalon);
 router.get('/getall/salonmessage', AdminMiddlewares.getAllRoomMessages);
 router.delete('/delete/salonmessage/:idMessage', AdminMiddlewares.deleteRoomMessage);
 
-router.get('/getall/usermesage', AdminMiddlewares.getAllUserMessages);
+router.get('/getall/usermessage', AdminMiddlewares.getAllUserMessages);
 router.delete('/delete/usermessage/:idMessage', AdminMiddlewares.deleteUserMessage);
 
 module.exports = router;

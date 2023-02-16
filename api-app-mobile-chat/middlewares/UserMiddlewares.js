@@ -192,8 +192,7 @@ const registerInputsAreSent = (req, res, next) => {
  */
 const userDoesntExists = async (req, res, next) => {
     const userAllreadyExists = await UserRepository.exists(req.body.email);
-
-    if (!req.params.idUser) {
+    if (!res.locals.userId) {
 
         if (userAllreadyExists) {
             res.status(406).send('Error during registration. This email is already used');
@@ -204,9 +203,7 @@ const userDoesntExists = async (req, res, next) => {
         if (
             req.body.email
             && userAllreadyExists != null
-            && userAllreadyExists.idUser != null
-            && userAllreadyExists.idUser != undefined
-            && userAllreadyExists.idUser != req.params.idUser
+            && userAllreadyExists.idUser != res.locals.userId
         ) {
             res.status(406).send('Update Failed, this email is already used');
             return;

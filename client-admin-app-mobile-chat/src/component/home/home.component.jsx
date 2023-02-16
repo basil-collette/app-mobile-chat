@@ -92,11 +92,11 @@ export default function HomeComponent(props) {
             }
 
             if (onglet == tabEnum.TAB_PRIVATE_MESSAGES) {
-                entityData = await apiHttpRequest(`messageuser/getall`, 'GET', null, null);
+                entityData = await apiHttpRequest(`admin/getall/usermessage`, 'GET', null, null);
             }
 
             if (onglet == tabEnum.TAB_ROOM_MESSAGES) {
-                entityData = await apiHttpRequest(`messagesalon/getall`, 'GET', null, null);
+                entityData = await apiHttpRequest(`admin/getall/salonmessage`, 'GET', null, null);
             }
             setState((currentState) => {
                 return {
