@@ -15,8 +15,8 @@ export default function ChatTemplate(props) {
           props.scrollView.current.scrollToEnd({ animated: true, index: -1 }, 200);
         }}
         >
-
-        {props.messages.map((msg, index) => {
+       { props.messages.length > 0 ? <TouchableOpacity style={ChatStyle.previousMessage} onPress = {() => props.getPreviousMessage()}><Text style ={{color:"#ffff"}}>Previous Messages</Text></TouchableOpacity> : null }
+        {props.messagesShowed.map((msg, index) => {
           const isConnectedUser = props.connectedUser.idUser == msg.userSender.idUser;
           const baseMsgContainer = (isConnectedUser) ? ChatStyle.msgContainerConnectedUser : ChatStyle.msgContainerInterlocutor;
           const finalMsgContainer = (index + 1 != props.messages.length) ? [baseMsgContainer, {marginBottom: 5}] : baseMsgContainer;

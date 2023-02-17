@@ -15,7 +15,17 @@ export default StyleSheet.create({
     flexGrow: 1,
     paddingVertical: 10
   },
-
+  previousMessage :{
+    backgroundColor :"#3B55EB",
+    alignItems:"center",
+    marginBottom : 7,
+    fontSize: 17,
+    backgroundColor: "transparent",
+    borderWidth : 1,
+    borderColor:'#ffffff',
+    borderRadius: 14,
+    padding : 10,
+  },
   msgContainer: {
     flexDirection: "column",
     width: "100%",

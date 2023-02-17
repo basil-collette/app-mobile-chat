@@ -9,20 +9,20 @@
 body{
     background-color: #3B55EB;
 }
-
+.container-form{
+  padding-left:500px;
+  padding-right:500px;
+  padding-top: 100px;
+}
 form{
-    height: 520px;
-    width: 400px;
     background-color: rgba(255,255,255,0.13);
-    position: absolute;
-    transform: translate(-50%,-50%);
-    top: 50%;
-    left: 50%;
     border-radius: 10px;
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255,255,255,0.1);
     box-shadow: 0 0 40px rgba(8,7,16,0.6);
-    padding: 50px 35px;
+    padding: 30px;
+    margin : auto;
+    gap : 20px;
 }
 form *{
     font-family: 'Poppins',sans-serif;
@@ -38,12 +38,6 @@ form h3{
     text-align: center;
 }
 
-label{
-    display: block;
-    /* margin-top: 30px; */
-    font-size: 16px;
-    font-weight: 500;
-}
 input{
     display: block;
     height: 50px;
@@ -68,26 +62,4 @@ button{
     font-weight: 600;
     border-radius: 5px;
     cursor: pointer;
-}
-.social{
-  margin-top: 30px;
-  display: flex;
-}
-.social div{
-  background: red;
-  width: 150px;
-  border-radius: 3px;
-  padding: 5px 10px 10px 5px;
-  background-color: rgba(255,255,255,0.27);
-  color: #eaf0fb;
-  text-align: center;
-}
-.social div:hover{
-  background-color: rgba(255,255,255,0.47);
-}
-.social .fb{
-  margin-left: 25px;
-}
-.social i{
-  margin-right: 4px;
 }
