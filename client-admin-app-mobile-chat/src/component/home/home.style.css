@@ -1,74 +1,66 @@
-
-
-.containerGrid {
+.container-grid-button {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  padding : 65px;
-
+  padding: 25px;
 }
 
 .container {
   display: flex;
   flex-direction: column;
-  gap: 25px;
 }
 
 .contBtn {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
 }
 
 .onglets {
   width: 250px;
   height: 40px;
-  background: #AAAABC;
-  color: #f1f1f1;
+  background: white;
+  color: black;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   border-top-right-radius: 12px;
   border-top-left-radius: 12px;
-  border : solid 1px gray;
+  border-bottom: none;
 }
 
 .container-grid {
-  background-color: rgba(255, 255, 255, 0.13);
+  display: flex;
+  flex-direction: column;
+  background-color: #aaaabc;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
   backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
-  padding: 20px 35px;
-  width: 100%;
-}
-
-.container-grid p {
-  padding: 10px;
-  margin: 0;
+  padding: 20px;
 }
 
 .active {
-  background: white;
-  color: black;
+  background: #aaaabc;
+  color: white;
 }
-
-
 .containerInput {
   gap: 10px;
 }
 
 .button {
-  padding : 5px;
-  height: 40px;
+  padding: 8px;
   width: 150px;
+  background-color: transparent;
+  border: solid 1px black;
+  color: white;
+  margin-top: 0;
+  margin-bottom: 23px;
   align-self: flex-end;
-  background-color: #8093FF;
-  border : none;
-  color : white;
-  font-size: small;
-  margin : 0;
+  cursor: pointer;
+  justify-content: center;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
 }

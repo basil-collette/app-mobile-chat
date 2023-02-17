@@ -2,7 +2,7 @@ const faker = require('@faker-js/faker');
 const NumberHelper = require('../../../helpers/NumberHelper');
 
 let user_message_salon = [];
-for (i = 0; i < 500; i++) {
+for (i = 0; i < 102; i++) {
 
     user_message_salon.push({
         model: "user_message_salon",
