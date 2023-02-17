@@ -19,8 +19,8 @@ export default StyleSheet.create({
     padding : 10,
     shadowColor: "#000",
     shadowOffset: {
-      width: 0,
-      height: 12,
+      width: 20,
+      height: 20,
     },
     shadowOpacity: 0.58,
     shadowRadius: 16.00,

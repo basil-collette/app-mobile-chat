@@ -4,6 +4,7 @@ import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import * as StoreService from '@services/StoreService';
 import { Animated } from 'react-native';
 import { easeOutBackAnimation } from '@assets/animation';
+import ChappyError from '@error/ChappyError';
 //CONTEXT
 import { ErrorContext } from '@context/error.context';
 

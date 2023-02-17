@@ -75,7 +75,7 @@ export default StyleSheet.create({
     borderRightColor: "transparent",
     borderLeftColor: "transparent",
     borderTopColor: "#3B55EB",
-    marginBottom:"auto"
+    marginBottom: "auto"
   },
   usersListTitle: {
     color: "white",
