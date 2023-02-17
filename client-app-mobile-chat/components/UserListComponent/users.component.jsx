@@ -7,8 +7,15 @@ import { getGetAllUsersURL } from '@endpoint/ApiEndpoint';
 import * as StoreService from '@services/StoreService';
 import { SocketContext } from '@context/socket.context';
 import { easeOutAnimation } from '@assets/animation';
+import ChappyError from '@error/ChappyError';
+//CONTEXT
+import { ErrorContext } from '@context/error.context';
 
 export default function userListComponent(props) {
+
+  const CONTEXTS = {
+    ErrorContext: useContext(ErrorContext)
+  }
 
   const socket = useContext(SocketContext);
 
@@ -35,32 +42,44 @@ export default function userListComponent(props) {
   //FUNCTIONS ________________________________________________________________________________________ FUNCTIONS
 
   const init = async () => {
-    const userResult = await JSON.parse(await StoreService.retrieveData('user'));
+    try {
+      const userResult = await JSON.parse(await StoreService.retrieveData('user'));
 
-    setState((currentState) => {
-      return {
-        ...currentState,
-        connectedUser: userResult
-      };
-    });
+      setState((currentState) => {
+        return {
+          ...currentState,
+          connectedUser: userResult
+        };
+      });
 
-    setUserList(userResult.idUser);
-
-    const GET_USERS_CONNEXIONS_INTERVAL = 3000; //units in milliseconds
-    let setUserListRemoverInterval = setInterval(() => {
       setUserList(userResult.idUser);
-    }, GET_USERS_CONNEXIONS_INTERVAL);
+
+      const GET_USERS_CONNEXIONS_INTERVAL = 3000; //units in milliseconds
+      let setUserListRemoverInterval = setInterval(() => {
+        setUserList(userResult.idUser);
+      }, GET_USERS_CONNEXIONS_INTERVAL);
+
+    } catch (err) {
+      if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "UserListComponent.init()");
+      CONTEXTS.ErrorContext.handleError(err, err.isFatal);
+    }
   }
 
   const setUserList = async (idUser) => {
-    const allUsers = await apiHttpRequest(getGetAllUsersURL(), 'GET', null, null);
+    try {
+      const allUsers = await apiHttpRequest(getGetAllUsersURL(), 'GET', null, null);
 
-    setState((currentState) => {
-      return {
-        ...currentState,
-        users: allUsers
-      };
-    });
+      setState((currentState) => {
+        return {
+          ...currentState,
+          users: allUsers
+        };
+      });
+
+    } catch (err) {
+      if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "UserListComponent.setUserList()");
+      CONTEXTS.ErrorContext.handleError(err, err.isFatal);
+    }
   }
 
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK

@@ -3,7 +3,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { SocketContext, socket } from '@context/socket.context';
 import { ErrorProvider } from '@context/error.context';
-import { ToastProvider } from '@context/toast.context';
+import { ToastProvider } from '@context/toast/toast.context';
 import { View, StatusBar } from 'react-native';
 import AuthComponent from '@comp/AuthComponent/auth.component.jsx';
 import HomeComponent from '@comp/HomeComponent/home.component.jsx';

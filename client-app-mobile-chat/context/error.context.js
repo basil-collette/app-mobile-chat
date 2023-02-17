@@ -2,7 +2,8 @@ import React, { useState, createContext, useContext, useEffect } from 'react';
 import { Alert } from 'react-native';
 import RNRestart from 'react-native-restart';
 import { setJSExceptionHandler } from "react-native-exception-handler";
-import { ToastContext, ChappyToast } from '@context/toast.context';
+import { ToastContext } from '@context/toast/toast.context';
+import ChappyToast from '@context/toast/ChappyToast';
 
 const ErrorContext = createContext();
 

@@ -1,45 +1,45 @@
-import React, { useContext } from 'react';
 import { Text } from "react-native";
-import { apiHttpRequest } from '@services/RequestService';
-import ChappyError from '@error/ChappyError';
-import {getTranslationsURL} from '@endpoint/ApiEndpoint';
-//CONTEXT
-import { ErrorContext } from '@context/error.context';
 
-export default class FilterService {
-  
-    errorContext;
-    translations;
+const getWordRegex = (value) => {
+    const stringRegex = `(?<=[^a-zA-Z]|^)${value}(?=[^a-zA-Z]|$)`;
+    return new RegExp(stringRegex);
+}
 
-    constructor() {
-        try {
-            errorContext = useContext(ErrorContext);
-            translations = apiHttpRequest(getTranslationsURL(), 'GET', null, null);
-        } catch(err) {
-            if (!(err instanceof ChappyError)) err = new ChappyError(err.message, false, "AuthComponent.loginRequest()");
-            errorContext.handleError(err, err.isFatal);
+const getRandomColor = () => {
+
+}
+
+const getFilteredMessage = (text, translations) => {
+    let resultArray = [text];
+
+    for (let i = 0; i < translations.length; i++) {
+        const insult = translations[i].insult;
+
+        for (let j = 0; j < resultArray.length; j++) {
+            if (typeof resultArray[j] == 'string') {
+                if ((match = getWordRegex(insult).exec(resultArray[j])) != null) {
+                    
+                    let newElement = [];
+                    if (match.index > 0) newElement.push(resultArray[j].slice(0, match.index));
+                    newElement.push(<Text key={i + j + match[0]} style={{backgroundColor: '#f74a62'}}>{translations[i].translate}</Text>);
+
+                    let temp = resultArray[j].slice(match.index + match[0].length);
+                    if (temp.length > 0) newElement.push(temp);
+
+                    let first = resultArray.slice(0, j);
+                    let last = resultArray.slice(j + 1);
+                    
+                    resultArray = first
+                        .concat(newElement)
+                        .concat(last);
+                }
+            }
         }
-    }
+    }   
+    
+    return resultArray;
+}
 
-    filter(text) {
-        let textArray = [];
-        let currentIndex;
-
-        while(match = /test/g.exec(text)) {
-            console.log(match);
-            /*
-            textArray.push(text.substring(1, 3));
-            currentIndex = match.index + match
-            console.log(match.index + ' ' + patt.lastIndex);
-            */
-        }
-
-        return(
-            <Text>
-
-            </Text>
-        );
-
-    }
-
+module.exports = {
+    getFilteredMessage
 }

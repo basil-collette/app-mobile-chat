@@ -1,16 +1,17 @@
-import { useState, useEffect, useContext } from "react";
-import { apiHttpRequest } from "@services/RequestService";
-import StoreService from "@services/StoreService";
-import InputService from "@services/InputService";
-import RegexService from "@services/RegexService";
-import AccountService from "@services/AccountService";
-import { getLoginURL } from "@endpoint/ApiEndpoint";
-import ChappyError from "@error/ChappyError";
-import AuthTemplate from "./auth.template.jsx";
+import { useState, useEffect, useContext } from 'react';
+import { apiHttpRequest } from '@services/RequestService';
+import StoreService from '@services/StoreService';
+import InputService from '@services/InputService';
+import RegexService from '@services/RegexService';
+import AccountService from '@services/AccountService';
+import { getLoginURL } from '@endpoint/ApiEndpoint';
+import ChappyError from '@error/ChappyError';
+import ChappyToast from '@context/toast/ChappyToast';
+import AuthTemplate from './auth.template.jsx';
 //CONTEXT
-import { SocketContext } from "@context/socket.context";
-import { ToastContext, ChappyToast } from "@context/toast.context";
-import { ErrorContext } from "@context/error.context";
+import { SocketContext } from '@context/socket.context';
+import { ToastContext } from '@context/toast/toast.context';
+import { ErrorContext } from '@context/error.context';
 
 export default function AuthComponent(props) {
   const CONTEXTS = {
@@ -61,11 +62,7 @@ export default function AuthComponent(props) {
   //TEMPLATE CALLBACK ________________________________________________________________________________ TEMPLATE CLALBACK
 
   const updateInput = (inputName, value) => {
-    const newConnexionInputs = InputService.setInputStates(
-      state.connexionInputs,
-      inputName,
-      value
-    );
+    const newConnexionInputs = InputService.setInputStates(state.connexionInputs, inputName, value);
 
     setState({
       ...state,
@@ -76,29 +73,16 @@ export default function AuthComponent(props) {
   const loginRequest = async () => {
     try {
       if (!verifyLoginInputs()) {
-        throw new ChappyError(
-          "login inputs are in an invalid format",
-          false,
-          "AuthComponent.loginRequest()"
-        );
+        throw new ChappyError("login inputs are in an invalid format", false, "AuthComponent.loginRequest()");
       }
 
-      const resultToken = await apiHttpRequest(
-        getLoginURL(),
-        "POST",
-        null,
-        state.connexionInputs
-      );
+      const resultToken = await apiHttpRequest(getLoginURL(), "POST", null, state.connexionInputs);
 
       const rememberMe = state.rememberStatusCheck
         ? state.connexionInputs
         : false;
 
-      await AccountService.login(
-        resultToken.user,
-        resultToken.token,
-        rememberMe
-      );
+      await AccountService.login(resultToken.user, resultToken.token, rememberMe);
 
       CONTEXTS.socket.emit(
         "associate_userid_to_socket",
@@ -106,13 +90,10 @@ export default function AuthComponent(props) {
       );
 
       props.navigation.navigate("Home");
+
     } catch (err) {
       if (!(err instanceof ChappyError))
-        err = new ChappyError(
-          err.message,
-          false,
-          "AuthComponent.loginRequest()"
-        );
+        err = new ChappyError(err.message, false, "AuthComponent.loginRequest()");
       CONTEXTS.ErrorContext.handleError(err, err.isFatal);
     }
   };
