@@ -59,6 +59,8 @@ app.use('/messagesalon', require('./routers/messageSalon.router'));
 app.use('/messageuser', require('./routers/messageUser.router'));
 //AdminRoute
 app.use('/admin', require('./middlewares/UserMiddlewares').isAdmin, require('./routers/admin.router'));
+//FilterRoute
+app.use('/translate', require('./routers/filter.router'));
 
 // ERRORS __________________________________________________________________ ERRORS
 

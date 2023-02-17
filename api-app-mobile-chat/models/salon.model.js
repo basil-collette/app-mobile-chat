@@ -24,6 +24,5 @@ module.exports = (sequelize) => {
         updatedAt : false
     });
 
-
     return salonModel;
 };

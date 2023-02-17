@@ -15,7 +15,14 @@ export default function ChatTemplate(props) {
           props.scrollView.current.scrollToEnd({ animated: true, index: -1 }, 200);
         }}
         >
-       { props.messages.length > 0 ? <TouchableOpacity style={ChatStyle.previousMessage} onPress = {() => props.getPreviousMessage()}><Text style ={{color:"#ffff"}}>Previous Messages</Text></TouchableOpacity> : null }
+        {props.messages.length > 0
+          && <TouchableOpacity
+              style={ChatStyle.previousMessage}
+              onPress = {() => props.getPreviousMessage()}>
+                
+            <Text style={{color:"#ffff"}}>Previous Messages</Text>
+          </TouchableOpacity>}
+
         {props.messagesShowed.map((msg, index) => {
           const isConnectedUser = props.connectedUser.idUser == msg.userSender.idUser;
           const baseMsgContainer = (isConnectedUser) ? ChatStyle.msgContainerConnectedUser : ChatStyle.msgContainerInterlocutor;
@@ -30,13 +37,13 @@ export default function ChatTemplate(props) {
               <View style={finalMsgContainer}>
                 {isConnectedUser ?
                   <>
-                    <Text style={content}>{msg.content}</Text>
+                    <Text style={content}>{props.getFilteredMessageCallback(msg.content)}</Text>
                     <View style={[ChatStyle.triangle, triangle]}></View>
                   </>
                   :
                   <>
                     <View style={[ChatStyle.triangle, triangle]}></View>
-                    <Text style={content}>{msg.content}</Text>
+                    <Text style={content}>{props.getFilteredMessageCallback(msg.content)}</Text>
                   </>
                 }
               </View>

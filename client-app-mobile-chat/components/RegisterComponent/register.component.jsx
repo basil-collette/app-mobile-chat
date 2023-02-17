@@ -4,10 +4,11 @@ import { apiHttpRequest } from '@services/RequestService';
 import RegexService from '@services/RegexService';
 import InputService from '@services/InputService';
 import ChappyError from '@error/ChappyError';
+import ChappyToast from '@context/toast/ChappyToast';
 import {getRegisterURL} from '@endpoint/ApiEndpoint';
 //CONTEXT
 import { SocketContext } from '@context/socket.context';
-import { ToastContext, ChappyToast } from '@context/toast.context';
+import { ToastContext } from '@context/toast/toast.context';
 import { ErrorContext } from '@context/error.context';
 
 export default function RegisterComponent(props) {

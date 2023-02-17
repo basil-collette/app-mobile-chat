@@ -44,7 +44,7 @@ const getSendMessageSalonURL = () => {
 // TRANSLATION _____________________________________________________________________ TRANSLATION
 
 const getTranslationsURL = () => {
-    return 'getAllTranslate/';
+    return 'translate/getAll/';
 }
 
 // EXPORT MODULE ___________________________________________________________________ EXPORT MODULE

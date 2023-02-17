@@ -4,39 +4,7 @@ import RNRestart from 'react-native-restart';
 import { easeOutAnimation } from '@assets/animation';
 import ToastTemplate from '@comp/ToastComponent/toast.template';
 
-/*************************************************************************************************************************************************************************/
-/* ToastContext                          */
-/*****************************************/
-
 const ToastContext = createContext();
-
-/*************************************************************************************************************************************************************************/
-/* Class ChappyToast                     */
-/*****************************************/
-
-class ChappyToast {
-    type;
-    message;
-
-    constructor(type, message) {
-        this.type = type ? type : 'info';
-        this.message = message ? message : 'message_unset';
-    }
-}
-
-/*************************************************************************************************************************************************************************/
-/* TOAST TYPE ENUMS                      */
-/*****************************************/
-
-const TOAST_TYPE_ENUMS = {
-    success: "success",
-    info: "info",
-    error: "error"
-}
-
-/************************************************************************************************************************************************************************/
-/* ToastProvider                         */
-/*****************************************/
 
 const ToastProvider = ({ children }) => {
 
@@ -162,4 +130,4 @@ const ToastProvider = ({ children }) => {
     );
 };
 
-export { ToastContext, ChappyToast, ToastProvider, TOAST_TYPE_ENUMS };
+export { ToastContext, ToastProvider };

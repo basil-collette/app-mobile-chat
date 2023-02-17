@@ -15,9 +15,10 @@ const getAllUser = async (req, res, next) => {
         let users = getUsersState(await UserRepository.getAll(parseInt(req.params.idMessage)));
         res.status(200);
         res.send(users);
+        
     } catch (err) {
-        next(err)
-        res.end();
+        console.log(err);
+        res.status(500).send('error_getting_all_users');
     }
 }
 
