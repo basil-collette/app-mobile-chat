@@ -39,7 +39,12 @@
 
 5/ BONUS :
     - L'application se nomme Happy-Chat / Chappy, elle permet le filtrage des insultes. Dans une interface de discution, les insultes connues de la base de données
-    sont remplacées par des mots phonétiquement ressemblant et politiquement corrects.
+    sont remplacées par des mots phonétiquement ressemblant et politiquement corrects. pour ce faire, à la racine se trouve un dossier "chappy-filter", on y trouve
+    un fichier texte contenant une banque d'insulte, un fichier texte contenant la plus part des mots de la langue française et un fichier "writeTranslatedFile.js".
+    A l'execution de ce dernier, les insutes du fichier "insultes.txt" sont retirées du fichier "liste_francais.txt", puis est créé un fichier "translate.csv" dans
+    ce même repertoire. grace à un algoritme contenu dans le fichier "writeTranslatedFile.js", un mot de la langue francaise est attribué à chaque insulte sur base
+    de leur ressemblance phonétique. Le fichier "translate.csv" contiendra alors une liste d'association id/insulte/traduction pouvant être insérée dans la base de
+    donnée.
     - Il est possible de voir les personnes connectées dans la liste des users (dont l'icone est alors verte) grace à l'usage interne des socket.
     - Les erreurs sont pour la plus part gérées par l'appli en prévenant les crash.
     - Un système de stack de toaster est utilisé pour les validations, info et les erreurs.
