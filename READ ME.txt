@@ -1,38 +1,43 @@
+#
 # INDEX ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-- 1/ API
+- 1/ BDD
+    - a) création
+- 2/ API
     - a) Fixtures
     - b) Lancement
-- 2/ MOBILE APP
+- 3/ MOBILE APP
     - a) Prérequis
     - b) Lancement
-- 3/ WEB PANEL ADMIN
+- 4/ WEB PANEL ADMIN
     - a) Lancement
-- 4/ BONUS
+- 5/ BONUS
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-1/ API :
+1/ BDD :
+    a) Création :
+        Le script de création de base se situe à la racine, il est nommé "restore_bdd_chappy.sql".
+
+2/ API :
     a) Fixtures :
         Dans le dossier "api-app-mobile-chat", executer la commande suivante : npm run load-fixtures
         Une dizaine de compte User seront générés dont un admin (mail : "admin@gmail.com", password : "password") et un user (mail : "user@gmail.com", password : "password").
     b) Lancement :
         Pour lancer le serveur, dans le dossier "api-app-mobile-chat", executer la commande suivante : node server.js
 
-2/ MOBILE APP :
+3/ MOBILE APP :
     a) Prérequis
         Dans le dossier "client-app-mobile-chat", et le fichier ".env", inscrire l'adresse IP de la machine à l'attribut "ENDPOINT_API".
     b) Lancement :
         Pour lancer l'execution expo, dans le dossier "client-app-mobile-chat", executer la commande suivante : npx expo start
 
-3/ WEB PANEL ADMIN :
+4/ WEB PANEL ADMIN :
     a) Lancement :
         Pour lancer le serveur web, dans le dossier "client-admin-app-mobile-chat", executer la commande suivante : npm start
         utiliser le compte admin pour se connecter (mail : "admin@gmail.com", password : "password")
 
-# BONUS --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-4/ BONUS :
+5/ BONUS :
     - L'application se nomme Happy-Chat / Chappy, elle permet le filtrage des insultes. Dans une interface de discution, les insultes connues de la base de données
     sont remplacées par des mots phonétiquement ressemblant et politiquement corrects.
     - Il est possible de voir les personnes connectées dans la liste des users (dont l'icone est alors verte) grace à l'usage interne des socket.
