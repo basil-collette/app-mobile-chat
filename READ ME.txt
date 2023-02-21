@@ -51,6 +51,6 @@
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Projet réalisé par Chris BRIERRE et Basil COLLETTE dans le cadre d'un enseignement à l'école La Plateforme, en 2023.
+Projet réalisé par Criss BRIERRE et Basil COLLETTE dans le cadre d'un enseignement à l'école La Plateforme, en 2023.
 
 # FIN -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
