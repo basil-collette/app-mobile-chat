@@ -2,8 +2,7 @@ import React, { useState, createContext, useContext, useEffect } from 'react';
 import { Alert } from 'react-native';
 import RNRestart from 'react-native-restart';
 import { setJSExceptionHandler } from "react-native-exception-handler";
-import { ToastContext } from '@context/toast/toast.context';
-import ChappyToast from '@context/toast/ChappyToast';
+import { ToastContext, ChappyToast, ToastTypeEnum, setFallback, setMaxToastCount } from 'rn-toaster-stack';
 
 const ErrorContext = createContext();
 
@@ -17,11 +16,25 @@ export default function ErrorProvider({ children }) {
         setJSExceptionHandler((error, isFatal) => {
             handleError(error, isFatal);
         }, true);
+
+        setMaxToastCount(10);
+        setFallback(() => {
+            Alert.alert(
+                'Toast Alert occured',
+                `Max toaster count : 10`,
+                [{
+                    text: 'Restart',
+                    onPress: () => {
+                        RNRestart.Restart();
+                    }
+                }]
+            );
+        });
     }, []);
 
     useEffect(() => {
         if (error) {
-            addToast(new ChappyToast('error', error.message));
+            addToast(new ChappyToast(ToastTypeEnum.error, error.message));
 
             clearError();
         }
@@ -54,7 +67,7 @@ export default function ErrorProvider({ children }) {
     };
 
     const handleError = (error, isFatal) => {
-        if (isFatal == undefined) isFatal = false;
+        isFatal = isFatal || false;
 
         logError(error, isFatal);
 

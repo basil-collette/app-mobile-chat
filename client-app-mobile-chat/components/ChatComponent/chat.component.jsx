@@ -6,12 +6,11 @@ import { getGetMessageUserURL, getGetMessageSalonURL, getGetUserURL, getSendMess
 import * as StoreService from '@services/StoreService';
 import { SvgProfil} from '@assets/svg'
 import ChappyError from '@error/ChappyError';
-import ChappyToast from '@context/toast/ChappyToast';
 import {getFilteredMessage} from '@services/FilterService';
 //CONTEXT
 import { SocketContext } from "@context/socket.context";
-import { ToastContext, ChappyToast } from "@context/toast.context";
 import { ErrorContext } from "@context/error.context";
+import { ToastContext} from 'rn-toaster-stack';
 
 export default function ChatComponent(props) {
 

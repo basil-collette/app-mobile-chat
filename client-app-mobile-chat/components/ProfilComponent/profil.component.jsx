@@ -9,9 +9,8 @@ import RegexService from '@services/RegexService';
 import { easeOutAnimation } from '@assets/animation'
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import ChappyError from '@error/ChappyError';
-import ChappyToast from '@context/toast/ChappyToast';
 //CONTEXT
-import { ToastContext } from '@context/toast/toast.context';
+import { ToastContext, ChappyToast } from 'rn-toaster-stack';
 import { ErrorContext } from '@context/error.context';
 
 export default function ProfilComponent(props) {

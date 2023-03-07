@@ -10,6 +10,7 @@ import { tabEnum } from "../../enum/tabEnum";
 const StoreService = require("../../services/StoreService");
 
 export default function HomeComponent(props) {
+  
   const [state, setState] = useState({
     stateOnglets: tabEnum.TAB_USERS,
     entityData: [],
