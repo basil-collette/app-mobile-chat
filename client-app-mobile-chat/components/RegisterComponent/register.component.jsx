@@ -4,11 +4,10 @@ import { apiHttpRequest } from '@services/RequestService';
 import RegexService from '@services/RegexService';
 import InputService from '@services/InputService';
 import ChappyError from '@error/ChappyError';
-import ChappyToast from '@context/toast/ChappyToast';
-import {getRegisterURL} from '@endpoint/ApiEndpoint';
+import { getRegisterURL } from '@endpoint/ApiEndpoint';
 //CONTEXT
 import { SocketContext } from '@context/socket.context';
-import { ToastContext } from '@context/toast/toast.context';
+import { ToastContext, ChappyToast, ToastTypeEnum } from 'rn-toaster-stack';
 import { ErrorContext } from '@context/error.context';
 
 export default function RegisterComponent(props) {
@@ -45,7 +44,7 @@ export default function RegisterComponent(props) {
   }
   
   const finalizeRegister = () => {
-    CONTEXTS.addToast(new ChappyToast('success', 'user updated !'));
+    CONTEXTS.addToast(new ChappyToast(ToastTypeEnum.success, 'user updated !'));
 
     const REDIRECT_DELAY = 2000; //time in milliseconds
     setTimeout(() => {

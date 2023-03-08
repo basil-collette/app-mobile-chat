@@ -15,6 +15,7 @@ module.exports = function(api) {
         "root": ["./"],
         "alias": {
           "underscore": "lodash",
+          "@wipe-pkg": "./packages-test",
           "@comp": "./components",
           "@services": "./services",
           "@endpoint": "./endpoint",

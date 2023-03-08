@@ -9,8 +9,8 @@ import ChappyError from '@error/ChappyError';
 import {getFilteredMessage} from '@services/FilterService';
 //CONTEXT
 import { SocketContext } from "@context/socket.context";
-import { ToastContext, ChappyToast } from "@context/toast/toast.context";
 import { ErrorContext } from "@context/error.context";
+import { ToastContext} from 'rn-toaster-stack';
 
 export default function ChatComponent(props) {
 

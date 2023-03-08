@@ -6,19 +6,17 @@ import RegexService from '@services/RegexService';
 import AccountService from '@services/AccountService';
 import { getLoginURL } from '@endpoint/ApiEndpoint';
 import ChappyError from '@error/ChappyError';
-import ChappyToast from '@context/toast/ChappyToast';
 import AuthTemplate from './auth.template.jsx';
 //CONTEXT
 import { SocketContext } from '@context/socket.context';
-import { ToastContext } from '@context/toast/toast.context';
 import { ErrorContext } from '@context/error.context';
 import { LoaderContext } from '@context/loader.context';
 
 export default function AuthComponent(props) {
+  
   const CONTEXTS = {
     socket: useContext(SocketContext),
-    ErrorContext: useContext(ErrorContext),
-    addToast: useContext(ToastContext),
+    ErrorContext: useContext(ErrorContext)
   };
 
   const [state, setState] = useState({

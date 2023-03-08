@@ -2,6 +2,7 @@ client-app-mobile-chat/node_modules/
 client-app-mobile-chat/.expo/
 client-app-mobile-chat/dist/
 client-app-mobile-chat/npm-debug.*
+client-app-mobile-chat/packages-test/
 *.jks
 *.p8
 *.p12
