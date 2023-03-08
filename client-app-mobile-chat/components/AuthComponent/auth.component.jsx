@@ -10,6 +10,7 @@ import AuthTemplate from './auth.template.jsx';
 //CONTEXT
 import { SocketContext } from '@context/socket.context';
 import { ErrorContext } from '@context/error.context';
+import { LoaderContext } from '@context/loader.context';
 
 export default function AuthComponent(props) {
   
@@ -74,7 +75,7 @@ export default function AuthComponent(props) {
         throw new ChappyError("login inputs are in an invalid format", false, "AuthComponent.loginRequest()");
       }
 
-      const resultToken = await apiHttpRequest(getLoginURL(), "POST", null, state.connexionInputs);
+      const resultToken = await apiHttpRequest(getLoginURL(), "POST", null, state.connexionInputs, true);
 
       const rememberMe = state.rememberStatusCheck
         ? state.connexionInputs

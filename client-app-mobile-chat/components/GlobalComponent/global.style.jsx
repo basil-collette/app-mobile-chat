@@ -22,9 +22,10 @@ export default StyleSheet.create({
       width: 0,
       height: 12,
     },
-    shadowOpacity: 0.58,
+    shadowOpacity: 1,
     shadowRadius: 16.00,
     elevation: 24,
+    zIndex: 50
   },
   titleContainer: {
     flexDirection: "row",

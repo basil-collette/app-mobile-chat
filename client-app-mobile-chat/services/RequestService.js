@@ -2,11 +2,11 @@ import * as StoreService from '@services/StoreService';
 import { ENDPOINT_API } from '@env';
 import ChappyError from '@error/ChappyError';
 
-const httpRequest = async (endpoint, method, headers, body) => {
+const httpRequest = async (endpoint, method, headers, body, needLoader = false) => {
     try {
         let requestOptions = {
             method: method,
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json', 'X-Chappy-NeedLoader' : needLoader }
         };
     
         if(headers) {
@@ -31,7 +31,7 @@ const httpRequest = async (endpoint, method, headers, body) => {
     }
 }
 
-const apiHttpRequest = async (endpoint, method, headers, body) => {
+const apiHttpRequest = async (endpoint, method, headers, body, needLoader = false) => {
     if (!headers) {
         headers = {};
     }
@@ -44,7 +44,7 @@ const apiHttpRequest = async (endpoint, method, headers, body) => {
         }
     }
     
-    return await httpRequest(ENDPOINT_API + endpoint, method, headers, body);
+    return await httpRequest(ENDPOINT_API + endpoint, method, headers, body, needLoader);
 }
 
 module.exports = {

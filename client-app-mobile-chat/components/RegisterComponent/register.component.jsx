@@ -64,7 +64,7 @@ export default function RegisterComponent(props) {
         throw new ChappyError('register inputs aren\'t in a valid format', false, "RegisterComponent.registerRequest");
       }
 
-      const result = await apiHttpRequest(getRegisterURL(), 'POST', null, state.registerInputs);
+      const result = await apiHttpRequest(getRegisterURL(), 'POST', null, state.registerInputs, true);
       finalizeRegister();
 
     } catch(err) {

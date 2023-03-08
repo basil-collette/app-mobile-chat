@@ -5,7 +5,6 @@ import GlobalStyle from "./global.style.jsx";
 export default function GlobalTemplate(props) {
   return (
     <View style={GlobalStyle.container}>
-      
       <View style={GlobalStyle.containerHeader}>
         {
           props.goBack
@@ -37,9 +36,9 @@ export default function GlobalTemplate(props) {
             <SvgGear width={25} height={25} fill="white" />
           </TouchableOpacity>
         }
-
+        
       </View>
-
+    
       {props.children}
 
     </View>

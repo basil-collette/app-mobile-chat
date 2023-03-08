@@ -6,7 +6,7 @@ export default StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
-    backgroundColor: "#3C3C49",
+    backgroundColor: "white",
     color: "white",
     overflow: 'hidden'
   },
@@ -14,7 +14,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#3B55EB",
+    backgroundColor: "red",
     width: "100%",
     padding : 10,
     shadowColor: "#000",
@@ -24,7 +24,7 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.58,
     shadowRadius: 16.00,
-    elevation: 24,
+    elevation: 100,
   },
   titleContainer: {
     flexDirection: "row",
@@ -64,5 +64,5 @@ export default StyleSheet.create({
     width: '100%',
     height: '100%',
     paddingHorizontal: 20
-  }
+  },
 });

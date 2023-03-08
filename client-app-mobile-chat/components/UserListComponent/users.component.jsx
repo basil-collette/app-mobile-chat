@@ -17,8 +17,8 @@ export default function userListComponent(props) {
     ErrorContext: useContext(ErrorContext)
   }
 
-  const socket = useContext(SocketContext);
-
+  let setUserListRemoverInterval;
+  
   const [state, setState] = useState({
     chatLibelle: props.navigation.state.params.chatLibelle,
     connectedUser: { idUser: '', prenom: '', nom: '' },
@@ -35,6 +35,7 @@ export default function userListComponent(props) {
     console.log("UserListComponent loaded");
 
     return () => {
+      clearInterval(setUserListRemoverInterval);
       console.log('UserListComponent Destruct');
     };
   }, []);
@@ -52,11 +53,11 @@ export default function userListComponent(props) {
         };
       });
 
-      setUserList(userResult.idUser);
+      setUserList(userResult.idUser, true);
 
       const GET_USERS_CONNEXIONS_INTERVAL = 3000; //units in milliseconds
-      let setUserListRemoverInterval = setInterval(() => {
-        setUserList(userResult.idUser);
+      setUserListRemoverInterval = setInterval(() => {
+        setUserList(userResult.idUser, false);
       }, GET_USERS_CONNEXIONS_INTERVAL);
 
     } catch (err) {
@@ -65,9 +66,9 @@ export default function userListComponent(props) {
     }
   }
 
-  const setUserList = async (idUser) => {
+  const setUserList = async (idUser, needLoad) => {
     try {
-      const allUsers = await apiHttpRequest(getGetAllUsersURL(), 'GET', null, null);
+      const allUsers = await apiHttpRequest(getGetAllUsersURL(), 'GET', null, null, needLoad);
 
       setState((currentState) => {
         return {

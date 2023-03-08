@@ -43,7 +43,7 @@ export default function ProfilComponent(props) {
     
       const connectedUser = await JSON.parse(await StoreService.retrieveData('user'));
 
-      let finalUserDetails = (connectedUser.idUser == state.userDetail.idUser) ? connectedUser : await apiHttpRequest(getGetUserURL(state.userDetail.idUser), 'GET', null, null);
+      let finalUserDetails = (connectedUser.idUser == state.userDetail.idUser) ? connectedUser : await apiHttpRequest(getGetUserURL(state.userDetail.idUser), 'GET', null, null, true);
     
       setState((currentState) => {
         return ({
@@ -116,7 +116,7 @@ export default function ProfilComponent(props) {
         CONTEXTS.ErrorContext.handleError(error, error.isFatal);
       }
 
-      const request = await apiHttpRequest(getUpdateUserURL(state.userDetail.idUser), 'PUT', null, userSent);
+      const request = await apiHttpRequest(getUpdateUserURL(state.userDetail.idUser), 'PUT', null, userSent, true);
 
       await StoreService.storeData('user', request);
       
