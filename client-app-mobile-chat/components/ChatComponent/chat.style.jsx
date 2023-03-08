@@ -5,7 +5,7 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-end",
-    backgroundColor: "#3C3C49"
+    backgroundColor: "rgba(0, 0, 0, 0)"
   },
   messageList: {
     flexDirection: "column",
@@ -16,7 +16,6 @@ export default StyleSheet.create({
     paddingVertical: 10
   },
   previousMessage :{
-    backgroundColor :"#3B55EB",
     alignItems:"center",
     marginBottom : 7,
     fontSize: 17,

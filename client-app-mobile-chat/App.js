@@ -12,6 +12,7 @@ import ChatComponent from '@comp/ChatComponent/chat.component.jsx';
 import RegisterComponent from '@comp/RegisterComponent/register.component.jsx';
 import ProfilComponent from '@comp/ProfilComponent/profil.component.jsx';
 import OptionComponent from '@comp/OptionComponent/option.component.jsx';
+import { LoaderProvider } from '@context/loader.context';
 
 export default function App() {
 
@@ -86,9 +87,11 @@ export default function App() {
       <ToastProvider>
         <ErrorProvider>
           <SocketContext.Provider value={socket}>
+            <LoaderProvider>
 
-            <AppContainer />
+              <AppContainer />
 
+            </LoaderProvider>
           </SocketContext.Provider>
         </ErrorProvider>
       </ToastProvider>

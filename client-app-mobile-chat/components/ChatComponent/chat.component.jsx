@@ -6,11 +6,10 @@ import { getGetMessageUserURL, getGetMessageSalonURL, getGetUserURL, getSendMess
 import * as StoreService from '@services/StoreService';
 import { SvgProfil} from '@assets/svg'
 import ChappyError from '@error/ChappyError';
-import ChappyToast from '@context/toast/ChappyToast';
 import {getFilteredMessage} from '@services/FilterService';
 //CONTEXT
 import { SocketContext } from "@context/socket.context";
-import { ToastContext, ChappyToast } from "@context/toast.context";
+import { ToastContext, ChappyToast } from "@context/toast/toast.context";
 import { ErrorContext } from "@context/error.context";
 
 export default function ChatComponent(props) {
@@ -23,7 +22,7 @@ export default function ChatComponent(props) {
 
   const NB_LOADED_MESSAGES = 20;
 
-  const refScrollView = useRef();
+  let refScrollView = useRef();
   const refMsgInput = useRef();
   const refSendBtn = useRef();
 
@@ -41,7 +40,7 @@ export default function ChatComponent(props) {
 
   useEffect(() => {
     init();
-
+    
     if (state.typeChat == 'user') {    
       var setInterlocuteurStateRemoverInterval = setInterval(() => {
         setInterlocutorState();
@@ -75,16 +74,16 @@ export default function ChatComponent(props) {
       if (state.typeChat == 'salon') {
         CONTEXTS.socket.emit('join_room', state.idDestination);
       }
-    
+
       const userResult = await JSON.parse(await StoreService.retrieveData('user'));
   
       const endpoint = state.typeChat == "user" ?
         getGetMessageUserURL(state.idDestination)
         : getGetMessageSalonURL(state.idDestination);
 
-      const messagesResult = await apiHttpRequest(endpoint, "GET", null, null);
+      const messagesResult = await apiHttpRequest(endpoint, "GET", null, null, true);
 
-      const translates = await apiHttpRequest(getTranslationsURL(), 'GET', null, null);
+      const translates = await apiHttpRequest(getTranslationsURL(), 'GET', null, null, true);
 
       setState((currentState) => {
         if (messagesResult.length > NB_LOADED_MESSAGES) {
@@ -126,7 +125,7 @@ export default function ChatComponent(props) {
 
   const setInterlocutorState = async () => {
     try {
-      const interlocutor = await apiHttpRequest(getGetUserURL(state.idDestination), "GET", null, null);
+      const interlocutor = await apiHttpRequest(getGetUserURL(state.idDestination), "GET", null, null, false);
 
       setState((currentState) => {
         return {

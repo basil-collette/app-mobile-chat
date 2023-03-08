@@ -1,10 +1,10 @@
 const StoreService = require('./StoreService');
 
-const httpRequest = async (endpoint, method, headers, body) => {
+const httpRequest = async (endpoint, method, headers, body, needLoader) => {
 
     let requestOptions = {
         method: method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-Loader-Needed' : needLoader },
         origin: "*"
     };
 
@@ -30,7 +30,7 @@ const httpRequest = async (endpoint, method, headers, body) => {
     return result;
 }
 
-const apiHttpRequest = async (endpoint, method, headers, body) => {
+const apiHttpRequest = async (endpoint, method, headers, body, needLoader) => {
     if (!headers) {
         headers = {};
     }
@@ -43,7 +43,7 @@ const apiHttpRequest = async (endpoint, method, headers, body) => {
         }
     }
 
-    return await httpRequest("http://localhost:3000/" + endpoint, method, headers, body);
+    return await httpRequest("http://localhost:3000/" + endpoint, method, headers, body, needLoader);
 }
 
 
