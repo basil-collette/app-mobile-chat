@@ -5,7 +5,6 @@ import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import { apiHttpRequest } from '@services/RequestService';
 import { getGetAllUsersURL } from '@endpoint/ApiEndpoint';
 import * as StoreService from '@services/StoreService';
-import { SocketContext } from '@context/socket.context';
 import { easeOutAnimation } from '@assets/animation';
 import ChappyError from '@error/ChappyError';
 //CONTEXT
@@ -36,6 +35,7 @@ export default function userListComponent(props) {
 
     return () => {
       clearInterval(setUserListRemoverInterval);
+      clearInterval(setUserListRemoverInterval);
       console.log('UserListComponent Destruct');
     };
   }, []);
@@ -53,11 +53,11 @@ export default function userListComponent(props) {
         };
       });
 
-      setUserList(userResult.idUser, true);
+      setUserList(true);
 
       const GET_USERS_CONNEXIONS_INTERVAL = 3000; //units in milliseconds
       setUserListRemoverInterval = setInterval(() => {
-        setUserList(userResult.idUser, false);
+        setUserList(false);
       }, GET_USERS_CONNEXIONS_INTERVAL);
 
     } catch (err) {
@@ -66,7 +66,7 @@ export default function userListComponent(props) {
     }
   }
 
-  const setUserList = async (idUser, needLoad) => {
+  const setUserList = async (needLoad) => {
     try {
       const allUsers = await apiHttpRequest(getGetAllUsersURL(), 'GET', null, null, needLoad);
 

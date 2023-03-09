@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { StackActions } from '@react-navigation/native';
 import RegisterTemplate from './register.template.jsx';
 import { apiHttpRequest } from '@services/RequestService';
 import RegexService from '@services/RegexService';
@@ -48,7 +49,7 @@ export default function RegisterComponent(props) {
 
     const REDIRECT_DELAY = 2000; //time in milliseconds
     setTimeout(() => {
-      props.navigation.navigate('Login');
+      props.navigation.replace('Login');
     }, REDIRECT_DELAY);
   }
 

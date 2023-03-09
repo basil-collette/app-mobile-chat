@@ -19,7 +19,7 @@ const retrieveData = (key) => {
 
 const forgetData=  (key) => {
     try {
-    return sessionStorage.removeItem(key)
+        return sessionStorage.removeItem(key)
     } catch (err) {
         console.error(err);
     }
