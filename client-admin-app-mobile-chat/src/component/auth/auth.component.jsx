@@ -29,7 +29,6 @@ export default function AuthComponent(props) {
 
   const updateInput = (inputName, value) => {
     try {
-      console.log(value);
       const newConnexionInputs = InputService.setInputStates(
         state.connexionInputs,
         inputName,

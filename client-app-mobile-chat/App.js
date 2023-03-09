@@ -29,7 +29,6 @@ export default function App() {
   const AppStackNavigator = createStackNavigator({
     Login: {
       screen: AuthComponent,
-      //unmountOnBlur: true,
       navigationOptions: {
         headerShown: false
       },

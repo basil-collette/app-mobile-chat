@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { StackActions } from '@react-navigation/native';
 import { apiHttpRequest } from '@services/RequestService';
 import StoreService from '@services/StoreService';
 import InputService from '@services/InputService';
@@ -10,7 +11,6 @@ import AuthTemplate from './auth.template.jsx';
 //CONTEXT
 import { SocketContext } from '@context/socket.context';
 import { ErrorContext } from '@context/error.context';
-import { LoaderContext } from '@context/loader.context';
 
 export default function AuthComponent(props) {
   
@@ -20,7 +20,7 @@ export default function AuthComponent(props) {
   };
 
   const [state, setState] = useState({
-    rememberStatusCheck: false,
+    rememberStatusCheck: true,
     connexionInputs: { email: "", password: "" },
   });
 
@@ -41,6 +41,7 @@ export default function AuthComponent(props) {
     );
 
     if (rememberMe) {
+      /*
       setState((currentState) => {
         return {
           ...currentState,
@@ -48,13 +49,16 @@ export default function AuthComponent(props) {
           rememberStatusCheck: true,
         };
       });
+      */
+
+      loginRequest(rememberMe);
     }
   };
 
-  const verifyLoginInputs = () => {
+  const verifyLoginInputs = (currentCredentials) => {
     return (
-      RegexService.testNameRegex(state.connexionInputs.email) &&
-      RegexService.testNameRegex(state.connexionInputs.password)
+      RegexService.testNameRegex(currentCredentials.email) &&
+      RegexService.testNameRegex(currentCredentials.password)
     );
   };
 
@@ -69,16 +73,18 @@ export default function AuthComponent(props) {
     });
   };
 
-  const loginRequest = async () => {
+  const loginRequest = async (currentCredentials) => {
     try {
-      if (!verifyLoginInputs()) {
+      credentials = currentCredentials ?? state.connexionInputs;
+
+      if (!verifyLoginInputs(credentials)) {
         throw new ChappyError("login inputs are in an invalid format", false, "AuthComponent.loginRequest()");
       }
 
-      const resultToken = await apiHttpRequest(getLoginURL(), "POST", null, state.connexionInputs, true);
+      const resultToken = await apiHttpRequest(getLoginURL(), "POST", null,  credentials, true);
 
-      const rememberMe = state.rememberStatusCheck
-        ? state.connexionInputs
+      const rememberMe = (currentCredentials ?? state.rememberStatusCheck)
+        ? credentials
         : false;
 
       await AccountService.login(resultToken.user, resultToken.token, rememberMe);
@@ -88,7 +94,8 @@ export default function AuthComponent(props) {
         resultToken.user.idUser
       );
 
-      props.navigation.navigate("Home");
+      //props.navigation.dispatch(StackActions.pop(1));
+      props.navigation.replace("Home");
 
     } catch (err) {
       if (!(err instanceof ChappyError))
