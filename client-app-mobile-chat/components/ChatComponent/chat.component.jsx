@@ -118,7 +118,7 @@ export default function ChatComponent(props) {
     setState((currentState) => {
       return {
         ...currentState,
-        bankMessages: [...currentState.bankMessages, msg],
+        showedMessages: [...currentState.showedMessages, msg],
       };
     });
   }

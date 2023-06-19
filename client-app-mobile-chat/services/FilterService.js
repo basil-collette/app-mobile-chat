@@ -23,12 +23,12 @@ const getFilteredMessage = (text, translations) => {
         for (let j = 0; j < resultArray.length; j++) {
 
             if (typeof resultArray[j] != 'string') {
-                continues;
+                continue;
             }
 
             let match = getWordRegex(insult).exec(resultArray[j]);
             if (!match) {
-                continues;
+                continue;
             }
 
             let newElement = [];

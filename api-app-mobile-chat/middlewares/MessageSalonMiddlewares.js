@@ -73,7 +73,7 @@ const sendMessage = async (req, res, next) => {
         res.status(500).send('error during sending message to room');
         return;
     }
-
+    
     try {
         SocketHelper.emitRoomMsg(req.body.idSalon, messageSalon);
     } catch (err) {

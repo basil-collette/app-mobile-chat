@@ -45,7 +45,7 @@ export default function RegisterComponent(props) {
   }
   
   const finalizeRegister = () => {
-    CONTEXTS.addToast(new ChappyToast(ToastTypeEnum.success, 'user updated !'));
+    CONTEXTS.addToast(new ChappyToast(ToastTypeEnum.success, 'user created !'));
 
     const REDIRECT_DELAY = 2000; //time in milliseconds
     setTimeout(() => {

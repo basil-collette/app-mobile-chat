@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "doc": "jsdoc -c jsdoc.json -r -d ./documentation"
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.6",
@@ -16,6 +17,8 @@
     "expo-secure-store": "~12.0.0",
     "expo-status-bar": "~1.4.2",
     "fetch-intercept": "^2.4.0",
+    "jsdoc-export-default-interop": "^0.3.1",
+    "jsdoc-ignore-code": "^1.0.1",
     "react": "18.1.0",
     "react-native": "0.70.5",
     "react-native-dotenv": "^3.4.7",
@@ -32,7 +35,8 @@
     "socket.io-client": "^4.5.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "jsdoc": "^4.0.2"
   },
   "private": true
 }
