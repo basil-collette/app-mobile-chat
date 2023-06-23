@@ -7,6 +7,7 @@ import * as StoreService from '@services/StoreService';
 import { SvgProfil} from '@assets/svg'
 import ChappyError from '@error/ChappyError';
 import {getFilteredMessage} from '@services/FilterService';
+import AccountService from '@services/AccountService';
 //CONTEXT
 import { SocketContext } from "@context/socket.context";
 import { ErrorContext } from "@context/error.context";
@@ -71,6 +72,13 @@ export default function ChatComponent(props) {
   
   const init = async () => {
     try {
+      /*
+      let connected = await AccountService.connectedUser();
+      if (!connected) {
+        props.navigation.replace("Login");
+      }
+      */
+
       if (state.typeChat == 'salon') {
         CONTEXTS.socket.emit('join_room', state.idDestination);
       }

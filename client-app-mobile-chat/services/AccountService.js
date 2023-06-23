@@ -18,6 +18,21 @@ const login = async (user, jwt, remembermeInputs) => {
   }
 }
 
+const isLogged = async () => {
+  try {
+    let connectedUser = await StoreService.retrieveData('user');
+    
+    if (connectedUser == null) {
+      return false;
+    }
+
+    return true;
+
+  } catch (err) {
+    return false;
+  }
+}
+
 const disconnect = async () => {
   try {
     await StoreService.deleteData('user');
