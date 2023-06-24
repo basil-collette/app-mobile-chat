@@ -148,7 +148,6 @@ const isAuthorized = async (req, res, next) => {
             return;
         }
         next();
-
     } catch(err) {
         console.log(err);
         res.status(500).send('error_during_authorization_check');
