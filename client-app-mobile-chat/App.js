@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { createAppContainer } from 'react-navigation';
+import { SafeAreaView, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { SocketContext, socket } from '@context/socket.context';
 import { ErrorProvider } from '@context/error.context';
@@ -13,8 +13,11 @@ import RegisterComponent from '@comp/RegisterComponent/register.component.jsx';
 import ProfilComponent from '@comp/ProfilComponent/profil.component.jsx';
 import OptionComponent from '@comp/OptionComponent/option.component.jsx';
 import { LoaderProvider } from '@context/loader.context';
+import { enableScreens } from 'react-native-screens';
 
 export default function App() {
+  
+  enableScreens(false);
 
   useEffect(() => {
     require('./socket')(socket);
@@ -74,27 +77,27 @@ export default function App() {
   const AppContainer = createAppContainer(AppStackNavigator);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#3C3C49" }}>
-      
-      <StatusBar
-        animated={true}
-        backgroundColor="black"
-        barStyle="dark"
-        showHideTransition="fade"
-      />
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#3C3C49" }}>
+        
+        <StatusBar
+          animated={true}
+          backgroundColor="black"
+          barStyle="dark"
+          showHideTransition="fade"
+        />
 
-      <ToastProvider>
-        <ErrorProvider>
-          <SocketContext.Provider value={socket}>
-            <LoaderProvider>
+        <ToastProvider>
+          <ErrorProvider>
+            <SocketContext.Provider value={socket}>
+              <LoaderProvider>
 
-              <AppContainer />
+                <AppContainer />
 
-            </LoaderProvider>
-          </SocketContext.Provider>
-        </ErrorProvider>
-      </ToastProvider>
+              </LoaderProvider>
+            </SocketContext.Provider>
+          </ErrorProvider>
+        </ToastProvider>
 
-    </View>
+    </SafeAreaView>
   );
 }
