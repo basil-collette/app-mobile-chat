@@ -2,7 +2,7 @@ import React, { useState, createContext, useContext, useEffect } from 'react';
 import { Alert } from 'react-native';
 import RNRestart from 'react-native-restart';
 import { setJSExceptionHandler } from "react-native-exception-handler";
-import { ToastContext, ChappyToast, ToastTypeEnum, setFallback, setMaxToastCount } from 'rn-toaster-stack';
+import { ToastContext, ChappyToast, ToastTypeEnum, setFallback, setMaxToastCount } from '../context/rn-toaster-stack';
 
 const ErrorContext = createContext();
 

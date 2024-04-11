@@ -8,7 +8,7 @@ import ChappyError from '@error/ChappyError';
 import { getRegisterURL } from '@endpoint/ApiEndpoint';
 //CONTEXT
 import { SocketContext } from '@context/socket.context';
-import { ToastContext, ChappyToast, ToastTypeEnum } from 'rn-toaster-stack';
+import { ToastContext, ChappyToast, ToastTypeEnum } from '@context/rn-toaster-stack/';
 import { ErrorContext } from '@context/error.context';
 
 export default function RegisterComponent(props) {
