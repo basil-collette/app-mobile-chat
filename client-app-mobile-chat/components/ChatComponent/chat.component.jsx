@@ -11,7 +11,7 @@ import AccountService from '@services/AccountService';
 //CONTEXT
 import { SocketContext } from "@context/socket.context";
 import { ErrorContext } from "@context/error.context";
-import { ToastContext} from 'rn-toaster-stack';
+import { ToastProvider } from '@context/rn-toaster-stack/ToastProvider';
 
 export default function ChatComponent(props) {
 

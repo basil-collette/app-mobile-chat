@@ -10,7 +10,7 @@ import { easeOutAnimation } from '@assets/animation'
 import GlobalTemplate from "@comp/GlobalComponent/global.template.jsx";
 import ChappyError from '@error/ChappyError';
 //CONTEXT
-import { ToastContext, ChappyToast } from 'rn-toaster-stack';
+import { ToastContext, ChappyToast } from '@context/rn-toaster-stack/';
 import { ErrorContext } from '@context/error.context';
 
 export default function ProfilComponent(props) {
