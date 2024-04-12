@@ -13,11 +13,8 @@ import RegisterComponent from '@comp/RegisterComponent/register.component.jsx';
 import ProfilComponent from '@comp/ProfilComponent/profil.component.jsx';
 import OptionComponent from '@comp/OptionComponent/option.component.jsx';
 import { LoaderProvider } from '@context/loader.context';
-import { enableScreens } from 'react-native-screens';
 
 export default function App() {
-  
-  enableScreens(false);
 
   useEffect(() => {
     require('./socket')(socket);

@@ -24,7 +24,8 @@ module.exports = function(api) {
           "@socket": "./socket",
           "@error": "./error",
         }
-      }]
+      }],
+      "react-native-reanimated/plugin",
     ]
   };
 };
